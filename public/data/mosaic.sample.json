@@ -1,0 +1,202 @@
+{
+  "profile": {
+    "name": "Omer Karaduman",
+    "title": "Generalist software engineer, automation builder, and coaching-minded problem solver",
+    "tagline": "A capability atlas: experiences mapped to the patterns they reveal.",
+    "location": "Netherlands",
+    "summary": "This sample map shows how projects, talks, coaching, hobbies, and odd constraints can reveal transferable capabilities. Replace the sample data with your own exported Mosaic JSON."
+  },
+  "capabilities": [
+    {
+      "id": "systems-thinking",
+      "label": "Systems thinking",
+      "category": "Core capability",
+      "description": "Seeing relationships, feedback loops, constraints, and unintended consequences."
+    },
+    {
+      "id": "bridge-building",
+      "label": "Bridge building",
+      "category": "Core capability",
+      "description": "Connecting existing tools, people, and processes instead of replacing everything."
+    },
+    {
+      "id": "mcgyvering",
+      "label": "McGyvering",
+      "category": "Core capability",
+      "description": "Finding practical paths through awkward constraints with available materials."
+    },
+    {
+      "id": "automation",
+      "label": "Automation",
+      "category": "Technical",
+      "description": "Turning repeated manual work into reliable, inspectable workflows."
+    },
+    {
+      "id": "data-observability",
+      "label": "Data observability",
+      "category": "Technical",
+      "description": "Making status, trends, and weak signals visible through data."
+    },
+    {
+      "id": "ai-tooling",
+      "label": "AI tooling",
+      "category": "Technical",
+      "description": "Using AI as a practical amplifier for requirements, analysis, and workflows."
+    },
+    {
+      "id": "ux-thinking",
+      "label": "UX thinking",
+      "category": "Technical",
+      "description": "Designing tools around adoption, clarity, and user behaviour."
+    },
+    {
+      "id": "coaching",
+      "label": "Coaching",
+      "category": "Human",
+      "description": "Helping people surface their own understanding and next move."
+    },
+    {
+      "id": "stakeholder-translation",
+      "label": "Stakeholder translation",
+      "category": "Human",
+      "description": "Translating between technical, operational, and human concerns."
+    },
+    {
+      "id": "public-speaking",
+      "label": "Public speaking",
+      "category": "Human",
+      "description": "Turning ideas into memorable stories for a group."
+    },
+    {
+      "id": "creative-expression",
+      "label": "Creative expression",
+      "category": "Creative",
+      "description": "Using music, storytelling, visuals, and play as thinking tools."
+    },
+    {
+      "id": "learning-agility",
+      "label": "Learning agility",
+      "category": "Creative",
+      "description": "Getting useful quickly in unfamiliar domains."
+    }
+  ],
+  "principles": [
+    {
+      "id": "bridge-dont-replace",
+      "label": "Bridge, don't replace",
+      "description": "Adoption often improves when new solutions connect to existing workflows."
+    },
+    {
+      "id": "constraints-fuel-creativity",
+      "label": "Constraints fuel creativity",
+      "description": "Limitations can make the solution sharper rather than weaker."
+    },
+    {
+      "id": "show-the-system",
+      "label": "Show the system",
+      "description": "People make better decisions when hidden state becomes visible."
+    },
+    {
+      "id": "think-with-your-hands",
+      "label": "Think with your hands",
+      "description": "Building small artifacts is often the fastest way to discover the real problem."
+    }
+  ],
+  "experiences": [
+    {
+      "id": "copiercin",
+      "title": "CopierciN",
+      "type": "Side project",
+      "company": "Personal",
+      "period": {
+        "start": "2010",
+        "end": "2012",
+        "label": "2010–2012"
+      },
+      "summary": "A utility born from the need to bridge copied content into workflows where official integration paths were limited.",
+      "rawNarrative": "Sample narrative: I wanted a smoother copy/paste workflow, but the ecosystem did not provide the clean integration points I wanted. Instead of waiting for a perfect API, I explored what was already available and built a practical bridge.",
+      "challenge": "There was no obvious public SDK path for the workflow I wanted to support.",
+      "approach": "Reverse-engineered available artifacts and used lightweight integration tricks to make the workflow usable.",
+      "impact": "Turned a blocked workflow into a working tool and shaped a long-running preference for practical bridges over total redesigns.",
+      "skills": ["bridge-building", "mcgyvering", "ux-thinking", "learning-agility"],
+      "principles": ["bridge-dont-replace", "constraints-fuel-creativity"],
+      "visibility": "public"
+    },
+    {
+      "id": "defect-observability-dashboard",
+      "title": "Defect observability dashboard",
+      "type": "Work project",
+      "company": "Philips Healthcare",
+      "period": {
+        "start": "2026",
+        "end": "2026",
+        "label": "2026"
+      },
+      "summary": "A reporting workflow that made defect state, age, ownership, and trend information easier to inspect.",
+      "rawNarrative": "Sample narrative: The available exports showed current status, but historical trend was not naturally available. The interesting part was not only building a dashboard, but creating a repeatable data trail so the system could start telling a story over time.",
+      "challenge": "Important status information existed, but history and trend context were hard to see.",
+      "approach": "Combined recurring snapshots, transformation logic, and dashboard views into a more observable workflow.",
+      "impact": "Helped move from static status checking to trend-aware conversations.",
+      "skills": ["automation", "data-observability", "systems-thinking", "stakeholder-translation"],
+      "principles": ["show-the-system", "think-with-your-hands"],
+      "visibility": "public"
+    },
+    {
+      "id": "ai-day-support",
+      "title": "AI Day facilitation and support",
+      "type": "Talk / facilitation",
+      "company": "Xebia / client context",
+      "period": {
+        "start": "2026",
+        "end": "2026",
+        "label": "2026"
+      },
+      "summary": "Supporting an AI-focused day by translating possibilities into usable conversations and next steps.",
+      "rawNarrative": "Sample narrative: AI conversations easily become either hype or fear. The useful layer is helping people connect the technology to their own work without losing the human and organizational context.",
+      "challenge": "AI adoption discussions can stay too abstract or tool-focused.",
+      "approach": "Used facilitation, examples, and translation between technical and non-technical viewpoints.",
+      "impact": "Created room for more practical and grounded AI conversations.",
+      "skills": ["ai-tooling", "coaching", "stakeholder-translation", "public-speaking"],
+      "principles": ["bridge-dont-replace", "show-the-system"],
+      "visibility": "public"
+    },
+    {
+      "id": "clarinet-stage-learning",
+      "title": "Clarinet, stage practice, and learning in public",
+      "type": "Creative / hobby",
+      "company": "Personal",
+      "period": {
+        "start": "2025",
+        "end": "2026",
+        "label": "2025–2026"
+      },
+      "summary": "A creative learning path that combines deliberate practice, performance pressure, feedback, and identity.",
+      "rawNarrative": "Sample narrative: Music is not a software project, but it exposes many of the same patterns: practice loops, constraints, performance anxiety, feedback, collaboration, and the strange gap between knowing and doing.",
+      "challenge": "Performing and learning an expressive instrument requires comfort with imperfection and feedback.",
+      "approach": "Combined practice, mentorship, equipment experiments, and small performance contexts.",
+      "impact": "Strengthened learning agility, creative expression, and tolerance for visible iteration.",
+      "skills": ["creative-expression", "learning-agility", "public-speaking", "coaching"],
+      "principles": ["think-with-your-hands", "constraints-fuel-creativity"],
+      "visibility": "public"
+    },
+    {
+      "id": "mosaic-capability-atlas",
+      "title": "Mosaic capability atlas",
+      "type": "Product experiment",
+      "company": "Personal / Xebia transition",
+      "period": {
+        "start": "2026",
+        "end": "2026",
+        "label": "2026"
+      },
+      "summary": "A self-made portfolio alternative that maps experiences to capabilities, principles, and time.",
+      "rawNarrative": "Sample narrative: A traditional portfolio would show projects. I wanted something that shows the patterns behind the projects: what each experience strengthened, what it revealed, and how seemingly unrelated domains connect.",
+      "challenge": "Generalist value is difficult to communicate through a linear CV or project list.",
+      "approach": "Designed a static, data-driven map where experiences can be explored through capabilities, principles, and timeline.",
+      "impact": "Creates a more memorable way to introduce the kind of engineer and coach someone is becoming.",
+      "skills": ["systems-thinking", "ux-thinking", "ai-tooling", "creative-expression", "stakeholder-translation"],
+      "principles": ["show-the-system", "think-with-your-hands", "bridge-dont-replace"],
+      "visibility": "public"
+    }
+  ]
+}
