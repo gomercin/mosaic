@@ -13,7 +13,7 @@ This first scaffold contains:
 - an overview / constellation-style capability view
 - a timeline view
 - a local Studio tab for drafting new experiences and exporting JSON
-- GitHub Actions for CI and release package generation
+- GitHub Actions for CI, release package generation, and GitHub Pages deployment
 
 ## Development
 
@@ -72,6 +72,22 @@ It performs:
 - `npm test`
 - `npm run build`
 - upload of the `dist/` folder as a workflow artifact
+
+### GitHub Pages
+
+The Pages workflow runs on pushes to `main` and manual dispatch.
+
+It performs:
+
+- dependency installation
+- `npm test`
+- `npm run build`
+- upload of the `dist/` folder as a GitHub Pages artifact
+- deployment to GitHub Pages
+
+If deployment fails with a Pages source or configuration error, open the repository settings and set the Pages build source to GitHub Actions.
+
+After a successful deployment, the site should be available under the repository's GitHub Pages URL.
 
 ### Release
 
