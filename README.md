@@ -38,3 +38,14 @@ public/data/mosaic.sample.json
 ```
 
 Later, this can be replaced by your own exported `mosaic.json` file.
+
+## Editing workflow
+
+1. Open the app locally.
+2. Go to Studio.
+3. Capture a rough experience story.
+4. Create a draft experience.
+5. Export JSON.
+6. Replace the public data file before building/publishing.
+
+The Studio is intentionally local-first. It does not require a backend, database, login, or WordPress integration.
