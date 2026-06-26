@@ -13,6 +13,7 @@ This first scaffold contains:
 - an overview / constellation-style capability view
 - a timeline view
 - a local Studio tab for drafting new experiences and exporting JSON
+- GitHub Actions for CI and release package generation
 
 ## Development
 
@@ -20,6 +21,15 @@ This first scaffold contains:
 npm install
 npm run dev
 ```
+
+## Validate and build
+
+```bash
+npm test
+npm run build
+```
+
+`npm test` runs TypeScript checks and validates the Mosaic sample data for duplicate IDs, required fields, and dangling capability/principle references.
 
 ## Build for static hosting
 
@@ -49,3 +59,35 @@ Later, this can be replaced by your own exported `mosaic.json` file.
 6. Replace the public data file before building/publishing.
 
 The Studio is intentionally local-first. It does not require a backend, database, login, or WordPress integration.
+
+## GitHub Actions
+
+### CI
+
+The CI workflow runs on pull requests, pushes to `main`, pushes to the scaffold branch, and manual dispatch.
+
+It performs:
+
+- dependency installation
+- `npm test`
+- `npm run build`
+- upload of the `dist/` folder as a workflow artifact
+
+### Release
+
+The release workflow runs when pushing a semantic version tag such as:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+It can also be started manually from the GitHub Actions tab.
+
+It produces:
+
+- a validated static build
+- `mosaic-static-site.zip`
+- a GitHub Release with the ZIP attached
+
+That ZIP can be uploaded directly to a static hosting folder.
