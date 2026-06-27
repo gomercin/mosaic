@@ -7,7 +7,7 @@ on:
   push:
     branches:
       - main
-      - scaffold-static-app
+      - codex-implementation
   workflow_dispatch:
 
 permissions:
