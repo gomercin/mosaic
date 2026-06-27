@@ -16,6 +16,17 @@
   --color-teal: #2dd4bf;
   --color-green: #4ade80;
   --color-gold: #facc15;
+  /* Mockup-inspired signal hooks for later UX/aesthetic refinement. */
+  --category-core-rgb: 45, 212, 191;
+  --category-technical-rgb: 56, 189, 248;
+  --category-human-rgb: 251, 113, 133;
+  --category-creative-rgb: 245, 158, 11;
+  --surface-rail: rgba(7, 8, 18, 0.46);
+  --surface-signal: rgba(255, 255, 255, 0.04);
+  --selected-path-border: rgba(125, 211, 252, 0.72);
+  --selected-path-fill: rgba(125, 211, 252, 0.08);
+  --selected-path-glow: 0 0 28px rgba(125, 211, 252, 0.16);
+  --muted-signal-opacity: 0.3;
   --glow-cyan: 0 0 60px rgba(125, 211, 252, 0.16);
   --glow-panel: 0 24px 80px rgba(0, 0, 0, 0.25);
   --radius-panel: 28px;
@@ -223,7 +234,7 @@ button {
   padding: 14px;
   border: 1px solid var(--color-border-soft);
   border-radius: 20px;
-  background: rgba(7, 8, 18, 0.46);
+  background: var(--surface-rail);
 }
 
 .discover-rail h3,
@@ -269,7 +280,7 @@ button {
   padding: 9px 10px;
   border: 1px solid var(--color-border-soft);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.045);
+  background: var(--surface-signal);
   color: var(--color-text);
   text-align: left;
 }
@@ -280,29 +291,29 @@ button {
 
 .category-filter button:hover,
 .category-filter button.is-active {
-  border-color: rgba(125, 211, 252, 0.62);
-  background: rgba(125, 211, 252, 0.08);
+  border-color: var(--selected-path-border);
+  background: var(--selected-path-fill);
   transform: translateX(2px);
 }
 
 .category-filter button[data-category="Core capability"],
 .legend-list span[data-category="Core capability"] {
-  border-color: rgba(45, 212, 191, 0.38);
+  border-color: rgba(var(--category-core-rgb), 0.38);
 }
 
 .category-filter button[data-category="Technical"],
 .legend-list span[data-category="Technical"] {
-  border-color: rgba(56, 189, 248, 0.38);
+  border-color: rgba(var(--category-technical-rgb), 0.38);
 }
 
 .category-filter button[data-category="Human"],
 .legend-list span[data-category="Human"] {
-  border-color: rgba(251, 113, 133, 0.38);
+  border-color: rgba(var(--category-human-rgb), 0.38);
 }
 
 .category-filter button[data-category="Creative"],
 .legend-list span[data-category="Creative"] {
-  border-color: rgba(245, 158, 11, 0.42);
+  border-color: rgba(var(--category-creative-rgb), 0.42);
 }
 
 .rail-experiences {
@@ -395,26 +406,26 @@ button {
 
 .capability-node[data-category="Core capability"],
 .tag[data-category="Core capability"] {
-  border-color: rgba(45, 212, 191, 0.42);
-  box-shadow: inset 0 0 24px rgba(45, 212, 191, 0.08);
+  border-color: rgba(var(--category-core-rgb), 0.42);
+  box-shadow: inset 0 0 24px rgba(var(--category-core-rgb), 0.08);
 }
 
 .capability-node[data-category="Technical"],
 .tag[data-category="Technical"] {
-  border-color: rgba(56, 189, 248, 0.42);
-  box-shadow: inset 0 0 24px rgba(56, 189, 248, 0.08);
+  border-color: rgba(var(--category-technical-rgb), 0.42);
+  box-shadow: inset 0 0 24px rgba(var(--category-technical-rgb), 0.08);
 }
 
 .capability-node[data-category="Human"],
 .tag[data-category="Human"] {
-  border-color: rgba(251, 113, 133, 0.42);
-  box-shadow: inset 0 0 24px rgba(251, 113, 133, 0.08);
+  border-color: rgba(var(--category-human-rgb), 0.42);
+  box-shadow: inset 0 0 24px rgba(var(--category-human-rgb), 0.08);
 }
 
 .capability-node[data-category="Creative"],
 .tag[data-category="Creative"] {
-  border-color: rgba(245, 158, 11, 0.45);
-  box-shadow: inset 0 0 24px rgba(245, 158, 11, 0.08);
+  border-color: rgba(var(--category-creative-rgb), 0.45);
+  box-shadow: inset 0 0 24px rgba(var(--category-creative-rgb), 0.08);
 }
 
 .capability-node:hover,
@@ -428,7 +439,7 @@ button {
 .capability-node.is-dimmed,
 .experience-chip.is-muted,
 .timeline-item.is-muted {
-  opacity: 0.3;
+  opacity: var(--muted-signal-opacity);
 }
 
 .experience-strip {
