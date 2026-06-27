@@ -1,13 +1,14 @@
 import type { MosaicData } from '../types';
 import {
   capabilityUsage,
-  experienceMatchesCapability,
+  experienceMatchesFilters,
   getExperienceCapabilityIds
 } from '../utils/mosaic';
 
 type CapabilityMapProps = {
   data: MosaicData;
   selectedCapabilityId: string | null;
+  selectedPrincipleId: string | null;
   selectedExperienceId: string | null;
   onCapabilitySelect: (capabilityId: string | null) => void;
   onExperienceSelect: (experienceId: string) => void;
@@ -16,6 +17,7 @@ type CapabilityMapProps = {
 export function CapabilityMap({
   data,
   selectedCapabilityId,
+  selectedPrincipleId,
   selectedExperienceId,
   onCapabilitySelect,
   onExperienceSelect
@@ -90,7 +92,10 @@ export function CapabilityMap({
 
       <div className="experience-strip">
         {data.experiences.map((experience) => {
-          const matches = experienceMatchesCapability(experience, selectedCapabilityId);
+          const matches = experienceMatchesFilters(experience, {
+            capabilityId: selectedCapabilityId,
+            principleId: selectedPrincipleId
+          });
           return (
             <button
               key={experience.id}

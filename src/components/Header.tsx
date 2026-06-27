@@ -3,6 +3,7 @@ import type { Profile, ViewMode } from '../types';
 const modes: Array<{ id: ViewMode; label: string }> = [
   { id: 'overview', label: 'Overview' },
   { id: 'timeline', label: 'Timeline' },
+  { id: 'principles', label: 'Principles' },
   { id: 'studio', label: 'Studio' }
 ];
 
@@ -10,8 +11,8 @@ type HeaderProps = {
   profile: Profile;
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
-  selectedCapabilityId: string | null;
-  onClearCapability: () => void;
+  activeFilterLabels: string[];
+  onClearFilters: () => void;
   selectedCount: number;
 };
 
@@ -19,8 +20,8 @@ export function Header({
   profile,
   viewMode,
   onViewModeChange,
-  selectedCapabilityId,
-  onClearCapability,
+  activeFilterLabels,
+  onClearFilters,
   selectedCount
 }: HeaderProps) {
   return (
@@ -46,9 +47,9 @@ export function Header({
           ))}
         </nav>
 
-        {selectedCapabilityId && (
-          <button className="filter-pill" type="button" onClick={onClearCapability}>
-            Showing {selectedCount} related experience{selectedCount === 1 ? '' : 's'} · clear filter
+        {activeFilterLabels.length > 0 && (
+          <button className="filter-pill" type="button" onClick={onClearFilters}>
+            Showing {selectedCount} related experience{selectedCount === 1 ? '' : 's'} for {activeFilterLabels.join(' + ')} · clear
           </button>
         )}
       </div>

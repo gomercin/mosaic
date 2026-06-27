@@ -1,4 +1,4 @@
-export type ViewMode = 'overview' | 'timeline' | 'studio';
+export type ViewMode = 'overview' | 'timeline' | 'principles' | 'studio';
 
 export type Profile = {
   name: string;

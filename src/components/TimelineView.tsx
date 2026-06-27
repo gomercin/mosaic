@@ -1,9 +1,10 @@
 import type { MosaicData } from '../types';
-import { experienceMatchesCapability, sortExperiencesByStart } from '../utils/mosaic';
+import { experienceMatchesFilters, sortExperiencesByStart } from '../utils/mosaic';
 
 type TimelineViewProps = {
   data: MosaicData;
   selectedCapabilityId: string | null;
+  selectedPrincipleId: string | null;
   selectedExperienceId: string | null;
   onExperienceSelect: (experienceId: string) => void;
 };
@@ -11,6 +12,7 @@ type TimelineViewProps = {
 export function TimelineView({
   data,
   selectedCapabilityId,
+  selectedPrincipleId,
   selectedExperienceId,
   onExperienceSelect
 }: TimelineViewProps) {
@@ -28,7 +30,10 @@ export function TimelineView({
 
       <div className="timeline">
         {sortedExperiences.map((experience, index) => {
-          const matches = experienceMatchesCapability(experience, selectedCapabilityId);
+          const matches = experienceMatchesFilters(experience, {
+            capabilityId: selectedCapabilityId,
+            principleId: selectedPrincipleId
+          });
           return (
             <button
               key={experience.id}

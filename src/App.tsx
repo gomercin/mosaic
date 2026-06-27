@@ -2,17 +2,19 @@ import { useEffect, useMemo, useState } from 'react';
 import { CapabilityMap } from './components/CapabilityMap';
 import { ExperiencePanel } from './components/ExperiencePanel';
 import { Header } from './components/Header';
+import { PrinciplesView } from './components/PrinciplesView';
 import { Studio } from './components/Studio';
 import { TimelineView } from './components/TimelineView';
 import { loadMosaicData } from './data/loadMosaic';
 import type { Experience, MosaicData, ViewMode } from './types';
-import { experienceMatchesCapability } from './utils/mosaic';
+import { experienceMatchesFilters } from './utils/mosaic';
 
 export function App() {
   const [data, setData] = useState<MosaicData | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('overview');
   const [selectedCapabilityId, setSelectedCapabilityId] = useState<string | null>(null);
+  const [selectedPrincipleId, setSelectedPrincipleId] = useState<string | null>(null);
   const [selectedExperienceId, setSelectedExperienceId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -40,9 +42,23 @@ export function App() {
     }
 
     return data.experiences.filter((experience) =>
-      experienceMatchesCapability(experience, selectedCapabilityId)
+      experienceMatchesFilters(experience, {
+        capabilityId: selectedCapabilityId,
+        principleId: selectedPrincipleId
+      })
     );
-  }, [data, selectedCapabilityId]);
+  }, [data, selectedCapabilityId, selectedPrincipleId]);
+
+  const activeFilterLabels = useMemo(() => {
+    if (!data) {
+      return [];
+    }
+
+    return [
+      data.capabilities.find((capability) => capability.id === selectedCapabilityId)?.label,
+      data.principles.find((principle) => principle.id === selectedPrincipleId)?.label
+    ].filter((label): label is string => Boolean(label));
+  }, [data, selectedCapabilityId, selectedPrincipleId]);
 
   function handleExperienceAdded(experience: Experience) {
     setData((currentData) => {
@@ -62,6 +78,7 @@ export function App() {
   function handleDataImported(importedData: MosaicData) {
     setData(importedData);
     setSelectedCapabilityId(null);
+    setSelectedPrincipleId(null);
     setSelectedExperienceId(importedData.experiences[0]?.id ?? null);
     setViewMode('overview');
   }
@@ -95,8 +112,11 @@ export function App() {
         profile={data.profile}
         viewMode={viewMode}
         onViewModeChange={setViewMode}
-        selectedCapabilityId={selectedCapabilityId}
-        onClearCapability={() => setSelectedCapabilityId(null)}
+        activeFilterLabels={activeFilterLabels}
+        onClearFilters={() => {
+          setSelectedCapabilityId(null);
+          setSelectedPrincipleId(null);
+        }}
         selectedCount={visibleExperiences.length}
       />
 
@@ -105,6 +125,7 @@ export function App() {
           <CapabilityMap
             data={data}
             selectedCapabilityId={selectedCapabilityId}
+            selectedPrincipleId={selectedPrincipleId}
             selectedExperienceId={selectedExperienceId}
             onCapabilitySelect={setSelectedCapabilityId}
             onExperienceSelect={setSelectedExperienceId}
@@ -122,7 +143,25 @@ export function App() {
           <TimelineView
             data={data}
             selectedCapabilityId={selectedCapabilityId}
+            selectedPrincipleId={selectedPrincipleId}
             selectedExperienceId={selectedExperienceId}
+            onExperienceSelect={setSelectedExperienceId}
+          />
+          <ExperiencePanel
+            data={data}
+            experience={selectedExperience}
+            selectedCapabilityId={selectedCapabilityId}
+          />
+        </section>
+      )}
+
+      {viewMode === 'principles' && (
+        <section className="workspace workspace--principles">
+          <PrinciplesView
+            data={data}
+            selectedPrincipleId={selectedPrincipleId}
+            selectedExperienceId={selectedExperienceId}
+            onPrincipleSelect={setSelectedPrincipleId}
             onExperienceSelect={setSelectedExperienceId}
           />
           <ExperiencePanel
