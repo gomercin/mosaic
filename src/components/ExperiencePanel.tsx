@@ -1,5 +1,5 @@
 import type { Experience, MosaicData } from '../types';
-import { getCapabilityMap, getPrincipleMap } from '../utils/mosaic';
+import { getCapabilityMap, getExperienceCapabilityIds, getPrincipleMap } from '../utils/mosaic';
 
 type ExperiencePanelProps = {
   data: MosaicData;
@@ -21,48 +21,82 @@ export function ExperiencePanel({ data, experience, selectedCapabilityId }: Expe
     );
   }
 
+  const tools = experience.tools ?? [];
+  const revealedPatterns = experience.revealedPatterns ?? [];
+
   return (
     <aside className="detail-panel">
       <p className="eyebrow">{experience.type} · {experience.period.label}</p>
       <h2>{experience.title}</h2>
       {experience.company && <p className="detail-panel__company">{experience.company}</p>}
       <p className="detail-panel__summary">{experience.summary}</p>
+      {experience.publicNarrative && (
+        <p className="detail-panel__narrative">{experience.publicNarrative}</p>
+      )}
 
       <div className="detail-grid">
         {experience.challenge && (
           <section>
-            <h3>Challenge</h3>
+            <h3>What was difficult?</h3>
             <p>{experience.challenge}</p>
           </section>
         )}
         {experience.approach && (
           <section>
-            <h3>Approach</h3>
+            <h3>How did I approach it?</h3>
             <p>{experience.approach}</p>
           </section>
         )}
         {experience.impact && (
           <section>
-            <h3>Impact</h3>
+            <h3>Why does this matter now?</h3>
             <p>{experience.impact}</p>
           </section>
         )}
       </div>
 
       <section className="tag-section">
-        <h3>Capabilities demonstrated</h3>
+        <h3>What did it strengthen?</h3>
         <div className="tag-list">
-          {experience.skills.map((skillId) => {
-            const capability = capabilityMap[skillId];
-            const isSelected = selectedCapabilityId === skillId;
+          {getExperienceCapabilityIds(experience).map((capabilityId) => {
+            const capability = capabilityMap[capabilityId];
+            const isSelected = selectedCapabilityId === capabilityId;
             return (
-              <span key={skillId} className={`tag ${isSelected ? 'is-selected' : ''}`}>
-                {capability?.label ?? skillId}
+              <span
+                key={capabilityId}
+                className={`tag ${isSelected ? 'is-selected' : ''}`}
+                data-category={capability?.category}
+              >
+                {capability?.label ?? capabilityId}
               </span>
             );
           })}
         </div>
       </section>
+
+      {tools.length > 0 && (
+        <section className="tag-section">
+          <h3>Tools and materials</h3>
+          <div className="tag-list">
+            {tools.map((tool) => (
+              <span key={tool} className="tag tag--tool">
+                {tool}
+              </span>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {revealedPatterns.length > 0 && (
+        <section className="pattern-section">
+          <h3>What did it reveal?</h3>
+          <div className="pattern-list">
+            {revealedPatterns.map((pattern) => (
+              <p key={pattern}>{pattern}</p>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="tag-section">
         <h3>Principles revealed</h3>

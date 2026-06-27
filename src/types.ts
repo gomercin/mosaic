@@ -29,6 +29,11 @@ export type ExperiencePeriod = {
 
 export type Visibility = 'public' | 'private' | 'draft';
 
+export type Evidence = {
+  label: string;
+  url: string;
+};
+
 export type Experience = {
   id: string;
   title: string;
@@ -36,12 +41,19 @@ export type Experience = {
   company?: string;
   period: ExperiencePeriod;
   summary: string;
-  rawNarrative?: string;
+  rawNarrative: string;
+  publicNarrative?: string;
+  privateNotes?: string;
   challenge?: string;
   approach?: string;
   impact?: string;
-  skills: string[];
+  strengthenedCapabilities: string[];
+  skills?: string[];
+  revealedPatterns: string[];
+  tools: string[];
   principles: string[];
+  evidence?: Evidence[];
+  tone?: string[];
   visibility: Visibility;
 };
 

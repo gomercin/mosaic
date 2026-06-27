@@ -59,6 +59,13 @@ export function App() {
     setViewMode('overview');
   }
 
+  function handleDataImported(importedData: MosaicData) {
+    setData(importedData);
+    setSelectedCapabilityId(null);
+    setSelectedExperienceId(importedData.experiences[0]?.id ?? null);
+    setViewMode('overview');
+  }
+
   if (loadError) {
     return (
       <main className="app-shell app-shell--centered">
@@ -127,7 +134,11 @@ export function App() {
       )}
 
       {viewMode === 'studio' && (
-        <Studio data={data} onExperienceAdded={handleExperienceAdded} />
+        <Studio
+          data={data}
+          onExperienceAdded={handleExperienceAdded}
+          onDataImported={handleDataImported}
+        />
       )}
     </main>
   );

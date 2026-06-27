@@ -17,6 +17,12 @@ This first scaffold contains:
 
 ## Development
 
+Use Node.js 22, matching the GitHub Actions workflows:
+
+```bash
+nvm use
+```
+
 ```bash
 npm install
 npm run dev

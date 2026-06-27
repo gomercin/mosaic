@@ -16,10 +16,18 @@ export function getPrincipleMap(principles: Principle[]): Record<string, Princip
   return Object.fromEntries(principles.map((principle) => [principle.id, principle]));
 }
 
+export function getExperienceCapabilityIds(experience: Experience): string[] {
+  const strengthenedCapabilities = experience.strengthenedCapabilities ?? [];
+
+  return strengthenedCapabilities.length > 0
+    ? strengthenedCapabilities
+    : experience.skills ?? [];
+}
+
 export function capabilityUsage(data: MosaicData): Record<string, number> {
   return data.experiences.reduce<Record<string, number>>((usage, experience) => {
-    experience.skills.forEach((skillId) => {
-      usage[skillId] = (usage[skillId] ?? 0) + 1;
+    getExperienceCapabilityIds(experience).forEach((capabilityId) => {
+      usage[capabilityId] = (usage[capabilityId] ?? 0) + 1;
     });
 
     return usage;
@@ -30,7 +38,7 @@ export function experienceMatchesCapability(
   experience: Experience,
   selectedCapabilityId: string | null
 ): boolean {
-  return !selectedCapabilityId || experience.skills.includes(selectedCapabilityId);
+  return !selectedCapabilityId || getExperienceCapabilityIds(experience).includes(selectedCapabilityId);
 }
 
 export function sortExperiencesByStart(experiences: Experience[]): Experience[] {

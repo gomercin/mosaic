@@ -115,11 +115,18 @@
       },
       "summary": "A utility born from the need to bridge copied content into workflows where official integration paths were limited.",
       "rawNarrative": "Sample narrative: I wanted a smoother copy/paste workflow, but the ecosystem did not provide the clean integration points I wanted. Instead of waiting for a perfect API, I explored what was already available and built a practical bridge.",
+      "publicNarrative": "CopierciN is a small example of a recurring pattern: when a direct integration route is blocked, look for the behaviour people already rely on and build a bridge around it.",
       "challenge": "There was no obvious public SDK path for the workflow I wanted to support.",
       "approach": "Reverse-engineered available artifacts and used lightweight integration tricks to make the workflow usable.",
       "impact": "Turned a blocked workflow into a working tool and shaped a long-running preference for practical bridges over total redesigns.",
-      "skills": ["bridge-building", "mcgyvering", "ux-thinking", "learning-agility"],
+      "strengthenedCapabilities": ["bridge-building", "mcgyvering", "ux-thinking", "learning-agility"],
+      "revealedPatterns": [
+        "I prefer bridging existing workflows over replacing them.",
+        "I enjoy solving useful problems under awkward constraints."
+      ],
+      "tools": ["browser bookmarks", "system files"],
       "principles": ["bridge-dont-replace", "constraints-fuel-creativity"],
+      "tone": ["inventive", "pragmatic", "constraint-driven"],
       "visibility": "public"
     },
     {
@@ -134,11 +141,18 @@
       },
       "summary": "A reporting workflow that made defect state, age, ownership, and trend information easier to inspect.",
       "rawNarrative": "Sample narrative: The available exports showed current status, but historical trend was not naturally available. The interesting part was not only building a dashboard, but creating a repeatable data trail so the system could start telling a story over time.",
+      "publicNarrative": "The dashboard mattered less as a report and more as an observability layer: a way to turn static status checking into shared trend-aware conversations.",
       "challenge": "Important status information existed, but history and trend context were hard to see.",
       "approach": "Combined recurring snapshots, transformation logic, and dashboard views into a more observable workflow.",
       "impact": "Helped move from static status checking to trend-aware conversations.",
-      "skills": ["automation", "data-observability", "systems-thinking", "stakeholder-translation"],
+      "strengthenedCapabilities": ["automation", "data-observability", "systems-thinking", "stakeholder-translation"],
+      "revealedPatterns": [
+        "I turn vague operational pain into inspectable workflows.",
+        "I look for ways to make hidden system state visible enough for better conversations."
+      ],
+      "tools": ["recurring snapshots", "data transformation", "dashboard views"],
       "principles": ["show-the-system", "think-with-your-hands"],
+      "tone": ["systemic", "observable", "practical"],
       "visibility": "public"
     },
     {
@@ -153,11 +167,18 @@
       },
       "summary": "Supporting an AI-focused day by translating possibilities into usable conversations and next steps.",
       "rawNarrative": "Sample narrative: AI conversations easily become either hype or fear. The useful layer is helping people connect the technology to their own work without losing the human and organizational context.",
+      "publicNarrative": "This experience sits at the intersection of AI tooling, facilitation, and coaching: helping people move from abstract possibility to grounded next steps.",
       "challenge": "AI adoption discussions can stay too abstract or tool-focused.",
       "approach": "Used facilitation, examples, and translation between technical and non-technical viewpoints.",
       "impact": "Created room for more practical and grounded AI conversations.",
-      "skills": ["ai-tooling", "coaching", "stakeholder-translation", "public-speaking"],
+      "strengthenedCapabilities": ["ai-tooling", "coaching", "stakeholder-translation", "public-speaking"],
+      "revealedPatterns": [
+        "I translate emerging technology into human, organizational, and practical terms.",
+        "I am drawn to adoption questions, not only tool capability questions."
+      ],
+      "tools": ["facilitation prompts", "examples", "AI tooling"],
       "principles": ["bridge-dont-replace", "show-the-system"],
+      "tone": ["grounded", "curious", "facilitative"],
       "visibility": "public"
     },
     {
@@ -172,11 +193,18 @@
       },
       "summary": "A creative learning path that combines deliberate practice, performance pressure, feedback, and identity.",
       "rawNarrative": "Sample narrative: Music is not a software project, but it exposes many of the same patterns: practice loops, constraints, performance anxiety, feedback, collaboration, and the strange gap between knowing and doing.",
+      "publicNarrative": "Clarinet practice reveals a non-software learning pattern: making progress while visible, imperfect, and dependent on feedback.",
       "challenge": "Performing and learning an expressive instrument requires comfort with imperfection and feedback.",
       "approach": "Combined practice, mentorship, equipment experiments, and small performance contexts.",
       "impact": "Strengthened learning agility, creative expression, and tolerance for visible iteration.",
-      "skills": ["creative-expression", "learning-agility", "public-speaking", "coaching"],
+      "strengthenedCapabilities": ["creative-expression", "learning-agility", "public-speaking", "coaching"],
+      "revealedPatterns": [
+        "I learn by creating feedback loops between practice, reflection, and public exposure.",
+        "Creative practice gives me another language for understanding systems, people, and growth."
+      ],
+      "tools": ["practice routines", "mentorship", "performance settings"],
       "principles": ["think-with-your-hands", "constraints-fuel-creativity"],
+      "tone": ["reflective", "creative", "iterative"],
       "visibility": "public"
     },
     {
@@ -191,11 +219,18 @@
       },
       "summary": "A self-made portfolio alternative that maps experiences to capabilities, principles, and time.",
       "rawNarrative": "Sample narrative: A traditional portfolio would show projects. I wanted something that shows the patterns behind the projects: what each experience strengthened, what it revealed, and how seemingly unrelated domains connect.",
+      "publicNarrative": "Mosaic is both the artifact and the argument: generalist value becomes easier to see when experiences are mapped to capabilities, principles, and revealed patterns.",
       "challenge": "Generalist value is difficult to communicate through a linear CV or project list.",
       "approach": "Designed a static, data-driven map where experiences can be explored through capabilities, principles, and timeline.",
       "impact": "Creates a more memorable way to introduce the kind of engineer and coach someone is becoming.",
-      "skills": ["systems-thinking", "ux-thinking", "ai-tooling", "creative-expression", "stakeholder-translation"],
+      "strengthenedCapabilities": ["systems-thinking", "ux-thinking", "ai-tooling", "creative-expression", "stakeholder-translation"],
+      "revealedPatterns": [
+        "I build artifacts to understand and communicate fuzzy identity-level problems.",
+        "I connect software, coaching, storytelling, and visual systems when a plain document undersells the idea."
+      ],
+      "tools": ["React", "TypeScript", "static JSON", "GitHub Pages"],
       "principles": ["show-the-system", "think-with-your-hands", "bridge-dont-replace"],
+      "tone": ["self-made", "exploratory", "systems-minded"],
       "visibility": "public"
     }
   ]

@@ -1,5 +1,9 @@
 import type { MosaicData } from '../types';
-import { capabilityUsage, experienceMatchesCapability } from '../utils/mosaic';
+import {
+  capabilityUsage,
+  experienceMatchesCapability,
+  getExperienceCapabilityIds
+} from '../utils/mosaic';
 
 type CapabilityMapProps = {
   data: MosaicData;
@@ -37,7 +41,9 @@ export function CapabilityMap({
             const angle = (index / data.capabilities.length) * Math.PI * 2 - Math.PI / 2;
             const x = 50 + Math.cos(angle) * 39;
             const y = 50 + Math.sin(angle) * 34;
-            const isConnectedToSelectedExperience = selectedExperience?.skills.includes(capability.id);
+            const isConnectedToSelectedExperience = selectedExperience
+              ? getExperienceCapabilityIds(selectedExperience).includes(capability.id)
+              : false;
             const isSelectedCapability = selectedCapabilityId === capability.id;
 
             return (
@@ -69,6 +75,7 @@ export function CapabilityMap({
             <button
               key={capability.id}
               className={`capability-node ${isSelected ? 'is-selected' : ''} ${isDimmed ? 'is-dimmed' : ''}`}
+              data-category={capability.category}
               style={{ left: `${x}%`, top: `${y}%` }}
               type="button"
               onClick={() => onCapabilitySelect(isSelected ? null : capability.id)}
