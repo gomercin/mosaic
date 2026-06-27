@@ -23,6 +23,8 @@ export function ExperiencePanel({ data, experience, selectedCapabilityId }: Expe
 
   const tools = experience.tools ?? [];
   const revealedPatterns = experience.revealedPatterns ?? [];
+  const principles = experience.principles ?? [];
+  const evidence = experience.evidence ?? [];
 
   return (
     <aside className="detail-panel">
@@ -32,6 +34,34 @@ export function ExperiencePanel({ data, experience, selectedCapabilityId }: Expe
       <p className="detail-panel__summary">{experience.summary}</p>
       {experience.publicNarrative && (
         <p className="detail-panel__narrative">{experience.publicNarrative}</p>
+      )}
+
+      {revealedPatterns.length > 0 && (
+        <section className="pattern-section pattern-section--primary">
+          <h3>What did it reveal?</h3>
+          <div className="pattern-list">
+            {revealedPatterns.map((pattern) => (
+              <p key={pattern}>{pattern}</p>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {principles.length > 0 && (
+        <section className="principle-section">
+          <h3>Principles this points to</h3>
+          <div className="principle-list">
+            {principles.map((principleId) => {
+              const principle = principleMap[principleId];
+              return (
+                <article key={principleId}>
+                  <strong>{principle?.label ?? principleId}</strong>
+                  {principle?.description && <p>{principle.description}</p>}
+                </article>
+              );
+            })}
+          </div>
+        </section>
       )}
 
       <div className="detail-grid">
@@ -87,31 +117,18 @@ export function ExperiencePanel({ data, experience, selectedCapabilityId }: Expe
         </section>
       )}
 
-      {revealedPatterns.length > 0 && (
-        <section className="pattern-section">
-          <h3>What did it reveal?</h3>
-          <div className="pattern-list">
-            {revealedPatterns.map((pattern) => (
-              <p key={pattern}>{pattern}</p>
+      {evidence.length > 0 && (
+        <section className="evidence-section">
+          <h3>Evidence</h3>
+          <div className="evidence-list">
+            {evidence.map((item) => (
+              <a key={item.url} href={item.url} target="_blank" rel="noreferrer">
+                {item.label}
+              </a>
             ))}
           </div>
         </section>
       )}
-
-      <section className="tag-section">
-        <h3>Principles revealed</h3>
-        <div className="principle-list">
-          {experience.principles.map((principleId) => {
-            const principle = principleMap[principleId];
-            return (
-              <article key={principleId}>
-                <strong>{principle?.label ?? principleId}</strong>
-                {principle?.description && <p>{principle.description}</p>}
-              </article>
-            );
-          })}
-        </div>
-      </section>
     </aside>
   );
 }

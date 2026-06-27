@@ -497,7 +497,9 @@ button {
 
 .detail-grid h3,
 .tag-section h3,
+.principle-section h3,
 .pattern-section h3,
+.evidence-section h3,
 .prompt-panel h3 {
   margin: 0 0 8px;
   color: #e0e7ff;
@@ -512,12 +514,23 @@ button {
   margin-top: 20px;
 }
 
+.principle-section,
 .pattern-section {
   margin-top: 22px;
 }
 
+.pattern-section--primary {
+  padding: 16px;
+  border: 1px solid rgba(250, 204, 21, 0.2);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at top left, rgba(250, 204, 21, 0.08), transparent 12rem),
+    rgba(250, 204, 21, 0.035);
+}
+
 .tag-list,
-.principle-list {
+.principle-list,
+.evidence-list {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -547,6 +560,23 @@ button {
   border-color: rgba(250, 204, 21, 0.28);
   background: rgba(250, 204, 21, 0.055);
   color: #fff7d1;
+}
+
+.evidence-section {
+  margin-top: 20px;
+}
+
+.evidence-list a {
+  padding: 9px 11px;
+  border: 1px solid rgba(125, 211, 252, 0.25);
+  border-radius: 999px;
+  background: rgba(125, 211, 252, 0.08);
+  color: #dff7ff;
+  text-decoration: none;
+}
+
+.evidence-list a:hover {
+  border-color: rgba(125, 211, 252, 0.7);
 }
 
 .tag.is-selected {
