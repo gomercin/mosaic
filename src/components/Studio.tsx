@@ -86,6 +86,31 @@ function buildDraftExperience(draft: DraftState): Experience {
   };
 }
 
+function downloadJson(data: MosaicData, filename: string) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function toPublicMosaicData(data: MosaicData): MosaicData {
+  return {
+    ...data,
+    experiences: data.experiences
+      .filter((experience) => experience.visibility === 'public')
+      .map(({ privateNotes: _privateNotes, rawNarrative, publicNarrative, summary, ...experience }) => ({
+        ...experience,
+        summary,
+        rawNarrative: publicNarrative ?? summary ?? rawNarrative,
+        publicNarrative,
+        visibility: 'public'
+      }))
+  };
+}
+
 export function Studio({ data, onExperienceAdded, onDataImported }: StudioProps) {
   const [draft, setDraft] = useState<DraftState>(initialDraft);
   const [importErrors, setImportErrors] = useState<string[]>([]);
@@ -211,14 +236,12 @@ export function Studio({ data, onExperienceAdded, onDataImported }: StudioProps)
     }
   }
 
-  function exportJson() {
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'mosaic.json';
-    link.click();
-    URL.revokeObjectURL(url);
+  function exportAuthoringJson() {
+    downloadJson(data, 'mosaic-authoring.json');
+  }
+
+  function exportPublicJson() {
+    downloadJson(toPublicMosaicData(data), 'mosaic.public.json');
   }
 
   return (
@@ -395,8 +418,11 @@ export function Studio({ data, onExperienceAdded, onDataImported }: StudioProps)
             >
               Add draft experience
             </button>
-            <button type="button" className="secondary" onClick={exportJson}>
-              Export JSON
+            <button type="button" className="secondary" onClick={exportAuthoringJson}>
+              Export authoring JSON
+            </button>
+            <button type="button" className="secondary" onClick={exportPublicJson}>
+              Export public JSON
             </button>
           </div>
         </form>
