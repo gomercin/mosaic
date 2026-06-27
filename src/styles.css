@@ -208,6 +208,109 @@ button {
     rgba(255, 255, 255, 0.035);
 }
 
+.atlas-board {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr) 180px;
+  gap: 14px;
+  align-items: stretch;
+}
+
+.discover-rail,
+.legend-panel {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: 20px;
+  background: rgba(7, 8, 18, 0.46);
+}
+
+.discover-rail h3,
+.legend-panel h3 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1rem;
+}
+
+.rail-summary {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid rgba(125, 211, 252, 0.18);
+  border-radius: 16px;
+  background: rgba(125, 211, 252, 0.06);
+}
+
+.rail-summary span {
+  color: var(--color-cyan);
+  font-size: 1.7rem;
+  font-weight: 900;
+}
+
+.rail-summary small,
+.rail-label,
+.legend-note p {
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.45;
+}
+
+.category-filter,
+.rail-experiences,
+.legend-list,
+.legend-note {
+  display: grid;
+  gap: 8px;
+}
+
+.category-filter button,
+.legend-list span {
+  padding: 9px 10px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.045);
+  color: var(--color-text);
+  text-align: left;
+}
+
+.category-filter button {
+  transition: border-color 220ms ease, background 220ms ease, transform 220ms ease;
+}
+
+.category-filter button:hover,
+.category-filter button.is-active {
+  border-color: rgba(125, 211, 252, 0.62);
+  background: rgba(125, 211, 252, 0.08);
+  transform: translateX(2px);
+}
+
+.category-filter button[data-category="Core capability"],
+.legend-list span[data-category="Core capability"] {
+  border-color: rgba(45, 212, 191, 0.38);
+}
+
+.category-filter button[data-category="Technical"],
+.legend-list span[data-category="Technical"] {
+  border-color: rgba(56, 189, 248, 0.38);
+}
+
+.category-filter button[data-category="Human"],
+.legend-list span[data-category="Human"] {
+  border-color: rgba(251, 113, 133, 0.38);
+}
+
+.category-filter button[data-category="Creative"],
+.legend-list span[data-category="Creative"] {
+  border-color: rgba(245, 158, 11, 0.42);
+}
+
+.rail-experiences {
+  max-height: 340px;
+  overflow: auto;
+  padding-right: 2px;
+}
+
 .constellation__lines {
   position: absolute;
   inset: 0;
@@ -224,6 +327,10 @@ button {
 .constellation__lines line.is-lit {
   stroke: rgba(125, 211, 252, 0.8);
   stroke-width: 0.36;
+}
+
+.constellation__lines line.is-muted {
+  opacity: 0.22;
 }
 
 .constellation__center {
@@ -252,6 +359,11 @@ button {
 
 .constellation__center strong {
   font-size: 1rem;
+}
+
+.constellation__center small {
+  color: var(--color-muted);
+  line-height: 1.35;
 }
 
 .capability-node {
@@ -306,7 +418,8 @@ button {
 }
 
 .capability-node:hover,
-.capability-node.is-selected {
+.capability-node.is-selected,
+.capability-node.is-connected {
   border-color: rgba(125, 211, 252, 0.75);
   background: rgba(30, 41, 80, 0.95);
   transform: translate(-50%, -50%) scale(1.05);
@@ -788,8 +901,22 @@ button {
   .hero,
   .workspace--overview,
   .workspace--timeline,
+  .workspace--principles,
   .studio__grid {
     grid-template-columns: 1fr;
+  }
+
+  .atlas-board {
+    grid-template-columns: 1fr;
+  }
+
+  .discover-rail,
+  .legend-panel {
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  }
+
+  .rail-experiences {
+    max-height: none;
   }
 
   .hero__actions {
@@ -809,6 +936,7 @@ button {
   .hero,
   .map-card,
   .timeline-card,
+  .principles-card,
   .detail-panel,
   .studio {
     border-radius: 22px;
