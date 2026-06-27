@@ -855,11 +855,74 @@ button {
   margin-top: 22px;
 }
 
+.studio-progress {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.studio-progress span {
+  padding: 8px 10px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.045);
+  color: var(--color-muted);
+}
+
+.studio-progress span.is-complete {
+  border-color: rgba(45, 212, 191, 0.42);
+  background: rgba(45, 212, 191, 0.08);
+  color: #ccfbf1;
+}
+
 .studio-form,
 .studio__side,
 .prompt-panel {
   display: grid;
   gap: 16px;
+}
+
+.studio-step {
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.studio-step > header {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.studio-step > header > span {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid rgba(125, 211, 252, 0.28);
+  border-radius: 50%;
+  background: rgba(125, 211, 252, 0.08);
+  color: var(--color-cyan);
+  font-weight: 900;
+}
+
+.studio-step h3,
+.studio-step p {
+  margin: 0;
+}
+
+.studio-step h3 {
+  color: var(--color-text);
+}
+
+.studio-step p {
+  color: var(--color-muted);
+  line-height: 1.55;
 }
 
 .studio-form label,

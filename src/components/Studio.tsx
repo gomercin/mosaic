@@ -171,6 +171,11 @@ export function Studio({ data, onExperienceAdded, onDataImported }: StudioProps)
 
     return buildDraftExperience(draft);
   }, [draft]);
+  const hasRawStory = draft.title.trim().length > 0 && draft.rawNarrative.trim().length > 0;
+  const hasStructure =
+    draft.strengthenedCapabilities.length > 0 ||
+    draft.principles.length > 0 ||
+    draft.revealedPatterns.trim().length > 0;
 
   function updateField<K extends keyof DraftState>(field: K, value: DraftState[K]) {
     setDraft((currentDraft) => ({ ...currentDraft, [field]: value }));
@@ -253,6 +258,11 @@ export function Studio({ data, onExperienceAdded, onDataImported }: StudioProps)
           This is intentionally not a CMS. It is a local JSON sculpting tool: capture, review,
           export, publish static files.
         </p>
+        <div className="studio-progress" aria-label="Studio progress">
+          <span className={hasRawStory ? 'is-complete' : ''}>1 Raw story</span>
+          <span className={hasStructure ? 'is-complete' : ''}>2 Structure</span>
+          <span className={previewExperience ? 'is-complete' : ''}>3 Preview/export</span>
+        </div>
       </div>
 
       <div className="studio__grid">
@@ -276,56 +286,75 @@ export function Studio({ data, onExperienceAdded, onDataImported }: StudioProps)
             )}
           </section>
 
-          <label>
-            Title
-            <input
-              value={draft.title}
-              onChange={(event) => updateField('title', event.target.value)}
-              placeholder="e.g. Mosaic capability atlas"
-            />
-          </label>
+          <section className="studio-step">
+            <header>
+              <span>1</span>
+              <div>
+                <h3>Raw story</h3>
+                <p>Capture the source material before polishing the shape.</p>
+              </div>
+            </header>
 
-          <div className="studio-form__row">
             <label>
-              Type
+              Title
               <input
-                value={draft.type}
-                onChange={(event) => updateField('type', event.target.value)}
-                placeholder="Work project, hobby, talk..."
+                value={draft.title}
+                onChange={(event) => updateField('title', event.target.value)}
+                placeholder="e.g. Mosaic capability atlas"
               />
             </label>
+
             <label>
-              Company / context
-              <input
-                value={draft.company}
-                onChange={(event) => updateField('company', event.target.value)}
-                placeholder="Personal, Xebia, client..."
+              Raw story
+              <textarea
+                value={draft.rawNarrative}
+                onChange={(event) => updateField('rawNarrative', event.target.value)}
+                rows={8}
+                placeholder="Tell it in your own words first. Too long is fine here."
               />
             </label>
-          </div>
+          </section>
 
-          <div className="studio-form__row">
+          <section className="studio-step">
+            <header>
+              <span>2</span>
+              <div>
+                <h3>Structured signals</h3>
+                <p>Shape the story into public narrative, capabilities, principles, tools, and patterns.</p>
+              </div>
+            </header>
+
+            <div className="studio-form__row">
+              <label>
+                Type
+                <input
+                  value={draft.type}
+                  onChange={(event) => updateField('type', event.target.value)}
+                  placeholder="Work project, hobby, talk..."
+                />
+              </label>
+              <label>
+                Company / context
+                <input
+                  value={draft.company}
+                  onChange={(event) => updateField('company', event.target.value)}
+                  placeholder="Personal, Xebia, client..."
+                />
+              </label>
+            </div>
+
+            <div className="studio-form__row">
+              <label>
+                Start
+                <input value={draft.start} onChange={(event) => updateField('start', event.target.value)} />
+              </label>
+              <label>
+                End
+                <input value={draft.end} onChange={(event) => updateField('end', event.target.value)} />
+              </label>
+            </div>
+
             <label>
-              Start
-              <input value={draft.start} onChange={(event) => updateField('start', event.target.value)} />
-            </label>
-            <label>
-              End
-              <input value={draft.end} onChange={(event) => updateField('end', event.target.value)} />
-            </label>
-          </div>
-
-          <label>
-            Raw story
-            <textarea
-              value={draft.rawNarrative}
-              onChange={(event) => updateField('rawNarrative', event.target.value)}
-              rows={8}
-              placeholder="Tell it in your own words first. Too long is fine here."
-            />
-          </label>
-
-          <label>
             Public narrative
             <textarea
               value={draft.publicNarrative}
@@ -333,9 +362,9 @@ export function Studio({ data, onExperienceAdded, onDataImported }: StudioProps)
               rows={4}
               placeholder="Optional public-safe story. Leave blank if this still needs refinement."
             />
-          </label>
+            </label>
 
-          <label>
+            <label>
             Revealed patterns
             <textarea
               value={draft.revealedPatterns}
@@ -343,30 +372,30 @@ export function Studio({ data, onExperienceAdded, onDataImported }: StudioProps)
               rows={4}
               placeholder="One pattern per line, e.g. I turn vague pain into inspectable workflows."
             />
-          </label>
-
-          <div className="studio-form__row">
-            <label>
-              Tools and materials
-              <textarea
-                value={draft.tools}
-                onChange={(event) => updateField('tools', event.target.value)}
-                rows={4}
-                placeholder="One per line: React, facilitation prompts, dashboard views..."
-              />
             </label>
-            <label>
-              Tone
-              <textarea
-                value={draft.tone}
-                onChange={(event) => updateField('tone', event.target.value)}
-                rows={4}
-                placeholder="One per line: pragmatic, reflective, inventive..."
-              />
-            </label>
-          </div>
 
-          <fieldset>
+            <div className="studio-form__row">
+              <label>
+                Tools and materials
+                <textarea
+                  value={draft.tools}
+                  onChange={(event) => updateField('tools', event.target.value)}
+                  rows={4}
+                  placeholder="One per line: React, facilitation prompts, dashboard views..."
+                />
+              </label>
+              <label>
+                Tone
+                <textarea
+                  value={draft.tone}
+                  onChange={(event) => updateField('tone', event.target.value)}
+                  rows={4}
+                  placeholder="One per line: pragmatic, reflective, inventive..."
+                />
+              </label>
+            </div>
+
+            <fieldset>
             <legend>Strengthened capabilities</legend>
             <div className="checkbox-grid">
               {data.capabilities.map((capability) => (
@@ -381,9 +410,9 @@ export function Studio({ data, onExperienceAdded, onDataImported }: StudioProps)
                 </label>
               ))}
             </div>
-          </fieldset>
+            </fieldset>
 
-          <fieldset>
+            <fieldset>
             <legend>Principles</legend>
             <div className="checkbox-grid">
               {data.principles.map((principle) => (
@@ -398,9 +427,9 @@ export function Studio({ data, onExperienceAdded, onDataImported }: StudioProps)
                 </label>
               ))}
             </div>
-          </fieldset>
+            </fieldset>
 
-          <label>
+            <label>
             Private notes
             <textarea
               value={draft.privateNotes}
@@ -408,9 +437,19 @@ export function Studio({ data, onExperienceAdded, onDataImported }: StudioProps)
               rows={4}
               placeholder="Local-only notes. Do not put real private notes in public deployed JSON."
             />
-          </label>
+            </label>
+          </section>
 
-          <div className="studio-form__actions">
+          <section className="studio-step studio-step--review">
+            <header>
+              <span>3</span>
+              <div>
+                <h3>Preview and export</h3>
+                <p>Add the draft to the in-memory atlas, then export JSON when ready.</p>
+              </div>
+            </header>
+
+            <div className="studio-form__actions">
             <button
               type="button"
               onClick={createDraftExperience}
@@ -424,7 +463,8 @@ export function Studio({ data, onExperienceAdded, onDataImported }: StudioProps)
             <button type="button" className="secondary" onClick={exportPublicJson}>
               Export public JSON
             </button>
-          </div>
+            </div>
+          </section>
         </form>
 
         <div className="studio__side">
