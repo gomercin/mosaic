@@ -16,6 +16,7 @@ export function App() {
   const [selectedCapabilityId, setSelectedCapabilityId] = useState<string | null>(null);
   const [selectedPrincipleId, setSelectedPrincipleId] = useState<string | null>(null);
   const [selectedExperienceId, setSelectedExperienceId] = useState<string | null>(null);
+  const [isOverviewDetailOpen, setIsOverviewDetailOpen] = useState(false);
 
   useEffect(() => {
     loadMosaicData()
@@ -73,6 +74,7 @@ export function App() {
     });
     setSelectedExperienceId(experience.id);
     setViewMode('overview');
+    setIsOverviewDetailOpen(true);
   }
 
   function handleDataImported(importedData: MosaicData) {
@@ -81,6 +83,20 @@ export function App() {
     setSelectedPrincipleId(null);
     setSelectedExperienceId(importedData.experiences[0]?.id ?? null);
     setViewMode('overview');
+    setIsOverviewDetailOpen(false);
+  }
+
+  function handleViewModeChange(nextViewMode: ViewMode) {
+    setViewMode(nextViewMode);
+
+    if (nextViewMode !== 'overview') {
+      setIsOverviewDetailOpen(false);
+    }
+  }
+
+  function handleOverviewExperienceSelect(experienceId: string) {
+    setSelectedExperienceId(experienceId);
+    setIsOverviewDetailOpen(true);
   }
 
   if (loadError) {
@@ -111,7 +127,7 @@ export function App() {
       <Header
         profile={data.profile}
         viewMode={viewMode}
-        onViewModeChange={setViewMode}
+        onViewModeChange={handleViewModeChange}
         activeFilterLabels={activeFilterLabels}
         onClearFilters={() => {
           setSelectedCapabilityId(null);
@@ -121,20 +137,34 @@ export function App() {
       />
 
       {viewMode === 'overview' && (
-        <section className="workspace workspace--overview">
+        <section className="workspace workspace--overview workspace--overview-canvas">
           <CapabilityMap
             data={data}
             selectedCapabilityId={selectedCapabilityId}
             selectedPrincipleId={selectedPrincipleId}
             selectedExperienceId={selectedExperienceId}
             onCapabilitySelect={setSelectedCapabilityId}
-            onExperienceSelect={setSelectedExperienceId}
+            onExperienceSelect={handleOverviewExperienceSelect}
           />
-          <ExperiencePanel
-            data={data}
-            experience={selectedExperience}
-            selectedCapabilityId={selectedCapabilityId}
-          />
+          {isOverviewDetailOpen && (
+            <div className="overview-detail-drawer" aria-label="Selected experience story">
+              <div className="overview-detail-drawer__bar">
+                <p className="eyebrow">Selected signal</p>
+                <button
+                  type="button"
+                  className="overview-detail-drawer__close"
+                  onClick={() => setIsOverviewDetailOpen(false)}
+                >
+                  Close
+                </button>
+              </div>
+              <ExperiencePanel
+                data={data}
+                experience={selectedExperience}
+                selectedCapabilityId={selectedCapabilityId}
+              />
+            </div>
+          )}
         </section>
       )}
 
