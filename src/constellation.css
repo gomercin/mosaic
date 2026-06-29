@@ -355,13 +355,16 @@
 }
 
 .constellation-core {
+  --core-size: 204px;
+
   position: absolute;
   top: 50%;
   left: 50%;
   z-index: 4;
   display: grid;
-  width: 190px;
-  min-height: 190px;
+  width: var(--core-size);
+  height: var(--core-size);
+  overflow: hidden;
   place-items: center;
   align-content: center;
   gap: 6px;
@@ -376,6 +379,28 @@
     inset 0 0 35px rgba(125, 211, 252, 0.08);
   text-align: center;
   transform: translate(-50%, -50%);
+  transition:
+    width 220ms ease,
+    height 220ms ease,
+    padding 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+
+.constellation-core.is-previewing {
+  --core-size: 258px;
+  gap: 5px;
+  padding: 22px;
+  border-color: rgba(125, 211, 252, 0.5);
+  box-shadow:
+    0 0 82px rgba(125, 211, 252, 0.22),
+    inset 0 0 42px rgba(125, 211, 252, 0.1);
+}
+
+.constellation-core.is-project-focus,
+.constellation-core.is-capability-focus,
+.constellation-core.is-principle-focus {
+  --core-size: 212px;
 }
 
 .constellation-core__initials {
@@ -414,17 +439,64 @@
   text-transform: uppercase;
 }
 
-.constellation-core strong {
-  max-width: 145px;
+.constellation-core__title {
+  display: -webkit-box;
+  max-width: calc(var(--core-size) - 62px);
+  margin: 0;
+  overflow: hidden;
   color: #f8fbff;
   font-size: 0.95rem;
   line-height: 1.24;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .constellation-core small {
-  max-width: 145px;
+  max-width: calc(var(--core-size) - 62px);
   color: var(--color-muted);
   line-height: 1.25;
+}
+
+.constellation-core__meta,
+.constellation-core__count {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.constellation-core__summary {
+  display: -webkit-box;
+  max-width: calc(var(--core-size) - 66px);
+  margin: 0;
+  overflow: hidden;
+  color: #c7d2fe;
+  font-size: 0.72rem;
+  line-height: 1.3;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.constellation-core.is-previewing .constellation-core__project-glyph {
+  width: 42px;
+  height: 42px;
+}
+
+.constellation-core.is-previewing .constellation-core__label {
+  font-size: 0.68rem;
+}
+
+.constellation-core.is-previewing .constellation-core__title {
+  max-width: calc(var(--core-size) - 74px);
+  font-size: 0.92rem;
+  line-height: 1.16;
+  -webkit-line-clamp: 3;
+}
+
+.constellation-core.is-previewing .constellation-core__meta,
+.constellation-core.is-previewing .constellation-core__count,
+.constellation-core.is-previewing .constellation-core__summary {
+  max-width: calc(var(--core-size) - 76px);
 }
 
 .constellation-capability,
@@ -586,89 +658,6 @@
     inset 0 0 18px rgba(125, 211, 252, 0.14);
 }
 
-.constellation-preview-card {
-  position: absolute;
-  z-index: 13;
-  display: grid;
-  width: min(260px, 34%);
-  gap: 8px;
-  padding: 14px;
-  border: 1px solid rgba(125, 211, 252, 0.34);
-  border-radius: 18px;
-  background:
-    radial-gradient(circle at top left, rgba(125, 211, 252, 0.11), transparent 9rem),
-    rgba(7, 10, 24, 0.94);
-  box-shadow:
-    0 18px 46px rgba(0, 0, 0, 0.34),
-    0 0 34px rgba(125, 211, 252, 0.13);
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-}
-
-.constellation-preview-card[data-placement="left"] {
-  transform: translate(-100%, -50%);
-}
-
-.constellation-preview-card[data-placement="right"] {
-  transform: translate(0, -50%);
-}
-
-.constellation-preview-card h3,
-.constellation-preview-card p {
-  margin: 0;
-}
-
-.constellation-preview-card h3 {
-  color: #f8fbff;
-  font-size: 1rem;
-  line-height: 1.2;
-}
-
-.constellation-preview-card > p:not(.eyebrow) {
-  display: -webkit-box;
-  overflow: hidden;
-  color: var(--color-muted);
-  line-height: 1.45;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
-.constellation-preview-card dl {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  margin: 0;
-}
-
-.constellation-preview-card div {
-  display: grid;
-  gap: 2px;
-  min-width: 0;
-  padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.constellation-preview-card dt,
-.constellation-preview-card dd {
-  margin: 0;
-}
-
-.constellation-preview-card dt {
-  color: var(--color-cyan);
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.constellation-preview-card dd {
-  overflow: hidden;
-  color: #e0e7ff;
-  font-size: 0.78rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .constellation-experience[data-category="Core capability"] .constellation-experience__glyph {
   background: rgba(var(--category-core-rgb), 0.2);
   color: #ccfbf1;
@@ -786,12 +775,29 @@
   }
 
   .constellation-core {
-    width: 160px;
-    min-height: 160px;
+    --core-size: 176px;
     padding: 18px;
   }
 
-  .constellation-preview-card {
-    width: min(230px, 58%);
+  .constellation-core.is-previewing {
+    --core-size: 224px;
+    gap: 4px;
+    padding: 16px;
   }
+
+  .constellation-core.is-project-focus,
+  .constellation-core.is-capability-focus,
+  .constellation-core.is-principle-focus {
+    --core-size: 186px;
+  }
+
+  .constellation-core.is-previewing .constellation-core__title {
+    font-size: 0.82rem;
+    -webkit-line-clamp: 3;
+  }
+
+  .constellation-core.is-previewing .constellation-core__summary {
+    display: none;
+  }
+
 }

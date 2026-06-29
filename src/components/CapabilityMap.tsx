@@ -158,7 +158,7 @@ function buildCapabilityNodes(data: MosaicData): CapabilityNode[] {
 
 function resolveCapabilityCollisions(nodes: CapabilityNode[]): CapabilityNode[] {
   const minimumDistance = 18.8;
-  const centerExclusionRadius = 27;
+  const centerExclusionRadius = 34;
   let resolvedNodes = nodes.map((node) => ({ ...node }));
 
   for (let pass = 0; pass < 10; pass += 1) {
@@ -260,7 +260,7 @@ function buildExperienceNodes(data: MosaicData, capabilityNodes: CapabilityNode[
 
 function resolveExperienceCollisions(nodes: ExperienceNode[]): ExperienceNode[] {
   const minimumDistance = 15.2;
-  const centerExclusionRadius = 21;
+  const centerExclusionRadius = 31;
   let resolvedNodes = nodes.map((node) => ({ ...node }));
 
   for (let pass = 0; pass < 8; pass += 1) {
@@ -355,11 +355,10 @@ export function CapabilityMap({
   const focusedExperience = activeFocus.kind === 'project'
     ? experienceNodes.find((experience) => experience.id === activeFocus.id)
     : undefined;
-  const hoveredExperience = activeFocus.kind === 'overview' && hoverTarget?.kind === 'project'
+  const centerPreviewExperience = activeFocus.kind === 'overview' && hoverTarget?.kind === 'project'
     ? experienceNodes.find((experience) => experience.id === hoverTarget.id)
     : undefined;
-  const activeExperience = activeFocus.kind === 'project' ? focusedExperience : hoveredExperience;
-  const previewExperience = activeFocus.kind === 'overview' ? hoveredExperience : undefined;
+  const activeExperience = activeFocus.kind === 'project' ? focusedExperience : centerPreviewExperience;
   const activeCapabilityIds = activeExperience?.capabilityIds ?? [];
   const hasActiveFilter = Boolean(selectedCapabilityId || selectedPrincipleId || selectedCategory);
   const selectedCapability = selectedCapabilityId ? capabilityNodeMap[selectedCapabilityId] : undefined;
@@ -372,14 +371,11 @@ export function CapabilityMap({
   const selectedPrincipleExperienceCount = activeFocus.kind === 'principle'
     ? experienceNodes.filter((experience) => experience.principles.includes(activeFocus.id)).length
     : 0;
-  const previewStyle = previewExperience
-    ? ({
-        left: `${clamp(previewExperience.x + (previewExperience.x > 58 ? -16 : 16), 16, 84)}%`,
-        top: `${clamp(previewExperience.y + (previewExperience.y > 58 ? -12 : 12), 14, 86)}%`
-      } as CSSProperties)
-    : undefined;
-  const previewPlacement = previewExperience?.x && previewExperience.x > 58 ? 'left' : 'right';
-
+  const coreClassName = [
+    'constellation-core',
+    centerPreviewExperience ? 'is-previewing' : '',
+    !centerPreviewExperience ? `is-${activeFocus.kind}-focus` : ''
+  ].filter(Boolean).join(' ');
   function experienceMatchesCategory(experience: ExperienceNode): boolean {
     if (!selectedCategory) {
       return true;
@@ -644,35 +640,43 @@ export function CapabilityMap({
             )}
           </svg>
 
-          <div className="constellation-core" aria-label="Profile core">
-            {activeFocus.kind === 'project' && focusedExperience ? (
+          <div className={coreClassName} aria-label="Profile core">
+            {centerPreviewExperience ? (
+              <>
+                <span className="constellation-core__project-glyph">{centerPreviewExperience.glyph}</span>
+                <span className="constellation-core__label">Preview</span>
+                <strong className="constellation-core__title">{centerPreviewExperience.title}</strong>
+                <small className="constellation-core__meta">{centerPreviewExperience.type} · {centerPreviewExperience.period.label}</small>
+                <p className="constellation-core__summary">{centerPreviewExperience.summary}</p>
+                <small className="constellation-core__count">{centerPreviewExperience.capabilityIds.length} capabilities connected</small>
+              </>
+            ) : activeFocus.kind === 'project' && focusedExperience ? (
               <>
                 <span className="constellation-core__project-glyph">{focusedExperience.glyph}</span>
-                <span className="constellation-core__label">Project path</span>
-                <strong>{focusedExperience.title}</strong>
-                <small>{focusedExperience.period.label} · {focusedExperience.type}</small>
-                <small>{focusedExperience.capabilityIds.length} capabilities connected</small>
+                <span className="constellation-core__label">Selected project</span>
+                <strong className="constellation-core__title">{focusedExperience.title}</strong>
+                <small className="constellation-core__count">{focusedExperience.capabilityIds.length} capabilities connected</small>
               </>
             ) : activeFocus.kind === 'capability' && selectedCapability ? (
               <>
                 <span className="constellation-core__initials">C</span>
                 <span className="constellation-core__label">Capability focus</span>
-                <strong>{selectedCapability.label}</strong>
-                <small>{selectedCapability.category}</small>
-                <small>{selectedCapabilityExperiences.length} projects connected</small>
+                <strong className="constellation-core__title">{selectedCapability.label}</strong>
+                <small className="constellation-core__meta">{selectedCapability.category}</small>
+                <small className="constellation-core__count">{selectedCapabilityExperiences.length} projects connected</small>
               </>
             ) : activeFocus.kind === 'principle' && selectedPrinciple ? (
               <>
                 <span className="constellation-core__initials">P</span>
                 <span className="constellation-core__label">Principle focus</span>
-                <strong>{selectedPrinciple.label}</strong>
-                <small>{selectedPrincipleExperienceCount} experiences connected</small>
+                <strong className="constellation-core__title">{selectedPrinciple.label}</strong>
+                <small className="constellation-core__count">{selectedPrincipleExperienceCount} experiences connected</small>
               </>
             ) : (
               <>
                 <span className="constellation-core__initials">{getProfileInitials(data.profile.name)}</span>
                 <span className="constellation-core__label">Mosaic</span>
-                <strong>Capability Atlas</strong>
+                <strong className="constellation-core__title">Capability Atlas</strong>
                 <small>Hover a project to preview its path. Click to open the full story.</small>
               </>
             )}
@@ -720,7 +724,6 @@ export function CapabilityMap({
                 data-category={experience.dominantCategory}
                 style={{ left: `${experience.x}%`, top: `${experience.y}%` } as CSSProperties}
                 type="button"
-                title={`${experience.title} · ${experience.type} · ${experience.period.label}`}
                 onClick={() => onFocusChange({ kind: 'project', id: experience.id })}
                 onFocus={() => setHoverTarget({ kind: 'project', id: experience.id })}
                 onBlur={() => setHoverTarget(null)}
@@ -737,28 +740,6 @@ export function CapabilityMap({
             );
           })}
 
-          {previewExperience && (
-            <aside
-              className="constellation-preview-card"
-              data-placement={previewPlacement}
-              style={previewStyle}
-              aria-live="polite"
-            >
-              <p className="eyebrow">Preview</p>
-              <h3>{previewExperience.title}</h3>
-              <p>{previewExperience.summary}</p>
-              <dl>
-                <div>
-                  <dt>When</dt>
-                  <dd>{previewExperience.period.label}</dd>
-                </div>
-                <div>
-                  <dt>Type</dt>
-                  <dd>{previewExperience.type}</dd>
-                </div>
-              </dl>
-            </aside>
-          )}
         </div>
       </div>
     </section>
