@@ -199,8 +199,17 @@
   stroke-width: 0.55;
 }
 
+.constellation-edge.is-active-path {
+  opacity: 1;
+  stroke-width: 0.78;
+}
+
+.constellation-edge.is-filter-path {
+  stroke-dasharray: 1.2 1.1;
+}
+
 .constellation-edge.is-muted {
-  opacity: 0.08;
+  opacity: 0.055;
 }
 
 .constellation-edge[data-category="Core capability"].is-lit {
@@ -327,9 +336,13 @@
     inset 0 0 30px rgba(125, 211, 252, 0.08);
 }
 
+.constellation-capability.is-selected-path {
+  border-color: rgba(226, 244, 255, 0.66);
+}
+
 .constellation-capability.is-dimmed,
 .constellation-experience.is-dimmed {
-  opacity: 0.23;
+  opacity: 0.18;
 }
 
 .constellation-capability[data-category="Core capability"] {
@@ -407,11 +420,96 @@
   transform: translate(-50%, -50%) scale(1.05);
 }
 
-.constellation-experience:hover .constellation-experience__story,
-.constellation-experience.is-hovered .constellation-experience__story,
+.constellation-experience.is-selected-path {
+  border-color: rgba(226, 244, 255, 0.6);
+}
+
 .constellation-experience.is-selected .constellation-experience__story {
   max-width: 160px;
   opacity: 1;
+}
+
+.constellation-preview-card {
+  position: absolute;
+  z-index: 9;
+  display: grid;
+  width: min(260px, 34%);
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid rgba(125, 211, 252, 0.34);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at top left, rgba(125, 211, 252, 0.11), transparent 9rem),
+    rgba(7, 10, 24, 0.94);
+  box-shadow:
+    0 18px 46px rgba(0, 0, 0, 0.34),
+    0 0 34px rgba(125, 211, 252, 0.13);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.constellation-preview-card[data-placement="left"] {
+  transform: translate(-100%, -50%);
+}
+
+.constellation-preview-card[data-placement="right"] {
+  transform: translate(0, -50%);
+}
+
+.constellation-preview-card h3,
+.constellation-preview-card p {
+  margin: 0;
+}
+
+.constellation-preview-card h3 {
+  color: #f8fbff;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.constellation-preview-card > p:not(.eyebrow) {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--color-muted);
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.constellation-preview-card dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.constellation-preview-card div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.constellation-preview-card dt,
+.constellation-preview-card dd {
+  margin: 0;
+}
+
+.constellation-preview-card dt {
+  color: var(--color-cyan);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.constellation-preview-card dd {
+  overflow: hidden;
+  color: #e0e7ff;
+  font-size: 0.78rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .constellation-experience[data-category="Core capability"] .constellation-experience__glyph {
@@ -502,9 +600,11 @@
     min-height: 160px;
   }
 
-  .constellation-experience:hover .constellation-experience__story,
-  .constellation-experience.is-hovered .constellation-experience__story,
   .constellation-experience.is-selected .constellation-experience__story {
     max-width: 120px;
+  }
+
+  .constellation-preview-card {
+    width: min(230px, 58%);
   }
 }

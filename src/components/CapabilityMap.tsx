@@ -27,6 +27,7 @@ type CapabilityNode = Capability & Point & { usage: number };
 type ExperienceNode = Experience & Point & {
   capabilityIds: string[];
   dominantCategory?: string;
+  collisionAnchor: Point;
   glyph: string;
 };
 
@@ -75,6 +76,10 @@ function hashString(value: string): number {
 
 function intersects(left: string[], right: string[]): boolean {
   return left.some((item) => right.includes(item));
+}
+
+function distanceBetween(left: Point, right: Point): number {
+  return Math.hypot(left.x - right.x, left.y - right.y);
 }
 
 function getExperienceGlyph(experience: Experience): string {
@@ -143,7 +148,7 @@ function buildCapabilityNodes(data: MosaicData): CapabilityNode[] {
 function buildExperienceNodes(data: MosaicData, capabilityNodes: CapabilityNode[]): ExperienceNode[] {
   const capabilityMap = Object.fromEntries(capabilityNodes.map((node) => [node.id, node]));
 
-  return data.experiences.map((experience, index) => {
+  const initialNodes = data.experiences.map((experience, index) => {
     const capabilityIds = getExperienceCapabilityIds(experience);
     const relatedCapabilityNodes = capabilityIds
       .map((capabilityId) => capabilityMap[capabilityId])
@@ -166,23 +171,80 @@ function buildExperienceNodes(data: MosaicData, capabilityNodes: CapabilityNode[
         }
       : polarPoint((index / Math.max(data.experiences.length, 1)) * 360, 28, 22);
 
+    const x = clamp(
+      normalizedAverage.x * 0.72 + CENTER.x * 0.28 + Math.cos(jitterAngle) * jitterRadius + Math.cos(orbitAngle) * 2.8,
+      10,
+      90
+    );
+    const y = clamp(
+      normalizedAverage.y * 0.72 + CENTER.y * 0.28 + Math.sin(jitterAngle) * jitterRadius + Math.sin(orbitAngle) * 2.8,
+      12,
+      88
+    );
+
     return {
       ...experience,
       capabilityIds,
       dominantCategory: relatedCapabilityNodes[0]?.category,
       glyph: getExperienceGlyph(experience),
-      x: clamp(
-        normalizedAverage.x * 0.72 + CENTER.x * 0.28 + Math.cos(jitterAngle) * jitterRadius + Math.cos(orbitAngle) * 2.8,
-        10,
-        90
-      ),
-      y: clamp(
-        normalizedAverage.y * 0.72 + CENTER.y * 0.28 + Math.sin(jitterAngle) * jitterRadius + Math.sin(orbitAngle) * 2.8,
-        12,
-        88
-      )
+      x,
+      y,
+      collisionAnchor: { x, y }
     };
   });
+
+  return resolveExperienceCollisions(initialNodes);
+}
+
+function resolveExperienceCollisions(nodes: ExperienceNode[]): ExperienceNode[] {
+  const minimumDistance = 7.2;
+  const centerExclusionRadius = 15;
+  let resolvedNodes = nodes.map((node) => ({ ...node }));
+
+  for (let pass = 0; pass < 8; pass += 1) {
+    resolvedNodes = resolvedNodes.map((node) => ({ ...node }));
+
+    for (let leftIndex = 0; leftIndex < resolvedNodes.length; leftIndex += 1) {
+      for (let rightIndex = leftIndex + 1; rightIndex < resolvedNodes.length; rightIndex += 1) {
+        const left = resolvedNodes[leftIndex];
+        const right = resolvedNodes[rightIndex];
+        const distance = distanceBetween(left, right);
+
+        if (distance >= minimumDistance) {
+          continue;
+        }
+
+        const fallbackAngle = ((hashString(`${left.id}-${right.id}`) % 360) / 180) * Math.PI;
+        const directionX = distance === 0 ? Math.cos(fallbackAngle) : (right.x - left.x) / distance;
+        const directionY = distance === 0 ? Math.sin(fallbackAngle) : (right.y - left.y) / distance;
+        const push = (minimumDistance - distance) / 2;
+
+        left.x = clamp(left.x - directionX * push, 8, 92);
+        left.y = clamp(left.y - directionY * push, 10, 90);
+        right.x = clamp(right.x + directionX * push, 8, 92);
+        right.y = clamp(right.y + directionY * push, 10, 90);
+      }
+    }
+
+    resolvedNodes.forEach((node) => {
+      const centerDistance = distanceBetween(node, CENTER);
+
+      if (centerDistance < centerExclusionRadius) {
+        const fallbackAngle = ((hashString(node.id) % 360) / 180) * Math.PI;
+        const directionX = centerDistance === 0 ? Math.cos(fallbackAngle) : (node.x - CENTER.x) / centerDistance;
+        const directionY = centerDistance === 0 ? Math.sin(fallbackAngle) : (node.y - CENTER.y) / centerDistance;
+        const push = centerExclusionRadius - centerDistance;
+
+        node.x = clamp(node.x + directionX * push, 8, 92);
+        node.y = clamp(node.y + directionY * push, 10, 90);
+      }
+
+      node.x = clamp(node.x * 0.94 + node.collisionAnchor.x * 0.06, 8, 92);
+      node.y = clamp(node.y * 0.94 + node.collisionAnchor.y * 0.06, 10, 90);
+    });
+  }
+
+  return resolvedNodes;
 }
 
 function buildBackgroundSignals(count: number): Array<Point & { size: number; opacity: number }> {
@@ -234,8 +296,16 @@ export function CapabilityMap({
     (experience) => experience.id === hoveredExperienceId
   );
   const activeExperience = hoveredExperience ?? selectedExperience;
+  const previewExperience = hoveredExperience;
   const activeCapabilityIds = activeExperience?.capabilityIds ?? [];
   const hasActiveFilter = Boolean(selectedCapabilityId || selectedPrincipleId || selectedCategory);
+  const previewStyle = previewExperience
+    ? ({
+        left: `${clamp(previewExperience.x + (previewExperience.x > 58 ? -16 : 16), 16, 84)}%`,
+        top: `${clamp(previewExperience.y + (previewExperience.y > 58 ? -12 : 12), 14, 86)}%`
+      } as CSSProperties)
+    : undefined;
+  const previewPlacement = previewExperience?.x && previewExperience.x > 58 ? 'left' : 'right';
 
   function experienceMatchesCategory(experience: ExperienceNode): boolean {
     if (!selectedCategory) {
@@ -381,10 +451,13 @@ export function CapabilityMap({
 
                 const isActiveExperience = activeExperience?.id === experience.id;
                 const isSelectedCapabilityEdge = selectedCapabilityId === capabilityId;
-                const isLit =
-                  (isActiveExperience && experience.capabilityIds.includes(capabilityId)) ||
+                const isActiveExperiencePath = isActiveExperience && activeExperience?.id === experience.id;
+                const isFilterPath =
                   (isSelectedCapabilityEdge && experienceMatchesSelectedCapability(experience)) ||
                   (Boolean(selectedPrincipleId) && experienceMatchesSelectedPrinciple(experience));
+                const isLit =
+                  (isActiveExperiencePath && experience.capabilityIds.includes(capabilityId)) ||
+                  isFilterPath;
                 const isMuted =
                   !isLit &&
                   (hasActiveFilter || Boolean(activeExperience) || !experienceMatchesCategory(experience));
@@ -396,7 +469,7 @@ export function CapabilityMap({
                     y1={experience.y}
                     x2={capability.x}
                     y2={capability.y}
-                    className={`constellation-edge ${isLit ? 'is-lit' : ''} ${isMuted ? 'is-muted' : ''}`}
+                    className={`constellation-edge ${isLit ? 'is-lit' : ''} ${isActiveExperiencePath ? 'is-active-path' : ''} ${isFilterPath ? 'is-filter-path' : ''} ${isMuted ? 'is-muted' : ''}`}
                     data-category={capability.category}
                   />
                 );
@@ -416,12 +489,13 @@ export function CapabilityMap({
           {capabilityNodes.map((capability) => {
             const isSelected = selectedCapabilityId === capability.id;
             const isConnected = activeCapabilityIds.includes(capability.id);
+            const isSelectedPath = isSelected || isConnected;
             const isDimmed = isCapabilityDimmed(capability);
 
             return (
               <button
                 key={capability.id}
-                className={`constellation-capability ${isSelected ? 'is-selected' : ''} ${isConnected ? 'is-connected' : ''} ${isDimmed ? 'is-dimmed' : ''}`}
+                className={`constellation-capability ${isSelected ? 'is-selected' : ''} ${isConnected ? 'is-connected' : ''} ${isSelectedPath ? 'is-selected-path' : ''} ${isDimmed ? 'is-dimmed' : ''}`}
                 data-category={capability.category}
                 style={{ left: `${capability.x}%`, top: `${capability.y}%` } as CSSProperties}
                 type="button"
@@ -438,12 +512,14 @@ export function CapabilityMap({
             const isSelected = selectedExperienceId === experience.id;
             const isHovered = hoveredExperienceId === experience.id;
             const isDimmed = isExperienceDimmed(experience);
-            const isRelatedToCapability = experienceMatchesSelectedCapability(experience);
+            const isRelatedToCapability = Boolean(selectedCapabilityId) && experienceMatchesSelectedCapability(experience);
+            const isRelatedToPrinciple = Boolean(selectedPrincipleId) && experienceMatchesSelectedPrinciple(experience);
+            const isSelectedPath = isSelected || isHovered || isRelatedToCapability || isRelatedToPrinciple;
 
             return (
               <button
                 key={experience.id}
-                className={`constellation-experience ${isSelected ? 'is-selected' : ''} ${isHovered ? 'is-hovered' : ''} ${isDimmed ? 'is-dimmed' : ''} ${isRelatedToCapability ? 'is-related' : ''}`}
+                className={`constellation-experience ${isSelected ? 'is-selected' : ''} ${isHovered ? 'is-hovered' : ''} ${isSelectedPath ? 'is-selected-path' : ''} ${isDimmed ? 'is-dimmed' : ''} ${isRelatedToCapability || isRelatedToPrinciple ? 'is-related' : ''}`}
                 data-category={experience.dominantCategory}
                 style={{ left: `${experience.x}%`, top: `${experience.y}%` } as CSSProperties}
                 type="button"
@@ -462,6 +538,29 @@ export function CapabilityMap({
               </button>
             );
           })}
+
+          {previewExperience && (
+            <aside
+              className="constellation-preview-card"
+              data-placement={previewPlacement}
+              style={previewStyle}
+              aria-live="polite"
+            >
+              <p className="eyebrow">Preview</p>
+              <h3>{previewExperience.title}</h3>
+              <p>{previewExperience.summary}</p>
+              <dl>
+                <div>
+                  <dt>When</dt>
+                  <dd>{previewExperience.period.label}</dd>
+                </div>
+                <div>
+                  <dt>Type</dt>
+                  <dd>{previewExperience.type}</dd>
+                </div>
+              </dl>
+            </aside>
+          )}
         </div>
 
         <aside className="constellation-legend" aria-label="Constellation legend">
