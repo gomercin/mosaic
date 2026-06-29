@@ -558,7 +558,12 @@ export function CapabilityMap({
             </aside>
           )}
 
-          <svg className="constellation-network" viewBox="0 0 100 100" aria-hidden="true">
+          <svg
+            className="constellation-network"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
             <defs>
               <filter id="constellation-glow" x="-30%" y="-30%" width="160%" height="160%">
                 <feGaussianBlur stdDeviation="0.7" result="blur" />
