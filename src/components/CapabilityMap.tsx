@@ -31,6 +31,14 @@ type ExperienceNode = Experience & Point & {
   glyph: string;
 };
 
+type HelperPanel = 'filters' | 'legend' | 'help';
+
+const HELPER_LABELS: Record<HelperPanel, string> = {
+  filters: 'Filters',
+  legend: 'Legend',
+  help: 'Help'
+};
+
 const CATEGORY_ARCS: Record<string, [number, number]> = {
   'Core capability': [130, 235],
   Technical: [-25, 50],
@@ -270,6 +278,7 @@ export function CapabilityMap({
 }: CapabilityMapProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [hoveredExperienceId, setHoveredExperienceId] = useState<string | null>(null);
+  const [openHelper, setOpenHelper] = useState<HelperPanel | null>(null);
   const capabilityMap = getCapabilityMap(data.capabilities);
   const categories = useMemo(
     () => Array.from(new Set(data.capabilities.map((capability) => capability.category))),
@@ -353,6 +362,10 @@ export function CapabilityMap({
     );
   }
 
+  function toggleHelper(helper: HelperPanel) {
+    setOpenHelper((currentHelper) => currentHelper === helper ? null : helper);
+  }
+
   return (
     <section className="map-card" aria-label="Capability constellation">
       <div className="map-card__header constellation-heading">
@@ -367,52 +380,6 @@ export function CapabilityMap({
       </div>
 
       <div className="constellation-foundation">
-        <aside className="constellation-rail" aria-label="Constellation filters">
-          <div>
-            <p className="eyebrow">Filter by</p>
-            <h3>Capability family</h3>
-          </div>
-
-          <div className="constellation-rail__summary">
-            <span>{data.experiences.length}</span>
-            <small>experiences mapped into one living graph</small>
-          </div>
-
-          <div className="constellation-category-list">
-            <button
-              className={selectedCategory === null ? 'is-active' : ''}
-              type="button"
-              onClick={() => setSelectedCategory(null)}
-            >
-              <span>All</span>
-              <small>{data.capabilities.length}</small>
-            </button>
-            {categories.map((category) => {
-              const capabilityCount = data.capabilities.filter(
-                (capability) => capability.category === category
-              ).length;
-
-              return (
-                <button
-                  key={category}
-                  className={selectedCategory === category ? 'is-active' : ''}
-                  data-category={category}
-                  type="button"
-                  onClick={() => setSelectedCategory(category)}
-                >
-                  <span>{category}</span>
-                  <small>{capabilityCount}</small>
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="constellation-hint">
-            <strong>Interaction rule</strong>
-            <p>Nothing disappears abruptly. Unrelated nodes fade so the selected path still lives inside the whole map.</p>
-          </div>
-        </aside>
-
         <div className="constellation-stage" aria-label="Interactive capability constellation">
           <div className="constellation-atmosphere" aria-hidden="true" />
           {backgroundSignals.map((signal, index) => (
@@ -429,6 +396,110 @@ export function CapabilityMap({
               aria-hidden="true"
             />
           ))}
+
+          <div className="constellation-helper-bar" aria-label="Constellation helpers">
+            {(Object.keys(HELPER_LABELS) as HelperPanel[]).map((helper) => (
+              <button
+                key={helper}
+                className={`constellation-helper-button ${openHelper === helper ? 'is-active' : ''}`}
+                type="button"
+                aria-expanded={openHelper === helper}
+                aria-controls={`constellation-helper-${helper}`}
+                onClick={() => toggleHelper(helper)}
+              >
+                {HELPER_LABELS[helper]}
+              </button>
+            ))}
+          </div>
+
+          {openHelper === 'filters' && (
+            <aside
+              id="constellation-helper-filters"
+              className="constellation-floating-panel constellation-floating-panel--filters constellation-rail"
+              aria-label="Constellation filters"
+            >
+              <div>
+                <p className="eyebrow">Filter by</p>
+                <h3>Capability family</h3>
+              </div>
+
+              <div className="constellation-rail__summary">
+                <span>{data.experiences.length}</span>
+                <small>experiences mapped into one living graph</small>
+              </div>
+
+              <div className="constellation-category-list">
+                <button
+                  className={selectedCategory === null ? 'is-active' : ''}
+                  type="button"
+                  onClick={() => setSelectedCategory(null)}
+                >
+                  <span>All</span>
+                  <small>{data.capabilities.length}</small>
+                </button>
+                {categories.map((category) => {
+                  const capabilityCount = data.capabilities.filter(
+                    (capability) => capability.category === category
+                  ).length;
+
+                  return (
+                    <button
+                      key={category}
+                      className={selectedCategory === category ? 'is-active' : ''}
+                      data-category={category}
+                      type="button"
+                      onClick={() => setSelectedCategory(category)}
+                    >
+                      <span>{category}</span>
+                      <small>{capabilityCount}</small>
+                    </button>
+                  );
+                })}
+              </div>
+            </aside>
+          )}
+
+          {openHelper === 'legend' && (
+            <aside
+              id="constellation-helper-legend"
+              className="constellation-floating-panel constellation-floating-panel--legend constellation-legend"
+              aria-label="Constellation legend"
+            >
+              <p className="eyebrow">Legend</p>
+              <h3>Signal colors</h3>
+              <div className="constellation-legend__items">
+                {categories.map((category) => (
+                  <span key={category} data-category={category}>
+                    {category}
+                  </span>
+                ))}
+              </div>
+
+              <h3>Experience types</h3>
+              <div className="constellation-legend__types">
+                {experienceTypes.map((type) => (
+                  <span key={type}>{type}</span>
+                ))}
+              </div>
+            </aside>
+          )}
+
+          {openHelper === 'help' && (
+            <aside
+              id="constellation-helper-help"
+              className="constellation-floating-panel constellation-floating-panel--help"
+              aria-label="Constellation foundation"
+            >
+              <div className="constellation-hint">
+                <strong>Interaction rule</strong>
+                <p>Nothing disappears abruptly. Unrelated nodes fade so the selected path still lives inside the whole map.</p>
+              </div>
+              <div className="constellation-hint constellation-hint--right">
+                <strong>Foundation note</strong>
+                <p>This view intentionally uses deterministic layout math for now. Codex can later replace the positioning engine without changing the data model.</p>
+              </div>
+            </aside>
+          )}
 
           <svg className="constellation-network" viewBox="0 0 100 100" aria-hidden="true">
             <defs>
@@ -562,30 +633,6 @@ export function CapabilityMap({
             </aside>
           )}
         </div>
-
-        <aside className="constellation-legend" aria-label="Constellation legend">
-          <p className="eyebrow">Legend</p>
-          <h3>Signal colors</h3>
-          <div className="constellation-legend__items">
-            {categories.map((category) => (
-              <span key={category} data-category={category}>
-                {category}
-              </span>
-            ))}
-          </div>
-
-          <h3>Experience types</h3>
-          <div className="constellation-legend__types">
-            {experienceTypes.map((type) => (
-              <span key={type}>{type}</span>
-            ))}
-          </div>
-
-          <div className="constellation-hint constellation-hint--right">
-            <strong>Foundation note</strong>
-            <p>This view intentionally uses deterministic layout math for now. Codex can later replace the positioning engine without changing the data model.</p>
-          </div>
-        </aside>
       </div>
     </section>
   );
