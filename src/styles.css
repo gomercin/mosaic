@@ -69,6 +69,11 @@ button {
   padding: 32px;
 }
 
+.app-shell--canvas {
+  width: min(1720px, 100%);
+  padding-inline: clamp(18px, 2.2vw, 30px);
+}
+
 .app-shell--centered {
   display: grid;
   min-height: 100vh;
@@ -115,6 +120,25 @@ button {
   margin: 12px 0 0;
   color: var(--color-muted);
   line-height: 1.7;
+}
+
+.app-shell--canvas .hero {
+  margin-bottom: 18px;
+  padding: 20px 24px;
+}
+
+.app-shell--canvas .hero h1 {
+  font-size: clamp(2.4rem, 4vw, 4.4rem);
+}
+
+.app-shell--canvas .hero__title {
+  margin-top: 8px;
+}
+
+.app-shell--canvas .hero__summary {
+  max-width: 760px;
+  margin-top: 8px;
+  line-height: 1.5;
 }
 
 .hero__actions {
@@ -177,10 +201,16 @@ button {
 .workspace--overview-canvas {
   position: relative;
   grid-template-columns: minmax(0, 1fr);
+  animation: none;
 }
 
 .workspace--overview-canvas .map-card {
   min-width: 0;
+  padding: 18px;
+}
+
+.workspace--overview-canvas .map-card__header {
+  margin-bottom: 12px;
 }
 
 .overview-detail-drawer {
@@ -1171,6 +1201,10 @@ button {
 @media (max-width: 760px) {
   .app-shell {
     padding: 16px;
+  }
+
+  .app-shell--canvas {
+    padding-inline: 10px;
   }
 
   .hero,

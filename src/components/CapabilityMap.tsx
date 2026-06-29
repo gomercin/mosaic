@@ -22,7 +22,10 @@ type Point = {
   y: number;
 };
 
-type CapabilityNode = Capability & Point & { usage: number };
+type CapabilityNode = Capability & Point & {
+  collisionAnchor: Point;
+  usage: number;
+};
 
 type ExperienceNode = Experience & Point & {
   capabilityIds: string[];
@@ -136,7 +139,7 @@ function buildCapabilityNodes(data: MosaicData): CapabilityNode[] {
   );
   const categories = Object.keys(groupedCapabilities);
 
-  return categories.flatMap((category, categoryIndex) => {
+  const initialNodes = categories.flatMap((category, categoryIndex) => {
     const capabilities = groupedCapabilities[category];
     const [start, end] = CATEGORY_ARCS[category] ?? FALLBACK_ARCS[categoryIndex % FALLBACK_ARCS.length];
 
@@ -147,10 +150,64 @@ function buildCapabilityNodes(data: MosaicData): CapabilityNode[] {
       return {
         ...capability,
         ...point,
+        collisionAnchor: point,
         usage: usage[capability.id] ?? 0
       };
     });
   });
+
+  return resolveCapabilityCollisions(initialNodes);
+}
+
+function resolveCapabilityCollisions(nodes: CapabilityNode[]): CapabilityNode[] {
+  const minimumDistance = 18.8;
+  const centerExclusionRadius = 27;
+  let resolvedNodes = nodes.map((node) => ({ ...node }));
+
+  for (let pass = 0; pass < 10; pass += 1) {
+    resolvedNodes = resolvedNodes.map((node) => ({ ...node }));
+
+    for (let leftIndex = 0; leftIndex < resolvedNodes.length; leftIndex += 1) {
+      for (let rightIndex = leftIndex + 1; rightIndex < resolvedNodes.length; rightIndex += 1) {
+        const left = resolvedNodes[leftIndex];
+        const right = resolvedNodes[rightIndex];
+        const distance = distanceBetween(left, right);
+
+        if (distance >= minimumDistance) {
+          continue;
+        }
+
+        const fallbackAngle = ((hashString(`${left.id}-${right.id}-capability`) % 360) / 180) * Math.PI;
+        const directionX = distance === 0 ? Math.cos(fallbackAngle) : (right.x - left.x) / distance;
+        const directionY = distance === 0 ? Math.sin(fallbackAngle) : (right.y - left.y) / distance;
+        const push = (minimumDistance - distance) / 2;
+
+        left.x = clamp(left.x - directionX * push, 9, 91);
+        left.y = clamp(left.y - directionY * push, 12, 88);
+        right.x = clamp(right.x + directionX * push, 9, 91);
+        right.y = clamp(right.y + directionY * push, 12, 88);
+      }
+    }
+
+    resolvedNodes.forEach((node) => {
+      const centerDistance = distanceBetween(node, CENTER);
+
+      if (centerDistance < centerExclusionRadius) {
+        const fallbackAngle = ((hashString(`${node.id}-capability-center`) % 360) / 180) * Math.PI;
+        const directionX = centerDistance === 0 ? Math.cos(fallbackAngle) : (node.x - CENTER.x) / centerDistance;
+        const directionY = centerDistance === 0 ? Math.sin(fallbackAngle) : (node.y - CENTER.y) / centerDistance;
+        const push = centerExclusionRadius - centerDistance;
+
+        node.x = clamp(node.x + directionX * push, 9, 91);
+        node.y = clamp(node.y + directionY * push, 12, 88);
+      }
+
+      node.x = clamp(node.x * 0.97 + node.collisionAnchor.x * 0.03, 9, 91);
+      node.y = clamp(node.y * 0.97 + node.collisionAnchor.y * 0.03, 12, 88);
+    });
+  }
+
+  return resolvedNodes;
 }
 
 function buildExperienceNodes(data: MosaicData, capabilityNodes: CapabilityNode[]): ExperienceNode[] {
@@ -373,7 +430,7 @@ export function CapabilityMap({
           <p className="eyebrow">Overview</p>
           <h2>The constellation</h2>
           <p className="constellation-heading__subtitle">
-            Experiences orbit capabilities. Hover an experience to reveal the path; click a capability to filter the signal.
+            Experiences orbit capabilities. Hover an experience to preview its path; click it to open the full story.
           </p>
         </div>
         <p>{data.experiences.length} experiences · {data.capabilities.length} capabilities</p>

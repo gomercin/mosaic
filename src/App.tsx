@@ -123,7 +123,7 @@ export function App() {
   }
 
   return (
-    <main className="app-shell">
+    <main className={`app-shell ${viewMode === 'overview' ? 'app-shell--canvas' : ''}`}>
       <Header
         profile={data.profile}
         viewMode={viewMode}

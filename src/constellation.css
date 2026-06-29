@@ -194,10 +194,10 @@
 
 .constellation-stage {
   position: relative;
-  min-height: 680px;
+  min-height: clamp(720px, 72vh, 960px);
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 28px;
+  border-radius: 24px;
   background:
     radial-gradient(circle at 50% 50%, rgba(125, 211, 252, 0.12), transparent 13rem),
     radial-gradient(circle at 24% 30%, rgba(45, 212, 191, 0.1), transparent 13rem),
@@ -210,6 +210,7 @@
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
     inset 0 0 90px rgba(0, 0, 0, 0.38);
+  isolation: isolate;
 }
 
 .constellation-atmosphere {
@@ -257,7 +258,8 @@
 
 .constellation-edge.is-active-path {
   opacity: 1;
-  stroke-width: 0.78;
+  stroke-width: 0.9;
+  filter: url(#constellation-glow);
 }
 
 .constellation-edge.is-filter-path {
@@ -265,7 +267,7 @@
 }
 
 .constellation-edge.is-muted {
-  opacity: 0.055;
+  opacity: 0.045;
 }
 
 .constellation-edge[data-category="Core capability"].is-lit {
@@ -394,11 +396,14 @@
 
 .constellation-capability.is-selected-path {
   border-color: rgba(226, 244, 255, 0.66);
+  box-shadow:
+    0 0 36px rgba(125, 211, 252, 0.2),
+    inset 0 0 30px rgba(125, 211, 252, 0.1);
 }
 
 .constellation-capability.is-dimmed,
 .constellation-experience.is-dimmed {
-  opacity: 0.18;
+  opacity: 0.15;
 }
 
 .constellation-capability[data-category="Core capability"] {
@@ -478,11 +483,15 @@
 
 .constellation-experience.is-selected-path {
   border-color: rgba(226, 244, 255, 0.6);
+  box-shadow:
+    0 0 34px rgba(125, 211, 252, 0.18),
+    0 10px 28px rgba(0, 0, 0, 0.18);
 }
 
-.constellation-experience.is-selected .constellation-experience__story {
-  max-width: 160px;
-  opacity: 1;
+.constellation-experience.is-selected .constellation-experience__glyph {
+  box-shadow:
+    0 0 20px rgba(125, 211, 252, 0.28),
+    inset 0 0 18px rgba(125, 211, 252, 0.14);
 }
 
 .constellation-preview-card {
@@ -626,7 +635,7 @@
 
 @media (max-width: 1180px) {
   .constellation-stage {
-    min-height: 720px;
+    min-height: clamp(720px, 78vh, 920px);
   }
 
   .constellation-floating-panel--help {
@@ -638,7 +647,8 @@
 
 @media (max-width: 760px) {
   .constellation-stage {
-    min-height: 860px;
+    min-height: 820px;
+    border-radius: 20px;
   }
 
   .constellation-helper-bar {
@@ -677,10 +687,6 @@
   .constellation-core {
     width: 160px;
     min-height: 160px;
-  }
-
-  .constellation-experience.is-selected .constellation-experience__story {
-    max-width: 120px;
   }
 
   .constellation-preview-card {
