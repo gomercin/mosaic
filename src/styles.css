@@ -267,6 +267,103 @@ button {
   backdrop-filter: none;
 }
 
+.overview-inspector__body {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  min-height: 0;
+  overflow: auto;
+  padding: 4px 4px 8px;
+}
+
+.overview-inspector__body h2,
+.overview-inspector__body p {
+  margin: 0;
+}
+
+.overview-inspector__body h2 {
+  color: #f8fbff;
+  letter-spacing: -0.04em;
+}
+
+.overview-inspector__body > p:not(.eyebrow) {
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+.overview-inspector__list {
+  display: grid;
+  gap: 10px;
+}
+
+.overview-inspector__list button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-control);
+  background: rgba(255, 255, 255, 0.04);
+  color: #eff6ff;
+  text-align: left;
+}
+
+.overview-inspector__list button:hover,
+.overview-inspector__list button:focus-visible {
+  border-color: rgba(125, 211, 252, 0.54);
+  background: rgba(125, 211, 252, 0.08);
+}
+
+.overview-inspector__glyph {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid rgba(226, 244, 255, 0.18);
+  border-radius: 50%;
+  background: rgba(226, 244, 255, 0.08);
+  font-weight: 900;
+}
+
+.overview-inspector__list strong,
+.overview-inspector__list small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.overview-inspector__list small {
+  color: var(--color-muted);
+}
+
+.overview-inspector__patterns {
+  display: grid;
+  gap: 10px;
+}
+
+.overview-inspector__patterns blockquote {
+  margin: 0;
+  padding: 13px;
+  border: 1px solid rgba(250, 204, 21, 0.16);
+  border-radius: var(--radius-control);
+  background: rgba(250, 204, 21, 0.035);
+}
+
+.overview-inspector__patterns p {
+  color: #fff7d6;
+  line-height: 1.5;
+}
+
+.overview-inspector__patterns cite {
+  display: block;
+  margin-top: 8px;
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  font-style: normal;
+}
+
 .map-card,
 .timeline-card,
 .principles-card,

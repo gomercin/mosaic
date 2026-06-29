@@ -6,28 +6,69 @@ import { PrinciplesView } from './components/PrinciplesView';
 import { Studio } from './components/Studio';
 import { TimelineView } from './components/TimelineView';
 import { loadMosaicData } from './data/loadMosaic';
-import type { Experience, MosaicData, ViewMode } from './types';
-import { experienceMatchesFilters } from './utils/mosaic';
+import type { ActiveFocus, Experience, MosaicData, ViewMode } from './types';
+import {
+  experienceMatchesFilters,
+  experiencesByCapability,
+  experiencesByPrinciple,
+  revealedPatternsByExperience
+} from './utils/mosaic';
+
+function getExperienceGlyph(experience: Experience): string {
+  const descriptor = `${experience.type} ${experience.title}`.toLowerCase();
+
+  if (descriptor.includes('talk') || descriptor.includes('facilitation')) {
+    return '✦';
+  }
+
+  if (descriptor.includes('creative') || descriptor.includes('hobby') || descriptor.includes('clarinet')) {
+    return '♪';
+  }
+
+  if (descriptor.includes('work')) {
+    return '▣';
+  }
+
+  if (descriptor.includes('product')) {
+    return '⬡';
+  }
+
+  if (descriptor.includes('side')) {
+    return '◇';
+  }
+
+  return '○';
+}
 
 export function App() {
   const [data, setData] = useState<MosaicData | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('overview');
-  const [selectedCapabilityId, setSelectedCapabilityId] = useState<string | null>(null);
-  const [selectedPrincipleId, setSelectedPrincipleId] = useState<string | null>(null);
-  const [selectedExperienceId, setSelectedExperienceId] = useState<string | null>(null);
-  const [isOverviewDetailOpen, setIsOverviewDetailOpen] = useState(false);
+  const [activeFocus, setActiveFocus] = useState<ActiveFocus>({ kind: 'overview' });
 
   useEffect(() => {
     loadMosaicData()
-      .then((loadedData) => {
-        setData(loadedData);
-        setSelectedExperienceId(loadedData.experiences[0]?.id ?? null);
-      })
+      .then((loadedData) => setData(loadedData))
       .catch((error: unknown) => {
         setLoadError(error instanceof Error ? error.message : 'Unknown load error');
       });
   }, []);
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setActiveFocus({ kind: 'overview' });
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const selectedCapabilityId = activeFocus.kind === 'capability' ? activeFocus.id : null;
+  const selectedPrincipleId = activeFocus.kind === 'principle' ? activeFocus.id : null;
+  const selectedExperienceId = activeFocus.kind === 'project' ? activeFocus.id : null;
 
   const selectedExperience = useMemo(() => {
     if (!data || !selectedExperienceId) {
@@ -49,6 +90,9 @@ export function App() {
       })
     );
   }, [data, selectedCapabilityId, selectedPrincipleId]);
+
+  const capabilityGroups = useMemo(() => data ? experiencesByCapability(data) : {}, [data]);
+  const principleGroups = useMemo(() => data ? experiencesByPrinciple(data) : {}, [data]);
 
   const activeFilterLabels = useMemo(() => {
     if (!data) {
@@ -72,31 +116,134 @@ export function App() {
         experiences: [experience, ...currentData.experiences]
       };
     });
-    setSelectedExperienceId(experience.id);
     setViewMode('overview');
-    setIsOverviewDetailOpen(true);
+    setActiveFocus({ kind: 'project', id: experience.id });
   }
 
   function handleDataImported(importedData: MosaicData) {
     setData(importedData);
-    setSelectedCapabilityId(null);
-    setSelectedPrincipleId(null);
-    setSelectedExperienceId(importedData.experiences[0]?.id ?? null);
     setViewMode('overview');
-    setIsOverviewDetailOpen(false);
+    setActiveFocus({ kind: 'overview' });
   }
 
   function handleViewModeChange(nextViewMode: ViewMode) {
     setViewMode(nextViewMode);
-
-    if (nextViewMode !== 'overview') {
-      setIsOverviewDetailOpen(false);
-    }
   }
 
-  function handleOverviewExperienceSelect(experienceId: string) {
-    setSelectedExperienceId(experienceId);
-    setIsOverviewDetailOpen(true);
+  function renderOverviewInspector() {
+    if (!data || activeFocus.kind === 'overview') {
+      return null;
+    }
+
+    if (activeFocus.kind === 'project') {
+      return (
+        <div className="overview-detail-drawer" aria-label="Selected project story">
+          <div className="overview-detail-drawer__bar">
+            <p className="eyebrow">Project focus</p>
+            <button
+              type="button"
+              className="overview-detail-drawer__close"
+              onClick={() => setActiveFocus({ kind: 'overview' })}
+            >
+              Close
+            </button>
+          </div>
+          <ExperiencePanel
+            data={data}
+            experience={selectedExperience}
+            selectedCapabilityId={selectedCapabilityId}
+          />
+        </div>
+      );
+    }
+
+    if (activeFocus.kind === 'capability') {
+      const capability = data.capabilities.find((item) => item.id === activeFocus.id);
+      const connectedExperiences = capabilityGroups[activeFocus.id] ?? [];
+
+      return (
+        <aside className="overview-detail-drawer overview-inspector" aria-label="Connected projects inspector">
+          <div className="overview-detail-drawer__bar">
+            <p className="eyebrow">Capability focus</p>
+            <button
+              type="button"
+              className="overview-detail-drawer__close"
+              onClick={() => setActiveFocus({ kind: 'overview' })}
+            >
+              Close
+            </button>
+          </div>
+          <section className="overview-inspector__body">
+            <p className="eyebrow">Projects connected to</p>
+            <h2>{capability?.label ?? activeFocus.id}</h2>
+            {capability?.description && <p>{capability.description}</p>}
+            <div className="overview-inspector__list">
+              {connectedExperiences.map((experience) => (
+                <button
+                  key={experience.id}
+                  type="button"
+                  onClick={() => setActiveFocus({ kind: 'project', id: experience.id })}
+                >
+                  <span className="overview-inspector__glyph">{getExperienceGlyph(experience)}</span>
+                  <span>
+                    <strong>{experience.title}</strong>
+                    <small>{experience.type} · {experience.period.label}</small>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </section>
+        </aside>
+      );
+    }
+
+    const principle = data.principles.find((item) => item.id === activeFocus.id);
+    const connectedExperiences = principleGroups[activeFocus.id] ?? [];
+
+    return (
+      <aside className="overview-detail-drawer overview-inspector" aria-label="Principle and patterns inspector">
+        <div className="overview-detail-drawer__bar">
+          <p className="eyebrow">Principle focus</p>
+          <button
+            type="button"
+            className="overview-detail-drawer__close"
+            onClick={() => setActiveFocus({ kind: 'overview' })}
+          >
+            Close
+          </button>
+        </div>
+        <section className="overview-inspector__body">
+          <p className="eyebrow">Principle</p>
+          <h2>{principle?.label ?? activeFocus.id}</h2>
+          {principle?.description && <p>{principle.description}</p>}
+          <div className="overview-inspector__list">
+            {connectedExperiences.map((experience) => (
+              <button
+                key={experience.id}
+                type="button"
+                onClick={() => setActiveFocus({ kind: 'project', id: experience.id })}
+              >
+                <span className="overview-inspector__glyph">{getExperienceGlyph(experience)}</span>
+                <span>
+                  <strong>{experience.title}</strong>
+                  <small>{experience.type} · {experience.period.label}</small>
+                </span>
+              </button>
+            ))}
+          </div>
+          <div className="overview-inspector__patterns">
+            {connectedExperiences.flatMap((experience) =>
+              revealedPatternsByExperience(experience).map((pattern) => (
+                <blockquote key={`${experience.id}-${pattern}`}>
+                  <p>{pattern}</p>
+                  <cite>{experience.title}</cite>
+                </blockquote>
+              ))
+            )}
+          </div>
+        </section>
+      </aside>
+    );
   }
 
   if (loadError) {
@@ -130,8 +277,7 @@ export function App() {
         onViewModeChange={handleViewModeChange}
         activeFilterLabels={activeFilterLabels}
         onClearFilters={() => {
-          setSelectedCapabilityId(null);
-          setSelectedPrincipleId(null);
+          setActiveFocus({ kind: 'overview' });
         }}
         selectedCount={visibleExperiences.length}
       />
@@ -140,32 +286,10 @@ export function App() {
         <section className="workspace workspace--overview workspace--overview-canvas">
           <CapabilityMap
             data={data}
-            selectedCapabilityId={selectedCapabilityId}
-            selectedPrincipleId={selectedPrincipleId}
-            selectedExperienceId={selectedExperienceId}
-            isSelectedExperienceActive={isOverviewDetailOpen}
-            onCapabilitySelect={setSelectedCapabilityId}
-            onExperienceSelect={handleOverviewExperienceSelect}
+            activeFocus={activeFocus}
+            onFocusChange={setActiveFocus}
           />
-          {isOverviewDetailOpen && (
-            <div className="overview-detail-drawer" aria-label="Selected experience story">
-              <div className="overview-detail-drawer__bar">
-                <p className="eyebrow">Selected signal</p>
-                <button
-                  type="button"
-                  className="overview-detail-drawer__close"
-                  onClick={() => setIsOverviewDetailOpen(false)}
-                >
-                  Close
-                </button>
-              </div>
-              <ExperiencePanel
-                data={data}
-                experience={selectedExperience}
-                selectedCapabilityId={selectedCapabilityId}
-              />
-            </div>
-          )}
+          {renderOverviewInspector()}
         </section>
       )}
 
@@ -176,7 +300,7 @@ export function App() {
             selectedCapabilityId={selectedCapabilityId}
             selectedPrincipleId={selectedPrincipleId}
             selectedExperienceId={selectedExperienceId}
-            onExperienceSelect={setSelectedExperienceId}
+            onExperienceSelect={(experienceId) => setActiveFocus({ kind: 'project', id: experienceId })}
           />
           <ExperiencePanel
             data={data}
@@ -192,8 +316,10 @@ export function App() {
             data={data}
             selectedPrincipleId={selectedPrincipleId}
             selectedExperienceId={selectedExperienceId}
-            onPrincipleSelect={setSelectedPrincipleId}
-            onExperienceSelect={setSelectedExperienceId}
+            onPrincipleSelect={(principleId) =>
+              setActiveFocus(principleId ? { kind: 'principle', id: principleId } : { kind: 'overview' })
+            }
+            onExperienceSelect={(experienceId) => setActiveFocus({ kind: 'project', id: experienceId })}
           />
           <ExperiencePanel
             data={data}

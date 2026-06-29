@@ -1,5 +1,16 @@
 export type ViewMode = 'overview' | 'timeline' | 'principles' | 'studio';
 
+export type ActiveFocus =
+  | { kind: 'overview' }
+  | { kind: 'project'; id: string }
+  | { kind: 'capability'; id: string }
+  | { kind: 'principle'; id: string };
+
+export type HoverTarget =
+  | { kind: 'project'; id: string }
+  | { kind: 'capability'; id: string }
+  | null;
+
 export type Profile = {
   name: string;
   title: string;

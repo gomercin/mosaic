@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { CSSProperties } from 'react';
-import type { Capability, Experience, MosaicData } from '../types';
+import type { ActiveFocus, Capability, Experience, HoverTarget, MosaicData } from '../types';
 import {
   capabilityUsage,
   experienceMatchesFilters,
@@ -10,12 +10,8 @@ import {
 
 type CapabilityMapProps = {
   data: MosaicData;
-  selectedCapabilityId: string | null;
-  selectedPrincipleId: string | null;
-  selectedExperienceId: string | null;
-  isSelectedExperienceActive?: boolean;
-  onCapabilitySelect: (capabilityId: string | null) => void;
-  onExperienceSelect: (experienceId: string) => void;
+  activeFocus: ActiveFocus;
+  onFocusChange: (focus: ActiveFocus) => void;
 };
 
 type Point = {
@@ -328,15 +324,11 @@ function buildBackgroundSignals(count: number): Array<Point & { size: number; op
 
 export function CapabilityMap({
   data,
-  selectedCapabilityId,
-  selectedPrincipleId,
-  selectedExperienceId,
-  isSelectedExperienceActive = false,
-  onCapabilitySelect,
-  onExperienceSelect
+  activeFocus,
+  onFocusChange
 }: CapabilityMapProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [hoveredExperienceId, setHoveredExperienceId] = useState<string | null>(null);
+  const [hoverTarget, setHoverTarget] = useState<HoverTarget>(null);
   const [openHelper, setOpenHelper] = useState<HelperPanel | null>(null);
   const capabilityMap = getCapabilityMap(data.capabilities);
   const categories = useMemo(
@@ -357,20 +349,29 @@ export function CapabilityMap({
     [data, capabilityNodes]
   );
   const backgroundSignals = useMemo(() => buildBackgroundSignals(90), []);
-  const selectedExperience = isSelectedExperienceActive
-    ? experienceNodes.find((experience) => experience.id === selectedExperienceId)
+  const selectedCapabilityId = activeFocus.kind === 'capability' ? activeFocus.id : null;
+  const selectedPrincipleId = activeFocus.kind === 'principle' ? activeFocus.id : null;
+  const selectedExperienceId = activeFocus.kind === 'project' ? activeFocus.id : null;
+  const focusedExperience = activeFocus.kind === 'project'
+    ? experienceNodes.find((experience) => experience.id === activeFocus.id)
     : undefined;
-  const hoveredExperience = experienceNodes.find(
-    (experience) => experience.id === hoveredExperienceId
-  );
-  const activeExperience = hoveredExperience ?? selectedExperience;
-  const previewExperience = hoveredExperience;
+  const hoveredExperience = activeFocus.kind === 'overview' && hoverTarget?.kind === 'project'
+    ? experienceNodes.find((experience) => experience.id === hoverTarget.id)
+    : undefined;
+  const activeExperience = activeFocus.kind === 'project' ? focusedExperience : hoveredExperience;
+  const previewExperience = activeFocus.kind === 'overview' ? hoveredExperience : undefined;
   const activeCapabilityIds = activeExperience?.capabilityIds ?? [];
   const hasActiveFilter = Boolean(selectedCapabilityId || selectedPrincipleId || selectedCategory);
   const selectedCapability = selectedCapabilityId ? capabilityNodeMap[selectedCapabilityId] : undefined;
   const selectedCapabilityExperiences = selectedCapabilityId
     ? experienceNodes.filter((experience) => experience.capabilityIds.includes(selectedCapabilityId))
     : [];
+  const selectedPrinciple = activeFocus.kind === 'principle'
+    ? data.principles.find((principle) => principle.id === activeFocus.id)
+    : undefined;
+  const selectedPrincipleExperienceCount = activeFocus.kind === 'principle'
+    ? experienceNodes.filter((experience) => experience.principles.includes(activeFocus.id)).length
+    : 0;
   const previewStyle = previewExperience
     ? ({
         left: `${clamp(previewExperience.x + (previewExperience.x > 58 ? -16 : 16), 16, 84)}%`,
@@ -378,13 +379,6 @@ export function CapabilityMap({
       } as CSSProperties)
     : undefined;
   const previewPlacement = previewExperience?.x && previewExperience.x > 58 ? 'left' : 'right';
-  const selectedCapabilityPanelStyle = selectedCapability
-    ? ({
-        left: `${clamp(selectedCapability.x + (selectedCapability.x > 62 ? -19 : 19), 18, 82)}%`,
-        top: `${clamp(selectedCapability.y + (selectedCapability.y > 62 ? -14 : 14), 16, 84)}%`
-      } as CSSProperties)
-    : undefined;
-  const selectedCapabilityPanelPlacement = selectedCapability?.x && selectedCapability.x > 62 ? 'left' : 'right';
 
   function experienceMatchesCategory(experience: ExperienceNode): boolean {
     if (!selectedCategory) {
@@ -450,7 +444,15 @@ export function CapabilityMap({
       </div>
 
       <div className="constellation-foundation">
-        <div className="constellation-stage" aria-label="Interactive capability constellation">
+        <div
+          className="constellation-stage"
+          aria-label="Interactive capability constellation"
+          onClick={(event) => {
+            if (event.target === event.currentTarget) {
+              onFocusChange({ kind: 'overview' });
+            }
+          }}
+        >
           <div className="constellation-atmosphere" aria-hidden="true" />
           {backgroundSignals.map((signal, index) => (
             <span
@@ -643,13 +645,28 @@ export function CapabilityMap({
           </svg>
 
           <div className="constellation-core" aria-label="Profile core">
-            {activeExperience ? (
+            {activeFocus.kind === 'project' && focusedExperience ? (
               <>
-                <span className="constellation-core__project-glyph">{activeExperience.glyph}</span>
+                <span className="constellation-core__project-glyph">{focusedExperience.glyph}</span>
                 <span className="constellation-core__label">Project path</span>
-                <strong>{activeExperience.title}</strong>
-                <small>{activeExperience.period.label} · {activeExperience.type}</small>
-                <small>{activeExperience.capabilityIds.length} capabilities connected</small>
+                <strong>{focusedExperience.title}</strong>
+                <small>{focusedExperience.period.label} · {focusedExperience.type}</small>
+                <small>{focusedExperience.capabilityIds.length} capabilities connected</small>
+              </>
+            ) : activeFocus.kind === 'capability' && selectedCapability ? (
+              <>
+                <span className="constellation-core__initials">C</span>
+                <span className="constellation-core__label">Capability focus</span>
+                <strong>{selectedCapability.label}</strong>
+                <small>{selectedCapability.category}</small>
+                <small>{selectedCapabilityExperiences.length} projects connected</small>
+              </>
+            ) : activeFocus.kind === 'principle' && selectedPrinciple ? (
+              <>
+                <span className="constellation-core__initials">P</span>
+                <span className="constellation-core__label">Principle focus</span>
+                <strong>{selectedPrinciple.label}</strong>
+                <small>{selectedPrincipleExperienceCount} experiences connected</small>
               </>
             ) : (
               <>
@@ -663,6 +680,7 @@ export function CapabilityMap({
 
           {capabilityNodes.map((capability) => {
             const isSelected = selectedCapabilityId === capability.id;
+            const isHovered = hoverTarget?.kind === 'capability' && hoverTarget.id === capability.id;
             const isConnected = activeCapabilityIds.includes(capability.id);
             const isSelectedPath = isSelected || isConnected;
             const isDimmed = isCapabilityDimmed(capability);
@@ -670,11 +688,15 @@ export function CapabilityMap({
             return (
               <button
                 key={capability.id}
-                className={`constellation-capability ${isSelected ? 'is-selected' : ''} ${isConnected ? 'is-connected' : ''} ${isSelectedPath ? 'is-selected-path' : ''} ${isDimmed ? 'is-dimmed' : ''}`}
+                className={`constellation-capability ${isSelected ? 'is-selected' : ''} ${isHovered ? 'is-hovered' : ''} ${isConnected ? 'is-connected' : ''} ${isSelectedPath ? 'is-selected-path' : ''} ${isDimmed ? 'is-dimmed' : ''}`}
                 data-category={capability.category}
                 style={{ left: `${capability.x}%`, top: `${capability.y}%` } as CSSProperties}
                 type="button"
-                onClick={() => onCapabilitySelect(isSelected ? null : capability.id)}
+                onClick={() => onFocusChange(isSelected ? { kind: 'overview' } : { kind: 'capability', id: capability.id })}
+                onFocus={() => setHoverTarget({ kind: 'capability', id: capability.id })}
+                onBlur={() => setHoverTarget(null)}
+                onMouseEnter={() => setHoverTarget({ kind: 'capability', id: capability.id })}
+                onMouseLeave={() => setHoverTarget(null)}
                 title={capability.description}
               >
                 <span>{capability.label}</span>
@@ -684,8 +706,8 @@ export function CapabilityMap({
           })}
 
           {experienceNodes.map((experience) => {
-            const isSelected = isSelectedExperienceActive && selectedExperienceId === experience.id;
-            const isHovered = hoveredExperienceId === experience.id;
+            const isSelected = selectedExperienceId === experience.id;
+            const isHovered = hoverTarget?.kind === 'project' && hoverTarget.id === experience.id;
             const isDimmed = isExperienceDimmed(experience);
             const isRelatedToCapability = Boolean(selectedCapabilityId) && experienceMatchesSelectedCapability(experience);
             const isRelatedToPrinciple = Boolean(selectedPrincipleId) && experienceMatchesSelectedPrinciple(experience);
@@ -699,11 +721,11 @@ export function CapabilityMap({
                 style={{ left: `${experience.x}%`, top: `${experience.y}%` } as CSSProperties}
                 type="button"
                 title={`${experience.title} · ${experience.type} · ${experience.period.label}`}
-                onClick={() => onExperienceSelect(experience.id)}
-                onFocus={() => setHoveredExperienceId(experience.id)}
-                onBlur={() => setHoveredExperienceId(null)}
-                onMouseEnter={() => setHoveredExperienceId(experience.id)}
-                onMouseLeave={() => setHoveredExperienceId(null)}
+                onClick={() => onFocusChange({ kind: 'project', id: experience.id })}
+                onFocus={() => setHoverTarget({ kind: 'project', id: experience.id })}
+                onBlur={() => setHoverTarget(null)}
+                onMouseEnter={() => setHoverTarget({ kind: 'project', id: experience.id })}
+                onMouseLeave={() => setHoverTarget(null)}
                 aria-label={`Select experience: ${experience.title}`}
               >
                 <span className="constellation-experience__glyph">{experience.glyph}</span>
@@ -714,34 +736,6 @@ export function CapabilityMap({
               </button>
             );
           })}
-
-          {selectedCapability && selectedCapabilityPanelStyle && (
-            <aside
-              className="constellation-connected-panel"
-              data-placement={selectedCapabilityPanelPlacement}
-              style={selectedCapabilityPanelStyle}
-              aria-live="polite"
-              aria-label={`Projects connected to ${selectedCapability.label}`}
-            >
-              <p className="eyebrow">Projects connected to</p>
-              <h3>{selectedCapability.label}</h3>
-              <div className="constellation-connected-panel__list">
-                {selectedCapabilityExperiences.map((experience) => (
-                  <button
-                    key={experience.id}
-                    type="button"
-                    onClick={() => onExperienceSelect(experience.id)}
-                  >
-                    <span className="constellation-connected-panel__glyph">{experience.glyph}</span>
-                    <span>
-                      <strong>{experience.title}</strong>
-                      <small>{experience.type} · {experience.period.label}</small>
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </aside>
-          )}
 
           {previewExperience && (
             <aside
