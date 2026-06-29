@@ -143,6 +143,7 @@ export function App() {
             selectedCapabilityId={selectedCapabilityId}
             selectedPrincipleId={selectedPrincipleId}
             selectedExperienceId={selectedExperienceId}
+            isSelectedExperienceActive={isOverviewDetailOpen}
             onCapabilitySelect={setSelectedCapabilityId}
             onExperienceSelect={handleOverviewExperienceSelect}
           />

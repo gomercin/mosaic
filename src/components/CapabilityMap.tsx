@@ -13,6 +13,7 @@ type CapabilityMapProps = {
   selectedCapabilityId: string | null;
   selectedPrincipleId: string | null;
   selectedExperienceId: string | null;
+  isSelectedExperienceActive?: boolean;
   onCapabilitySelect: (capabilityId: string | null) => void;
   onExperienceSelect: (experienceId: string) => void;
 };
@@ -262,8 +263,8 @@ function buildExperienceNodes(data: MosaicData, capabilityNodes: CapabilityNode[
 }
 
 function resolveExperienceCollisions(nodes: ExperienceNode[]): ExperienceNode[] {
-  const minimumDistance = 7.2;
-  const centerExclusionRadius = 15;
+  const minimumDistance = 15.2;
+  const centerExclusionRadius = 21;
   let resolvedNodes = nodes.map((node) => ({ ...node }));
 
   for (let pass = 0; pass < 8; pass += 1) {
@@ -330,6 +331,7 @@ export function CapabilityMap({
   selectedCapabilityId,
   selectedPrincipleId,
   selectedExperienceId,
+  isSelectedExperienceActive = false,
   onCapabilitySelect,
   onExperienceSelect
 }: CapabilityMapProps) {
@@ -355,9 +357,9 @@ export function CapabilityMap({
     [data, capabilityNodes]
   );
   const backgroundSignals = useMemo(() => buildBackgroundSignals(90), []);
-  const selectedExperience = experienceNodes.find(
-    (experience) => experience.id === selectedExperienceId
-  );
+  const selectedExperience = isSelectedExperienceActive
+    ? experienceNodes.find((experience) => experience.id === selectedExperienceId)
+    : undefined;
   const hoveredExperience = experienceNodes.find(
     (experience) => experience.id === hoveredExperienceId
   );
@@ -365,6 +367,10 @@ export function CapabilityMap({
   const previewExperience = hoveredExperience;
   const activeCapabilityIds = activeExperience?.capabilityIds ?? [];
   const hasActiveFilter = Boolean(selectedCapabilityId || selectedPrincipleId || selectedCategory);
+  const selectedCapability = selectedCapabilityId ? capabilityNodeMap[selectedCapabilityId] : undefined;
+  const selectedCapabilityExperiences = selectedCapabilityId
+    ? experienceNodes.filter((experience) => experience.capabilityIds.includes(selectedCapabilityId))
+    : [];
   const previewStyle = previewExperience
     ? ({
         left: `${clamp(previewExperience.x + (previewExperience.x > 58 ? -16 : 16), 16, 84)}%`,
@@ -372,6 +378,13 @@ export function CapabilityMap({
       } as CSSProperties)
     : undefined;
   const previewPlacement = previewExperience?.x && previewExperience.x > 58 ? 'left' : 'right';
+  const selectedCapabilityPanelStyle = selectedCapability
+    ? ({
+        left: `${clamp(selectedCapability.x + (selectedCapability.x > 62 ? -19 : 19), 18, 82)}%`,
+        top: `${clamp(selectedCapability.y + (selectedCapability.y > 62 ? -14 : 14), 16, 84)}%`
+      } as CSSProperties)
+    : undefined;
+  const selectedCapabilityPanelPlacement = selectedCapability?.x && selectedCapability.x > 62 ? 'left' : 'right';
 
   function experienceMatchesCategory(experience: ExperienceNode): boolean {
     if (!selectedCategory) {
@@ -523,6 +536,25 @@ export function CapabilityMap({
               aria-label="Constellation legend"
             >
               <p className="eyebrow">Legend</p>
+              <h3>How to read it</h3>
+              <div className="constellation-legend__grammar">
+                <span>
+                  <i className="constellation-legend__sample constellation-legend__sample--capability" aria-hidden="true" />
+                  <strong>Capability anchor</strong>
+                  <small>Large rounded rectangle.</small>
+                </span>
+                <span>
+                  <i className="constellation-legend__sample constellation-legend__sample--project" aria-hidden="true" />
+                  <strong>Project / experience</strong>
+                  <small>Smaller pill with a glyph.</small>
+                </span>
+                <span>
+                  <i className="constellation-legend__sample constellation-legend__sample--line" aria-hidden="true" />
+                  <strong>Relationship</strong>
+                  <small>Line showing a project strengthens a capability.</small>
+                </span>
+              </div>
+
               <h3>Signal colors</h3>
               <div className="constellation-legend__items">
                 {categories.map((category) => (
@@ -611,11 +643,21 @@ export function CapabilityMap({
           </svg>
 
           <div className="constellation-core" aria-label="Profile core">
-            <span className="constellation-core__initials">{getProfileInitials(data.profile.name)}</span>
-            <span className="constellation-core__label">Mosaic</span>
-            <strong>{activeExperience?.title ?? data.profile.tagline}</strong>
-            {activeExperience && (
-              <small>{activeExperience.type} · {activeExperience.period.label}</small>
+            {activeExperience ? (
+              <>
+                <span className="constellation-core__project-glyph">{activeExperience.glyph}</span>
+                <span className="constellation-core__label">Project path</span>
+                <strong>{activeExperience.title}</strong>
+                <small>{activeExperience.period.label} · {activeExperience.type}</small>
+                <small>{activeExperience.capabilityIds.length} capabilities connected</small>
+              </>
+            ) : (
+              <>
+                <span className="constellation-core__initials">{getProfileInitials(data.profile.name)}</span>
+                <span className="constellation-core__label">Mosaic</span>
+                <strong>Capability Atlas</strong>
+                <small>Hover a project to preview its path. Click to open the full story.</small>
+              </>
             )}
           </div>
 
@@ -642,7 +684,7 @@ export function CapabilityMap({
           })}
 
           {experienceNodes.map((experience) => {
-            const isSelected = selectedExperienceId === experience.id;
+            const isSelected = isSelectedExperienceActive && selectedExperienceId === experience.id;
             const isHovered = hoveredExperienceId === experience.id;
             const isDimmed = isExperienceDimmed(experience);
             const isRelatedToCapability = Boolean(selectedCapabilityId) && experienceMatchesSelectedCapability(experience);
@@ -656,6 +698,7 @@ export function CapabilityMap({
                 data-category={experience.dominantCategory}
                 style={{ left: `${experience.x}%`, top: `${experience.y}%` } as CSSProperties}
                 type="button"
+                title={`${experience.title} · ${experience.type} · ${experience.period.label}`}
                 onClick={() => onExperienceSelect(experience.id)}
                 onFocus={() => setHoveredExperienceId(experience.id)}
                 onBlur={() => setHoveredExperienceId(null)}
@@ -666,11 +709,39 @@ export function CapabilityMap({
                 <span className="constellation-experience__glyph">{experience.glyph}</span>
                 <span className="constellation-experience__story">
                   <strong>{experience.title}</strong>
-                  <small>{experience.period.label} · {experience.type}</small>
+                  <small>{experience.type} · {experience.period.label}</small>
                 </span>
               </button>
             );
           })}
+
+          {selectedCapability && selectedCapabilityPanelStyle && (
+            <aside
+              className="constellation-connected-panel"
+              data-placement={selectedCapabilityPanelPlacement}
+              style={selectedCapabilityPanelStyle}
+              aria-live="polite"
+              aria-label={`Projects connected to ${selectedCapability.label}`}
+            >
+              <p className="eyebrow">Projects connected to</p>
+              <h3>{selectedCapability.label}</h3>
+              <div className="constellation-connected-panel__list">
+                {selectedCapabilityExperiences.map((experience) => (
+                  <button
+                    key={experience.id}
+                    type="button"
+                    onClick={() => onExperienceSelect(experience.id)}
+                  >
+                    <span className="constellation-connected-panel__glyph">{experience.glyph}</span>
+                    <span>
+                      <strong>{experience.title}</strong>
+                      <small>{experience.type} · {experience.period.label}</small>
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </aside>
+          )}
 
           {previewExperience && (
             <aside

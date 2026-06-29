@@ -54,7 +54,8 @@
 
 .constellation-category-list,
 .constellation-legend__items,
-.constellation-legend__types {
+.constellation-legend__types,
+.constellation-legend__grammar {
   display: grid;
   gap: 8px;
 }
@@ -71,6 +72,57 @@
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.035);
   color: var(--color-text);
+}
+
+.constellation-legend__grammar span {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 2px 10px;
+  align-items: center;
+  padding: 10px 11px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.constellation-legend__grammar strong,
+.constellation-legend__grammar small {
+  min-width: 0;
+}
+
+.constellation-legend__grammar small {
+  grid-column: 2;
+  color: var(--color-muted);
+  line-height: 1.35;
+}
+
+.constellation-legend__sample {
+  display: block;
+  grid-row: 1 / span 2;
+}
+
+.constellation-legend__sample--capability {
+  width: 30px;
+  height: 18px;
+  border: 1px solid rgba(125, 211, 252, 0.64);
+  border-radius: 7px;
+  background: rgba(125, 211, 252, 0.1);
+}
+
+.constellation-legend__sample--project {
+  width: 28px;
+  height: 20px;
+  border: 1px solid rgba(226, 244, 255, 0.48);
+  border-radius: 999px;
+  background: rgba(226, 244, 255, 0.08);
+}
+
+.constellation-legend__sample--line {
+  width: 32px;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(125, 211, 252, 0.82);
+  box-shadow: 0 0 12px rgba(125, 211, 252, 0.44);
 }
 
 .constellation-category-list button {
@@ -242,11 +294,27 @@
 }
 
 .constellation-edge {
-  stroke: rgba(255, 255, 255, 0.09);
+  stroke: rgba(255, 255, 255, 0.12);
   stroke-linecap: round;
-  stroke-width: 0.2;
+  stroke-width: 0.24;
   transition: opacity 180ms ease, stroke 180ms ease, stroke-width 180ms ease;
   vector-effect: non-scaling-stroke;
+}
+
+.constellation-edge[data-category="Core capability"] {
+  stroke: rgba(var(--category-core-rgb), 0.2);
+}
+
+.constellation-edge[data-category="Technical"] {
+  stroke: rgba(var(--category-technical-rgb), 0.2);
+}
+
+.constellation-edge[data-category="Human"] {
+  stroke: rgba(var(--category-human-rgb), 0.18);
+}
+
+.constellation-edge[data-category="Creative"] {
+  stroke: rgba(var(--category-creative-rgb), 0.2);
 }
 
 .constellation-edge.is-lit {
@@ -322,6 +390,22 @@
   font-weight: 900;
 }
 
+.constellation-core__project-glyph {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border: 1px solid rgba(125, 211, 252, 0.32);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at top left, rgba(125, 211, 252, 0.22), transparent 3.8rem),
+    rgba(125, 211, 252, 0.1);
+  color: #f8fbff;
+  font-size: 1.2rem;
+  font-weight: 900;
+  box-shadow: 0 0 28px rgba(125, 211, 252, 0.16);
+}
+
 .constellation-core__label {
   color: var(--color-cyan);
   font-size: 0.72rem;
@@ -338,6 +422,7 @@
 }
 
 .constellation-core small {
+  max-width: 145px;
   color: var(--color-muted);
   line-height: 1.25;
 }
@@ -425,34 +510,38 @@
 .constellation-experience {
   display: flex;
   align-items: center;
-  gap: 8px;
-  min-width: 38px;
-  max-width: 210px;
-  min-height: 38px;
-  padding: 6px;
+  gap: 9px;
+  width: 174px;
+  min-height: 48px;
+  padding: 7px 10px 7px 7px;
   border-radius: 999px;
-  background: rgba(9, 12, 28, 0.78);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.08), transparent 5rem),
+    rgba(9, 12, 28, 0.82);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.18),
+    inset 0 0 18px rgba(255, 255, 255, 0.025);
 }
 
 .constellation-experience__glyph {
   display: grid;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   flex: 0 0 auto;
   place-items: center;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.08);
   color: #eff6ff;
-  font-size: 0.8rem;
+  font-size: 0.86rem;
   font-weight: 900;
 }
 
 .constellation-experience__story {
   display: grid;
-  max-width: 0;
+  min-width: 0;
+  max-width: 116px;
   overflow: hidden;
-  opacity: 0;
+  opacity: 1;
   transition: max-width 180ms ease, opacity 180ms ease;
   white-space: nowrap;
 }
@@ -460,14 +549,16 @@
 .constellation-experience__story strong {
   overflow: hidden;
   color: #f8fbff;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
+  line-height: 1.12;
   text-overflow: ellipsis;
 }
 
 .constellation-experience__story small {
   overflow: hidden;
   color: var(--color-muted);
-  font-size: 0.72rem;
+  font-size: 0.66rem;
+  line-height: 1.25;
   text-overflow: ellipsis;
 }
 
@@ -496,7 +587,7 @@
 
 .constellation-preview-card {
   position: absolute;
-  z-index: 10;
+  z-index: 13;
   display: grid;
   width: min(260px, 34%);
   gap: 8px;
@@ -538,7 +629,97 @@
   color: var(--color-muted);
   line-height: 1.45;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
+}
+
+.constellation-connected-panel {
+  position: absolute;
+  z-index: 12;
+  display: grid;
+  width: min(300px, 34%);
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid rgba(125, 211, 252, 0.32);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at top left, rgba(125, 211, 252, 0.12), transparent 10rem),
+    rgba(7, 10, 24, 0.93);
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.34),
+    0 0 34px rgba(125, 211, 252, 0.12);
+  transform: translate(-50%, -50%);
+}
+
+.constellation-connected-panel[data-placement="left"] {
+  transform: translate(-100%, -50%);
+}
+
+.constellation-connected-panel[data-placement="right"] {
+  transform: translate(0, -50%);
+}
+
+.constellation-connected-panel h3,
+.constellation-connected-panel p {
+  margin: 0;
+}
+
+.constellation-connected-panel h3 {
+  color: #f8fbff;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.constellation-connected-panel__list {
+  display: grid;
+  gap: 8px;
+}
+
+.constellation-connected-panel__list button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 9px;
+  align-items: center;
+  padding: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #eff6ff;
+  text-align: left;
+}
+
+.constellation-connected-panel__list button:hover,
+.constellation-connected-panel__list button:focus-visible {
+  border-color: rgba(125, 211, 252, 0.54);
+  background: rgba(125, 211, 252, 0.08);
+}
+
+.constellation-connected-panel__glyph {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 1px solid rgba(226, 244, 255, 0.2);
+  border-radius: 50%;
+  background: rgba(226, 244, 255, 0.08);
+  font-weight: 900;
+}
+
+.constellation-connected-panel__list strong,
+.constellation-connected-panel__list small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.constellation-connected-panel__list strong {
+  color: #f8fbff;
+  font-size: 0.84rem;
+}
+
+.constellation-connected-panel__list small {
+  color: var(--color-muted);
+  font-size: 0.72rem;
 }
 
 .constellation-preview-card dl {
@@ -684,12 +865,26 @@
     padding: 10px;
   }
 
+  .constellation-experience {
+    width: 150px;
+    min-height: 44px;
+  }
+
+  .constellation-experience__story {
+    max-width: 94px;
+  }
+
   .constellation-core {
     width: 160px;
     min-height: 160px;
+    padding: 18px;
   }
 
   .constellation-preview-card {
     width: min(230px, 58%);
+  }
+
+  .constellation-connected-panel {
+    width: min(250px, 70%);
   }
 }
