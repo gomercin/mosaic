@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dna-horizontal-view
   workflow_dispatch:
 
 permissions:
