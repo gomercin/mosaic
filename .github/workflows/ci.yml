@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - codex-implementation
+      - dna-horizontal-view
   workflow_dispatch:
 
 permissions:
