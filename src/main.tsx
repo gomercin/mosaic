@@ -4,6 +4,7 @@ import { App } from './App';
 import './styles.css';
 import './constellation.css';
 import './studio.css';
+import './dna-helix.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
