@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { CapabilityMap } from './components/CapabilityMap';
+import { DnaHelixView } from './components/DnaHelixView';
 import { ExperiencePanel } from './components/ExperiencePanel';
 import { Header } from './components/Header';
 import { PrinciplesView } from './components/PrinciplesView';
@@ -283,8 +283,8 @@ export function App() {
       />
 
       {viewMode === 'overview' && (
-        <section className="workspace workspace--overview workspace--overview-canvas">
-          <CapabilityMap
+        <section className="workspace workspace--overview workspace--overview-canvas workspace--dna">
+          <DnaHelixView
             data={data}
             activeFocus={activeFocus}
             onFocusChange={setActiveFocus}
