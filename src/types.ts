@@ -1,4 +1,15 @@
-export type ViewMode = 'overview' | 'timeline' | 'studio';
+export type ViewMode = 'overview' | 'timeline' | 'principles' | 'studio';
+
+export type ActiveFocus =
+  | { kind: 'overview' }
+  | { kind: 'project'; id: string }
+  | { kind: 'capability'; id: string }
+  | { kind: 'principle'; id: string };
+
+export type HoverTarget =
+  | { kind: 'project'; id: string }
+  | { kind: 'capability'; id: string }
+  | null;
 
 export type Profile = {
   name: string;
@@ -29,6 +40,11 @@ export type ExperiencePeriod = {
 
 export type Visibility = 'public' | 'private' | 'draft';
 
+export type Evidence = {
+  label: string;
+  url: string;
+};
+
 export type Experience = {
   id: string;
   title: string;
@@ -36,12 +52,19 @@ export type Experience = {
   company?: string;
   period: ExperiencePeriod;
   summary: string;
-  rawNarrative?: string;
+  rawNarrative: string;
+  publicNarrative?: string;
+  privateNotes?: string;
   challenge?: string;
   approach?: string;
   impact?: string;
-  skills: string[];
+  strengthenedCapabilities: string[];
+  skills?: string[];
+  revealedPatterns: string[];
+  tools: string[];
   principles: string[];
+  evidence?: Evidence[];
+  tone?: string[];
   visibility: Visibility;
 };
 

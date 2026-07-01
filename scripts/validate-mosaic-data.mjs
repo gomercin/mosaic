@@ -19,6 +19,18 @@ function assertStringArray(value, path) {
   value.forEach((item, index) => assertString(item, `${path}[${index}]`));
 }
 
+function assertOptionalString(value, path) {
+  if (value !== undefined) {
+    assertString(value, path);
+  }
+}
+
+function assertOptionalStringArray(value, path) {
+  if (value !== undefined) {
+    assertStringArray(value, path);
+  }
+}
+
 function uniqueIds(items, path) {
   const seen = new Set();
 
@@ -77,12 +89,34 @@ function validateExperiences(experiences, capabilityIds, principleIds) {
     assertString(experience.period.start, `${path}.period.start`);
     assertString(experience.period.label, `${path}.period.label`);
     assertString(experience.summary, `${path}.summary`);
-    assertStringArray(experience.skills, `${path}.skills`);
+    assertString(experience.rawNarrative, `${path}.rawNarrative`);
+    assertOptionalString(experience.publicNarrative, `${path}.publicNarrative`);
+    assertOptionalString(experience.privateNotes, `${path}.privateNotes`);
+    assertStringArray(experience.strengthenedCapabilities, `${path}.strengthenedCapabilities`);
+    assertOptionalStringArray(experience.skills, `${path}.skills`);
+    assertStringArray(experience.revealedPatterns, `${path}.revealedPatterns`);
+    assertStringArray(experience.tools, `${path}.tools`);
     assertStringArray(experience.principles, `${path}.principles`);
+    assertOptionalStringArray(experience.tone, `${path}.tone`);
     assert(['public', 'private', 'draft'].includes(experience.visibility), `${path}.visibility must be public, private, or draft`);
 
-    experience.skills.forEach((skillId) => {
-      assert(capabilityIds.has(skillId), `${path}.skills references unknown capability id: ${skillId}`);
+    if (experience.evidence !== undefined) {
+      assert(Array.isArray(experience.evidence), `${path}.evidence must be an array`);
+
+      experience.evidence.forEach((evidence, evidenceIndex) => {
+        const evidencePath = `${path}.evidence[${evidenceIndex}]`;
+        assert(evidence && typeof evidence === 'object', `${evidencePath} must be an object`);
+        assertString(evidence.label, `${evidencePath}.label`);
+        assertString(evidence.url, `${evidencePath}.url`);
+        assert(
+          /^https?:\/\/\S+$/u.test(evidence.url),
+          `${evidencePath}.url must be an http(s) URL`
+        );
+      });
+    }
+
+    experience.strengthenedCapabilities.forEach((capabilityId) => {
+      assert(capabilityIds.has(capabilityId), `${path}.strengthenedCapabilities references unknown capability id: ${capabilityId}`);
     });
 
     experience.principles.forEach((principleId) => {
