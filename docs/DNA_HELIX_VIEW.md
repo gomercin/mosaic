@@ -108,6 +108,14 @@ No D3, React Flow, Three.js, or WebGL is used.
 
 ---
 
+## Branch preview deployment
+
+This branch also updates the Pages workflow to allow deployment from `dna-horizontal-view`.
+
+That means a push to this branch can build and deploy the branch version to the repository GitHub Pages environment. This is useful for previewing the DNA view before merging, but it also means the public Pages URL may temporarily show the branch implementation.
+
+---
+
 ## Design guardrails
 
 Keep these rules:
