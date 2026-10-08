@@ -257,6 +257,9 @@ button {
 
 .overview-detail-drawer .detail-panel {
   position: static;
+  align-self: stretch;
+  height: 100%;
+  min-width: 0;
   min-height: 0;
   overflow: auto;
   padding: 4px 4px 8px;
@@ -1349,3 +1352,26 @@ button {
     border-radius: 22px;
   }
 }
+
+
+.publication-notice {
+  padding: 0.8rem 1.2rem;
+  margin: 0 0 1rem;
+  color: #ecdcaa;
+  background: rgba(230, 190, 90, 0.08);
+  border: 1px solid rgba(230, 190, 90, 0.25);
+  border-radius: 12px;
+}
+
+.evidence-episode {
+  padding: 1rem;
+  margin: 1rem 0;
+  border: 1px solid rgba(139, 182, 213, 0.25);
+  border-radius: 12px;
+}
+
+.evidence-episode h4 { margin-top: 0; line-height: 1.5; }
+.evidence-episode dt { color: #c6def0; font-weight: 600; margin-top: 0.8rem; }
+.evidence-episode dd { margin: 0.3rem 0 0; line-height: 1.6; }
+.evidence-connection { margin-top: 1rem; border-top: 1px solid rgba(139, 182, 213, 0.18); padding-top: 1rem; }
+.evidence-connection small { color: #ecdcaa; line-height: 1.5; }

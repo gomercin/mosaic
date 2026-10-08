@@ -35,7 +35,7 @@ export function Header({
 
       <div className="hero__actions">
         <nav className="mode-switch" aria-label="View mode">
-          {modes.map((mode) => (
+          {modes.filter((mode) => mode.id !== 'studio' || import.meta.env.DEV).map((mode) => (
             <button
               key={mode.id}
               className={mode.id === viewMode ? 'is-active' : ''}

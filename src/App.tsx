@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { CapabilityMap } from './components/CapabilityMap';
 import { ExperiencePanel } from './components/ExperiencePanel';
 import { Header } from './components/Header';
 import { PrinciplesView } from './components/PrinciplesView';
-import { Studio } from './components/Studio';
 import { TimelineView } from './components/TimelineView';
 import { loadMosaicData } from './data/loadMosaic';
 import type { ActiveFocus, Experience, MosaicData, ViewMode } from './types';
@@ -39,6 +38,10 @@ function getExperienceGlyph(experience: Experience): string {
 
   return '○';
 }
+
+const Studio = import.meta.env.DEV
+  ? lazy(() => import('./components/Studio').then((module) => ({ default: module.Studio })))
+  : null;
 
 export function App() {
   const [data, setData] = useState<MosaicData | null>(null);
@@ -177,6 +180,7 @@ export function App() {
             <p className="eyebrow">Projects connected to</p>
             <h2>{capability?.label ?? activeFocus.id}</h2>
             {capability?.description && <p>{capability.description}</p>}
+            <p>Connections are supported by episodes below. Counts describe projects, not proficiency.</p>
             <div className="overview-inspector__list">
               {connectedExperiences.map((experience) => (
                 <button
@@ -251,7 +255,7 @@ export function App() {
       <main className="app-shell app-shell--centered">
         <section className="empty-state">
           <p className="eyebrow">Mosaic</p>
-          <h1>Could not load the sample data.</h1>
+          <h1>Could not load the capability atlas.</h1>
           <p>{loadError}</p>
         </section>
       </main>
@@ -281,6 +285,13 @@ export function App() {
         }}
         selectedCount={visibleExperiences.length}
       />
+
+      {data.datasetKind === 'synthetic' && (
+        <p className="publication-notice" role="note">
+          Synthetic demonstration · These three invented projects test the evidence pipeline.
+          They are not claims about the author's career.
+        </p>
+      )}
 
       {viewMode === 'overview' && (
         <section className="workspace workspace--overview workspace--overview-canvas">
@@ -329,12 +340,14 @@ export function App() {
         </section>
       )}
 
-      {viewMode === 'studio' && (
-        <Studio
-          data={data}
-          onExperienceAdded={handleExperienceAdded}
-          onDataImported={handleDataImported}
-        />
+      {viewMode === 'studio' && Studio && (
+        <Suspense fallback={<p>Opening local Studio…</p>}>
+          <Studio
+            data={data}
+            onExperienceAdded={handleExperienceAdded}
+            onDataImported={handleDataImported}
+          />
+        </Suspense>
       )}
     </main>
   );

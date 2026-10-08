@@ -1,115 +1,72 @@
 # Mosaic
 
-Mosaic is a static, data-driven capability atlas.
+Mosaic is a static capability atlas: experiences connect to capabilities, principles, and time. This increment implements Phase 0 and a small Phase 1 proof of concept from [issue #3](https://github.com/gomercin/mosaic/issues/3).
 
-Instead of presenting a traditional portfolio, it maps experiences to capabilities, principles, and time so people can explore how someone thinks, learns, builds, coaches, and connects domains.
+The default dataset contains **three invented projects**, clearly labeled in the app. It proves the publication pipeline without making career claims or publishing private interviews. The existing constellation, timeline, principles view, and local Studio are retained.
 
-## Current scope
+## Develop and verify
 
-This first scaffold contains:
-
-- a Vite + React + TypeScript frontend
-- a sample `mosaic.sample.json` data file
-- an overview / constellation-style capability view
-- a timeline view
-- a local Studio tab for drafting new experiences and exporting JSON
-- GitHub Actions for CI, release package generation, and GitHub Pages deployment
-
-## Development
-
-Use Node.js 22, matching the GitHub Actions workflows:
+Use Node.js 22, matching CI:
 
 ```bash
-nvm use
-```
-
-```bash
-npm install
-npm run dev
-```
-
-## Validate and build
-
-```bash
+npm ci
 npm test
 npm run build
+npm run preview
 ```
 
-`npm test` runs TypeScript checks and validates the Mosaic sample data for duplicate IDs, required fields, and dangling capability/principle references.
+`npm test` typechecks the app, checks deterministic generation, validates the public model, and runs importer, projection, inventory, loader, and deploy-audit tests. `npm run build` validates the generated data before compiling and audits the actual `dist/` tree afterward. CI, Pages, and release packaging explicitly audit that tree before uploading it. This PR does not deploy or change hosting.
 
-## Build for static hosting
+## Evidence and publication workflow
+
+```text
+Private source exports
+  -> inventory and normalized evidence with source hashes / JSON pointers
+  -> editorial publication manifest with explicit approvals
+  -> generated public/data/mosaic.json
+  -> validated static app and audited dist/
+```
+
+`_interview_raw_extracts/` and `.private-evidence/` are ignored. Never commit them, copy them into `public/`, or bundle them in application imports. The original exports stay where supplied and are read without modification. Detailed census metadata includes source names and project IDs, so it remains local too.
+
+To inventory the supplied exports, from this checkout:
 
 ```bash
+npm run inventory:interviews -- --input /absolute/path/to/_interview_raw_extracts
+```
+
+The command prints aggregate counts and writes the detailed, deterministic census to `.private-evidence/interview-inventory.json`. It enumerates JSON and ancillary files, source versions, missing keys, field shapes, duplicate records, confidentiality flags, and cross-project references. The inventory does not approve publication.
+
+The PoC builds only the fixed, synthetic inputs in `fixtures/synthetic/`. It never discovers or consumes the real source directory as a build input:
+
+```bash
+npm run generate:data
+npm run generate:data -- --check
+npm run validate:data
 npm run build
+npm run validate:dist
 ```
 
-Upload the generated `dist/` folder to any static host, including a Bluehost subfolder.
+Generation retains normalized evidence and an integrity report locally under `.private-evidence/`. The checked-in public JSON contains only reviewed presentation fields plus episodes and explainable relationships. The editorial manifest is tied to a normalized source digest; source changes require renewed review. Missing approval, unknown format/version, dangling references, unexpected fields, and stale generation fail closed. `visibility` and historical source approval flags are not publication approval.
 
-## Data model
+The release loader fetches `data/mosaic.json` relative to the hosting base path, validates the same contract used by the CLI, and displays actionable errors. It never falls back to sample data. The old public sample has been removed so it cannot accidentally ship beside the new projection.
 
-The public app reads experience data from:
+## Inspect the proof of concept
 
-```txt
-public/data/mosaic.sample.json
-```
+Choose a capability in Overview, then choose a connected project. Its story shows an evidence episode, personal contribution, team or existing work, AI assistance, delivered result or stop, limitations, and the explanation for each capability connection. Confidence and confirmation are visible. The shared capability has independent links across distinct projects; repetition is not a proficiency score. Timeline offers a reading path over the same projects.
 
-Later, this can be replaced by your own exported `mosaic.json` file.
+Studio is available only during `npm run dev` and excluded from production JavaScript. It exports private authoring drafts; the former direct public-export button has been removed. Drafts require the reviewed publication pipeline before use in a release.
 
-## Editing workflow
+## Contracts and review
 
-1. Open the app locally.
-2. Go to Studio.
-3. Capture a rough experience story.
-4. Create a draft experience.
-5. Export JSON.
-6. Replace the public data file before building/publishing.
+- [Phase 0 census, decisions, exclusions, and Phase 2 plan](docs/consolidation-review.md)
+- [Interview mapping and representation gaps](docs/interview-mapping.md)
+- [Local verification and browser checks](docs/phase1-verification.md)
+- [Consolidated evidence schema](schemas/normalized-evidence.v1.schema.json)
+- [Public presentation schema](schemas/public-mosaic.v1.schema.json)
 
-The Studio is intentionally local-first. It does not require a backend, database, login, or WordPress integration.
+The earlier design handoffs in `docs/` still guide the constellation. Their older examples that put raw narratives or private notes in public JSON are superseded by this publication contract and issue #3.
 
-## GitHub Actions
+The deploy audit allows only the app entry, compiled JS/CSS, and the exact validated public projection. It rejects extra JSON, source archives, source maps, symlinks, private paths, and declared canaries. These checks enforce the construction boundary; they cannot decide whether arbitrary editorial prose is confidential or semantically justified. Human review remains necessary.
 
-### CI
-
-The CI workflow runs on pull requests, pushes to `main`, pushes to the scaffold branch, and manual dispatch.
-
-It performs:
-
-- dependency installation
-- `npm test`
-- `npm run build`
-- upload of the `dist/` folder as a workflow artifact
-
-### GitHub Pages
-
-The Pages workflow runs on pushes to `main` and manual dispatch.
-
-It performs:
-
-- dependency installation
-- `npm test`
-- `npm run build`
-- upload of the `dist/` folder as a GitHub Pages artifact
-- deployment to GitHub Pages
-
-If deployment fails with a Pages source or configuration error, open the repository settings and set the Pages build source to GitHub Actions.
-
-After a successful deployment, the site should be available under the repository's GitHub Pages URL.
-
-### Release
-
-The release workflow runs when pushing a semantic version tag such as:
-
-```bash
-git tag v0.1.0
-git push origin v0.1.0
-```
-
-It can also be started manually from the GitHub Actions tab.
-
-It produces:
-
-- a validated static build
-- `mosaic-static-site.zip`
-- a GitHub Release with the ZIP attached
-
-That ZIP can be uploaded directly to a static hosting folder.
+Review meaning, attribution, and information density with the owner before expanding beyond this slice. Full consolidation, broader taxonomy, UI redesign, deployment, and backend work remain later steps.

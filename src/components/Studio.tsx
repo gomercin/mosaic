@@ -4,6 +4,7 @@ import { ExperiencePanel } from './ExperiencePanel';
 import type { Experience, MosaicData } from '../types';
 import { slugify } from '../utils/mosaic';
 import { validateMosaicData } from '../utils/validateMosaicData';
+import { validatePublicMosaicData } from '../data/publicContract.mjs';
 
 type StudioProps = {
   data: MosaicData;
@@ -107,21 +108,6 @@ function downloadJson(data: MosaicData, filename: string) {
   link.download = filename;
   link.click();
   URL.revokeObjectURL(url);
-}
-
-function toPublicMosaicData(data: MosaicData): MosaicData {
-  return {
-    ...data,
-    experiences: data.experiences
-      .filter((experience) => experience.visibility === 'public')
-      .map(({ privateNotes: _privateNotes, rawNarrative, publicNarrative, summary, ...experience }) => ({
-        ...experience,
-        summary,
-        rawNarrative: publicNarrative ?? summary ?? rawNarrative,
-        publicNarrative,
-        visibility: 'public'
-      }))
-  };
 }
 
 function AiBadge() {
@@ -296,7 +282,11 @@ export function Studio({ data, onExperienceAdded, onDataImported }: StudioProps)
 
     try {
       const parsedData = JSON.parse(await file.text()) as unknown;
-      const errors = validateMosaicData(parsedData);
+      const isPublicVersion = typeof parsedData === 'object' && parsedData !== null &&
+        'schemaVersion' in parsedData && parsedData.schemaVersion === '1.0';
+      const errors = isPublicVersion
+        ? validatePublicMosaicData(parsedData)
+        : validateMosaicData(parsedData);
 
       if (errors.length > 0) {
         setImportErrors(errors);
@@ -313,11 +303,21 @@ export function Studio({ data, onExperienceAdded, onDataImported }: StudioProps)
   }
 
   function exportAuthoringJson() {
-    downloadJson(data, 'mosaic-authoring.json');
-  }
-
-  function exportPublicJson() {
-    downloadJson(toPublicMosaicData(data), 'mosaic.public.json');
+    // Loaded publication data has no raw interview text. Its public wording can
+    // seed a local draft, but its publication approval must not follow that draft.
+    downloadJson({
+      profile: data.profile,
+      capabilities: data.capabilities,
+      principles: data.principles,
+      experiences: data.experiences.map((experience) => ({
+        ...experience,
+        rawNarrative: experience.rawNarrative ?? experience.publicNarrative ?? experience.summary,
+        visibility: 'draft'
+      })),
+      datasetKind: data.datasetKind,
+      evidenceEpisodes: data.evidenceEpisodes,
+      evidenceLinks: data.evidenceLinks
+    }, 'mosaic-authoring.json');
   }
 
   return (
@@ -579,9 +579,7 @@ export function Studio({ data, onExperienceAdded, onDataImported }: StudioProps)
               <button type="button" className="secondary" onClick={exportAuthoringJson}>
                 Export authoring JSON
               </button>
-              <button type="button" className="secondary" onClick={exportPublicJson}>
-                Export public JSON
-              </button>
+              <p>Authoring exports are private drafts. Publication requires review through the evidence pipeline.</p>
             </div>
           </section>
 

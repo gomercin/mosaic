@@ -36,6 +36,9 @@ jobs:
       - name: Build static site
         run: npm run build
 
+      - name: Audit deployable public artifact
+        run: npm run validate:dist
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
