@@ -15,7 +15,28 @@ npm run build
 npm run preview
 ```
 
-`npm test` typechecks the app, checks deterministic generation, validates the public model, and runs importer, projection, inventory, loader, and deploy-audit tests. `npm run build` validates the generated data before compiling and audits the actual `dist/` tree afterward. CI, Pages, and release packaging explicitly audit that tree before uploading it. This change has not been merged or deployed. The current Pages workflow runs on pushes to `main` (including a PR merge) and manual dispatch; merging this PR therefore triggers the Pages build/deploy workflow for the synthetic demo. A successful deployment publishes it. Before merge, the owner must choose to publish the synthetic demo through the existing workflow, or approve a separate change that decouples merge from publication. This pass does not change deployment settings.
+`npm test` typechecks the app, checks deterministic generation, validates the public model, and runs importer, projection, inventory, loader, and deploy-audit tests. `npm run build` validates the generated data before compiling and audits the actual `dist/` tree afterward. CI, Pages, and release packaging explicitly audit that tree before uploading it. Merging into `main` runs CI validation; it no longer automatically publishes changes to GitHub Pages.
+
+## Merging, artifacts, and public deployment
+
+| Action | Trigger | Result |
+| --- | --- | --- |
+| Code merge | Owner-approved PR merge into `main` | Updates the code and starts CI; does not deploy Pages. |
+| CI validation | Pull requests targeting `main`, pushes to `main` or `codex-implementation`, or manual CI dispatch | Installs Node 22 dependencies, tests, builds, audits `dist/`, verifies both browser viewports, and uploads Actions build/browser artifacts. |
+| Release packaging | A pushed `v*.*.*` tag or manual Release dispatch | Tests/builds/audits the static ZIP, uploads an Actions artifact, and creates a GitHub Release with the ZIP. This is a separate release action and does not deploy Pages. A merge does not create a version tag. |
+| Public Pages deployment | Manual dispatch of `Deploy GitHub Pages` only | Tests/builds/audits the selected ref, uploads its Pages artifact, and deploys through the `github-pages` environment. |
+
+The Pages workflow has no automatic push-to-`main` trigger. GitHub Pages remains available, but deployment is an explicit owner-authorized action until real public content is approved. Creating a release makes its ZIP available through GitHub Releases; uploading an Actions artifact or building `dist/` is not a website deployment.
+
+When the owner explicitly requests deployment, open the repository's **Actions → Deploy GitHub Pages → Run workflow**, select the approved ref (normally `main`), then select **Run workflow**. Alternatively, from an authenticated GitHub CLI:
+
+```sh
+gh workflow run pages.yml --repo gomercin/mosaic --ref main
+```
+
+That command deploys the selected ref after validation; do not run it merely to verify a merge or generate artifacts. Review the workflow run and any `github-pages` environment approval before checking the published site. Node configuration, Pages permissions/configuration, environment, artifact handling and privacy audits remain intact.
+
+A read-only GitHub settings check during this change reported Pages `build_type: workflow` and the three registered workflows listed above. Repository files cannot prove the absence of external app/webhook deployments, organization-level automation, or future settings changes. Hosting settings have not been changed and no deployment has been initiated. The manual-only policy takes effect when this change reaches `main`; it does not remove an existing site or cancel previously queued deployment runs.
 
 ## Repeatable browser verification
 
@@ -80,4 +101,4 @@ The earlier design handoffs in `docs/` still guide the constellation. Their olde
 
 The deploy audit allows only the app entry, compiled JS/CSS, and the exact validated public projection. It rejects extra JSON, source archives, source maps, symlinks, private paths, and declared canaries. These checks enforce the construction boundary; they cannot decide whether arbitrary editorial prose is confidential or semantically justified. Human review remains necessary.
 
-Review meaning, attribution, and information density with the owner before expanding beyond this slice. Full consolidation, broader taxonomy, broad UI redesign, and backend work remain later steps. Publication is an immediate owner decision before merge because the existing Pages workflow deploys `main`.
+Review meaning, attribution, and information density with the owner before expanding beyond this slice. Full consolidation, broader taxonomy, broad UI redesign, and backend work remain later steps. Code merge and publication are separate owner decisions. After the foundation is approved and merged, the next development activity can be Phase 2 evidence consolidation and cross-project synthesis from issue #3; this change does not begin that work or approve real public content.
