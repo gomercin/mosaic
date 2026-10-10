@@ -1,6 +1,6 @@
 # Phase 1 verification
 
-Bounded review-readiness pass on 10 October 2026 for PR #4. Verified implementation commit: **e898b0192ef1f322fe643dbc602ed9b02d3bed72**. The retained browser provenance identifies this exact clean source revision and SHA-256 hashes of the audited production assets. The subsequent report/screenshot commit changes documentation only; the PR description records the final verified head separately. The original checkout's unfinished V2 UI work remains outside this PR.
+Bounded review-readiness pass on 10 October 2026 for PR #4. Verified implementation commit: **18f574bdeca11db0b7029f32b90bb118201858ed**. The retained browser provenance identifies this exact clean source revision and SHA-256 hashes of the audited production assets. The subsequent report/screenshot commit changes documentation only; the PR description records the final verified head separately. The original checkout's unfinished V2 UI work remains outside this PR.
 
 ## Reproduced findings
 
@@ -14,9 +14,11 @@ Baseline commit: `b4abc5149db50e6cb097f0019c1b881a06148fc3`. Both production vie
 
 [Desktop baseline](screenshots/phase1/baseline-desktop-overview.png), [mobile baseline](screenshots/phase1/baseline-mobile-overview.png), and [baseline measurements](screenshots/phase1/baseline-metrics.json) retain the adverse case. The mobile document itself was 390 px wide; the clipping occurred inside the canvas. The earlier label-spacing verification applied to the desktop slice and did not establish mobile readiness.
 
+A subsequent [Ubuntu hosted CI run](https://github.com/gomercin/mosaic/actions/runs/38010766409) at `e29b1f31f002029c922b6725862d88067ac27d12` retained a second adverse case: desktop default center rows overlapped by 3.4 px with Linux font metrics, even though the Mac check passed. The [CI failure screenshot](screenshots/phase1/ci-ubuntu-desktop-before.png) shows that collision. The geometry assertion was retained; the core text fit was corrected.
+
 ## Targeted changes
 
-At widths up to 760 px, the constellation is replaced by a normal reading view with complete, wrapping capability and project labels. Choosing a capability opens the existing connected-project inspector and filters the reading list to the related projects. Selecting a project opens the existing evidence story. The narrow view avoids both canvas overlap/clipping and the compressed center bubble; it does not revise the desktop layout algorithm or the unfinished V2 design.
+At widths up to 760 px, the constellation is replaced by a normal reading view with complete, wrapping capability and project labels. Choosing a capability opens the existing connected-project inspector and filters the reading list to the related projects. Selecting a project opens the existing evidence story. The narrow view avoids both canvas overlap/clipping and the compressed center bubble; it does not revise the desktop graph positioning algorithm or the unfinished V2 design. For platform font variation, core rows now reserve their intrinsic content height, the helper instruction is shorter, and focused capability/principle monograms are 38 px. The surrounding core and graph dimensions stay fixed.
 
 Both views preserve capability → project → personal contribution → team/existing work and AI assistance → result/limitation → evidence explanation. The stopped stakeholder proposal and the unrun research idea retain their outcome status. Candidate status, low confidence and awaiting confirmation remain visible rather than becoming proficiency claims. No public data, taxonomy, source normalization, or publication approvals changed.
 
@@ -35,7 +37,7 @@ npm run browser:test
 
 `browser:test` first builds and audits `dist/`, then starts a fresh Vite preview at `http://127.0.0.1:4178`. It refuses an existing server. The two Playwright projects use Chromium 156.0.8078.4, device scale factor 1 and reduced motion, at 1440×1000 and 390×844; the narrow project emulates mobile/touch. Generated screenshots, geometry, browser version, Git revision and deploy-asset hashes live under ignored `test-results/`. CI installs Chromium and runs the same suite after its production build/audit, retaining browser artifacts. No browser dependencies or screenshots enter `dist/`.
 
-Both browser journeys passed:
+Both local browser journeys passed from the exact clean implementation commit:
 
 1. Confirm the synthetic notice and exact validated dataset response.
 2. Check overview, selected capability and tentative-project geometry: no intersecting capability/project controls, no controls outside their container, no mobile label fragments outside their buttons, no desktop center-text collisions, and no horizontal document overflow (1 px tolerance).
@@ -66,7 +68,7 @@ The mobile overview screenshot is scrolled to the reading controls; other long c
 
 ## Limits and publication decision
 
-This is a three-project synthetic check in one Chromium build at two fixed viewports. It does not certify a large corpus, all intermediate widths, physical mobile browsers, screen readers, or a complete accessibility audit. The desktop graph retains compact/ellipsized project previews; full stories and mobile reading labels remain available. Phase 2, capability taxonomy decisions and real public content remain outside this pass. Owner review of meaning and information density is still needed before expansion.
+This is a three-project synthetic check in one Chromium build at two fixed viewports, with Mac screenshots and an Ubuntu CI gate. It does not certify a large corpus, all intermediate widths, physical mobile browsers, screen readers, or a complete accessibility audit. The desktop graph retains compact/ellipsized project previews; full stories and mobile reading labels remain available. Phase 2, capability taxonomy decisions and real public content remain outside this pass. Owner review of meaning and information density is still needed before expansion.
 
 **Merging to `main` triggers the current Pages deployment workflow** (`.github/workflows/pages.yml`, push to `main`, plus manual dispatch). A successful workflow publishes the synthetic demo. Before merge, the owner must decide to **publish this synthetic demo through the existing workflow**, or **approve a separate change that separates merge from publication**. This pass does not change Pages/deployment settings. Repository-external Pages/environment approval rules were not inspected.
 

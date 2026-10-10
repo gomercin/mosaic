@@ -1,5 +1,5 @@
 {
-  "sourceRevision": "e898b0192ef1f322fe643dbc602ed9b02d3bed72",
+  "sourceRevision": "18f574bdeca11db0b7029f32b90bb118201858ed",
   "sourceWorktreeDirty": false,
   "project": "desktop",
   "browser": "chromium",
@@ -15,7 +15,7 @@
     {
       "path": "index.html",
       "bytes": 566,
-      "sha256": "fd4395c330797984a5fd0cedd62e6e934d2de2c7e95919e3eebc0d98504e6a50"
+      "sha256": "1d284bb6b08a818be863e438db6955fc7db68eb00ff88279db7fa42c42bfd8e8"
     },
     {
       "path": "data/mosaic.json",
@@ -23,14 +23,14 @@
       "sha256": "92ea1715b893484e7834750f9e04dc8ed7310c28c5727b797b44b960f05a8ae3"
     },
     {
-      "path": "assets/index-C-C_D1-E.js",
-      "bytes": 229375,
-      "sha256": "5af2db0e4451cd0412f527cf864e900f40f7293d73a85d0e9733b3cb0a3960ba"
+      "path": "assets/index-CLKSetcm.js",
+      "bytes": 229347,
+      "sha256": "81692a918d500c705785a80dc16110a0a9f5f228da69ccb534a3c1ab702324bf"
     },
     {
-      "path": "assets/index-DQ6Dghxx.css",
-      "bytes": 42655,
-      "sha256": "f3aaf5c282bba78797d7e5855e5ee1fcd7233d8c89df1c97a3cf1a2a39657f87"
+      "path": "assets/index-DtZ5frsi.css",
+      "bytes": 42844,
+      "sha256": "9c99dd81dc5f53f99f2b9a0354bf54f61dc0df7e0d95f3f7e2b296ff36297421"
     }
   ],
   "screenshots": {
