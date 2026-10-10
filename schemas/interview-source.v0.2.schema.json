@@ -1,0 +1,421 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gomercin.github.io/mosaic/schemas/interview-source.v0.2.schema.json",
+  "title": "Private interview export 0.2 accepted input",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "0.2"
+    },
+    "profileContext": {
+      "type": "object",
+      "properties": {
+        "education": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "education"
+      ],
+      "additionalProperties": false
+    },
+    "projects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "minLength": 1
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rawNotes": {
+            "type": "string",
+            "minLength": 1
+          },
+          "period": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "const": null
+                  }
+                ]
+              },
+              "end": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "const": null
+                  }
+                ]
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "start",
+              "end",
+              "label"
+            ],
+            "additionalProperties": false
+          },
+          "context": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "minLength": 1
+              },
+              "organization": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "const": null
+                  }
+                ]
+              },
+              "roleAtTime": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "const": null
+                  }
+                ]
+              },
+              "careerStage": {
+                "type": "string",
+                "minLength": 1
+              },
+              "collaboration": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "type",
+              "organization",
+              "roleAtTime",
+              "careerStage",
+              "collaboration"
+            ],
+            "additionalProperties": false
+          },
+          "confidentiality": {
+            "type": "object",
+            "properties": {
+              "level": {
+                "type": "string",
+                "minLength": 1
+              },
+              "publicUseApproved": {
+                "type": "boolean"
+              },
+              "notes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "level",
+              "publicUseApproved",
+              "notes"
+            ],
+            "additionalProperties": false
+          },
+          "motivation": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "problem": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "existingSolutionsOrAlternatives": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "myContribution": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "teamOrExistingContribution": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "approachAndDecisions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "differentiators": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "outcomes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "lessons": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "tools": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "openQuestions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "provisionalSignals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "label": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "interpretation": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "evidence": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "confidence": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "confirmedByUser": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "type",
+                "label",
+                "interpretation",
+                "evidence",
+                "confidence",
+                "confirmedByUser"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 0
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "status",
+          "summary",
+          "rawNotes",
+          "period",
+          "context",
+          "confidentiality",
+          "motivation",
+          "problem",
+          "existingSolutionsOrAlternatives",
+          "constraints",
+          "myContribution",
+          "teamOrExistingContribution",
+          "approachAndDecisions",
+          "differentiators",
+          "outcomes",
+          "lessons",
+          "tools",
+          "tags",
+          "openQuestions",
+          "provisionalSignals"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "crossProjectObservations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "interpretation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "supportingProjectIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "confidence": {
+            "type": "string",
+            "minLength": 1
+          },
+          "confirmedByUser": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "label",
+          "interpretation",
+          "supportingProjectIds",
+          "confidence",
+          "confirmedByUser"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "suggestedClassificationTypes": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "interpretation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "supportingProjectIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "confidence": {
+                "type": "string",
+                "minLength": 1
+              },
+              "confirmedByUser": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "label",
+              "interpretation",
+              "supportingProjectIds",
+              "confidence",
+              "confirmedByUser"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "minItems": 0
+    },
+    "exportNotes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "profileContext",
+    "projects",
+    "crossProjectObservations",
+    "suggestedClassificationTypes",
+    "exportNotes"
+  ],
+  "additionalProperties": false
+}

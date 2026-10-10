@@ -52,7 +52,7 @@ export type Experience = {
   company?: string;
   period: ExperiencePeriod;
   summary: string;
-  rawNarrative: string;
+  rawNarrative?: string;
   publicNarrative?: string;
   privateNotes?: string;
   challenge?: string;
@@ -65,7 +65,7 @@ export type Experience = {
   principles: string[];
   evidence?: Evidence[];
   tone?: string[];
-  visibility: Visibility;
+  visibility?: Visibility;
 };
 
 export type MosaicData = {
@@ -73,4 +73,61 @@ export type MosaicData = {
   capabilities: Capability[];
   principles: Principle[];
   experiences: Experience[];
+  datasetKind?: 'synthetic' | 'curated';
+  evidenceEpisodes?: EvidenceEpisode[];
+  evidenceLinks?: EvidenceLink[];
+};
+
+
+export type PublicationApproval = {
+  status: 'approved';
+  reviewer: string;
+  revision: string;
+};
+
+export type EvidenceEpisode = {
+  id: string;
+  experienceId: string;
+  summary: string;
+  myContribution: string;
+  teamContribution: string;
+  aiContribution: string;
+  result: string;
+  limitation: string;
+  outcomeStatus: 'delivered' | 'stopped' | 'idea';
+};
+
+export type EvidenceLink = {
+  id: string;
+  capabilityId: string;
+  experienceId: string;
+  episodeId: string;
+  explanation: string;
+  signalType: 'strengthened' | 'demonstrated' | 'candidate';
+  confidence: 'high' | 'medium' | 'low';
+  confirmedByUser: boolean;
+};
+
+// Publication data has its own versioned contract. Authoring fields never cross it.
+export type PublicExperience = Omit<Pick<Experience,
+  'id' | 'title' | 'type' | 'company' | 'period' | 'summary' | 'publicNarrative' |
+  'challenge' | 'approach' | 'impact' | 'strengthenedCapabilities' |
+  'revealedPatterns' | 'tools' | 'principles' | 'tone'
+>, 'publicNarrative' | 'challenge' | 'approach' | 'impact'> & {
+  publicNarrative: string;
+  challenge: string;
+  approach: string;
+  impact: string;
+};
+
+export type PublicMosaicData = {
+  schemaVersion: '1.0';
+  datasetKind: 'synthetic' | 'curated';
+  publication: PublicationApproval;
+  profile: Profile;
+  capabilities: Capability[];
+  principles: Principle[];
+  experiences: PublicExperience[];
+  evidenceEpisodes: EvidenceEpisode[];
+  evidenceLinks: EvidenceLink[];
 };

@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { CapabilityReadingView } from './CapabilityReadingView';
 import type { CSSProperties } from 'react';
 import type { ActiveFocus, Capability, Experience, HoverTarget, MosaicData } from '../types';
 import {
@@ -255,15 +256,15 @@ function buildExperienceNodes(data: MosaicData, capabilityNodes: CapabilityNode[
     };
   });
 
-  return resolveExperienceCollisions(initialNodes);
+  return resolveExperienceCollisions(initialNodes, capabilityNodes);
 }
 
-function resolveExperienceCollisions(nodes: ExperienceNode[]): ExperienceNode[] {
+function resolveExperienceCollisions(nodes: ExperienceNode[], capabilities: CapabilityNode[]): ExperienceNode[] {
   const minimumDistance = 15.2;
   const centerExclusionRadius = 31;
   let resolvedNodes = nodes.map((node) => ({ ...node }));
 
-  for (let pass = 0; pass < 8; pass += 1) {
+  for (let pass = 0; pass < 12; pass += 1) {
     resolvedNodes = resolvedNodes.map((node) => ({ ...node }));
 
     for (let leftIndex = 0; leftIndex < resolvedNodes.length; leftIndex += 1) {
@@ -303,6 +304,18 @@ function resolveExperienceCollisions(nodes: ExperienceNode[]): ExperienceNode[] 
 
       node.x = clamp(node.x * 0.94 + node.collisionAnchor.x * 0.06, 8, 92);
       node.y = clamp(node.y * 0.94 + node.collisionAnchor.y * 0.06, 10, 90);
+
+      // Project labels need space from capability labels as well as each other.
+      capabilities.forEach((capability) => {
+        const distance = distanceBetween(node, capability);
+        const separation = 18;
+        if (distance >= separation) return;
+        const angle = ((hashString(`${node.id}-${capability.id}`) % 360) / 180) * Math.PI;
+        const directionX = distance === 0 ? Math.cos(angle) : (node.x - capability.x) / distance;
+        const directionY = distance === 0 ? Math.sin(angle) : (node.y - capability.y) / distance;
+        node.x = clamp(node.x + directionX * (separation - distance), 8, 92);
+        node.y = clamp(node.y + directionY * (separation - distance), 10, 90);
+      });
     });
   }
 
@@ -439,6 +452,8 @@ export function CapabilityMap({
         <p>{data.experiences.length} experiences · {data.capabilities.length} capabilities</p>
       </div>
 
+      <CapabilityReadingView data={data} activeFocus={activeFocus} onFocusChange={onFocusChange} />
+
       <div className="constellation-foundation">
         <div
           className="constellation-stage"
@@ -549,7 +564,7 @@ export function CapabilityMap({
                 <span>
                   <i className="constellation-legend__sample constellation-legend__sample--line" aria-hidden="true" />
                   <strong>Relationship</strong>
-                  <small>Line showing a project strengthens a capability.</small>
+                  <small>Evidence connection. Inspect the story for signal status and limitations.</small>
                 </span>
               </div>
 
@@ -677,7 +692,7 @@ export function CapabilityMap({
                 <span className="constellation-core__initials">{getProfileInitials(data.profile.name)}</span>
                 <span className="constellation-core__label">Mosaic</span>
                 <strong className="constellation-core__title">Capability Atlas</strong>
-                <small>Hover a project to preview its path. Click to open the full story.</small>
+                <small>Select a project to read its evidence.</small>
               </>
             )}
           </div>

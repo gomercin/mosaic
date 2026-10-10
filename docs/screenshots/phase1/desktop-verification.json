@@ -1,0 +1,240 @@
+{
+  "sourceRevision": "18f574bdeca11db0b7029f32b90bb118201858ed",
+  "sourceWorktreeDirty": false,
+  "project": "desktop",
+  "browser": "chromium",
+  "browserVersion": "156.0.8078.4",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "deviceScaleFactor": 1,
+  "reducedMotion": "reduce",
+  "baseURL": "http://127.0.0.1:4178",
+  "assets": [
+    {
+      "path": "index.html",
+      "bytes": 566,
+      "sha256": "1d284bb6b08a818be863e438db6955fc7db68eb00ff88279db7fa42c42bfd8e8"
+    },
+    {
+      "path": "data/mosaic.json",
+      "bytes": 7682,
+      "sha256": "92ea1715b893484e7834750f9e04dc8ed7310c28c5727b797b44b960f05a8ae3"
+    },
+    {
+      "path": "assets/index-CLKSetcm.js",
+      "bytes": 229347,
+      "sha256": "81692a918d500c705785a80dc16110a0a9f5f228da69ccb534a3c1ab702324bf"
+    },
+    {
+      "path": "assets/index-DtZ5frsi.css",
+      "bytes": 42844,
+      "sha256": "9c99dd81dc5f53f99f2b9a0354bf54f61dc0df7e0d95f3f7e2b296ff36297421"
+    }
+  ],
+  "screenshots": {
+    "overview": "desktop-overview.png",
+    "capability": "desktop-capability.png",
+    "engineering-scrolled": "desktop-engineering-scrolled.png",
+    "tentative": "desktop-tentative.png",
+    "timeline": "desktop-timeline.png"
+  },
+  "measurements": {
+    "overview": {
+      "container": {
+        "name": "Interactive capability constellation",
+        "x": 49,
+        "y": 423.09375,
+        "width": 1342,
+        "height": 720,
+        "right": 1391,
+        "bottom": 1143.09375
+      },
+      "nodes": [
+        {
+          "name": "Feedback inspection2 experiences",
+          "x": 596.4375,
+          "y": 498.890625,
+          "width": 156,
+          "height": 82,
+          "right": 752.4375,
+          "bottom": 580.890625
+        },
+        {
+          "name": "Experiment framing1 experience",
+          "x": 1162.609375,
+          "y": 763.359375,
+          "width": 156,
+          "height": 82,
+          "right": 1318.609375,
+          "bottom": 845.359375
+        },
+        {
+          "name": "Select experience: Checkpoint status view",
+          "x": 813.015625,
+          "y": 561.65625,
+          "width": 174,
+          "height": 48,
+          "right": 987.015625,
+          "bottom": 609.65625
+        },
+        {
+          "name": "Select experience: Handoff conversation",
+          "x": 346.734375,
+          "y": 524.140625,
+          "width": 174,
+          "height": 48,
+          "right": 520.734375,
+          "bottom": 572.140625
+        },
+        {
+          "name": "Select experience: Sensor comparison notebook",
+          "x": 1010.421875,
+          "y": 676.359375,
+          "width": 174,
+          "height": 48,
+          "right": 1184.421875,
+          "bottom": 724.359375
+        }
+      ],
+      "overlaps": [],
+      "cropped": [],
+      "clippedLabels": [],
+      "centerTextOverlaps": [],
+      "centerTextOutside": [],
+      "documentWidth": 1440,
+      "viewportWidth": 1440
+    },
+    "capability": {
+      "container": {
+        "name": "Interactive capability constellation",
+        "x": 49,
+        "y": 423.09375,
+        "width": 1342,
+        "height": 720,
+        "right": 1391,
+        "bottom": 1143.09375
+      },
+      "nodes": [
+        {
+          "name": "Feedback inspection2 experiences",
+          "x": 596.4375,
+          "y": 498.890625,
+          "width": 156,
+          "height": 82,
+          "right": 752.4375,
+          "bottom": 580.890625
+        },
+        {
+          "name": "Experiment framing1 experience",
+          "x": 1162.609375,
+          "y": 763.359375,
+          "width": 156,
+          "height": 82,
+          "right": 1318.609375,
+          "bottom": 845.359375
+        },
+        {
+          "name": "Select experience: Checkpoint status view",
+          "x": 813.015625,
+          "y": 561.65625,
+          "width": 174,
+          "height": 48,
+          "right": 987.015625,
+          "bottom": 609.65625
+        },
+        {
+          "name": "Select experience: Handoff conversation",
+          "x": 346.734375,
+          "y": 524.140625,
+          "width": 174,
+          "height": 48,
+          "right": 520.734375,
+          "bottom": 572.140625
+        },
+        {
+          "name": "Select experience: Sensor comparison notebook",
+          "x": 1010.421875,
+          "y": 676.359375,
+          "width": 174,
+          "height": 48,
+          "right": 1184.421875,
+          "bottom": 724.359375
+        }
+      ],
+      "overlaps": [],
+      "cropped": [],
+      "clippedLabels": [],
+      "centerTextOverlaps": [],
+      "centerTextOutside": [],
+      "documentWidth": 1440,
+      "viewportWidth": 1440
+    },
+    "tentative": {
+      "container": {
+        "name": "Interactive capability constellation",
+        "x": 49,
+        "y": 423.09375,
+        "width": 1342,
+        "height": 720,
+        "right": 1391,
+        "bottom": 1143.09375
+      },
+      "nodes": [
+        {
+          "name": "Feedback inspection2 experiences",
+          "x": 592.1475219726562,
+          "y": 496.6356201171875,
+          "width": 164.58001708984375,
+          "height": 86.510009765625,
+          "right": 756.7275390625,
+          "bottom": 583.1456298828125
+        },
+        {
+          "name": "Experiment framing1 experience",
+          "x": 1162.609375,
+          "y": 763.359375,
+          "width": 156,
+          "height": 82,
+          "right": 1318.609375,
+          "bottom": 845.359375
+        },
+        {
+          "name": "Select experience: Checkpoint status view",
+          "x": 813.015625,
+          "y": 561.65625,
+          "width": 174,
+          "height": 48,
+          "right": 987.015625,
+          "bottom": 609.65625
+        },
+        {
+          "name": "Select experience: Handoff conversation",
+          "x": 346.734375,
+          "y": 524.140625,
+          "width": 174,
+          "height": 48,
+          "right": 520.734375,
+          "bottom": 572.140625
+        },
+        {
+          "name": "Select experience: Sensor comparison notebook",
+          "x": 1010.421875,
+          "y": 676.359375,
+          "width": 174,
+          "height": 48,
+          "right": 1184.421875,
+          "bottom": 724.359375
+        }
+      ],
+      "overlaps": [],
+      "cropped": [],
+      "clippedLabels": [],
+      "centerTextOverlaps": [],
+      "centerTextOutside": [],
+      "documentWidth": 1440,
+      "viewportWidth": 1440
+    }
+  }
+}

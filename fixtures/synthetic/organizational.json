@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "0.2",
+  "profileContext": {
+    "education": "Invented background for pipeline testing; no real interview subject."
+  },
+  "projects": [
+    {
+      "id": "synthetic-handoff-workshop",
+      "title": "Handoff conversation",
+      "status": "stopped",
+      "summary": "A fictional workshop explored unclear handoffs between two groups.",
+      "rawNotes": "PRIVATE_EVIDENCE_CANARY: invented internal note for synthetic-handoff-workshop. AI attribution: No AI assistance was used.",
+      "period": {
+        "start": "2024",
+        "end": "2024",
+        "label": "Invented 2024 episode"
+      },
+      "context": {
+        "type": "Organizational / stakeholder",
+        "organization": "Example Cooperative",
+        "roleAtTime": "Contributor",
+        "careerStage": "Synthetic example",
+        "collaboration": "Shared work"
+      },
+      "confidentiality": {
+        "level": "private",
+        "publicUseApproved": false,
+        "notes": [
+          "Raw wording has no publication approval. Synthetic manifest supplies separately reviewed public text."
+        ]
+      },
+      "motivation": [
+        "Understand a small, observable problem."
+      ],
+      "problem": [
+        "A fictional workshop explored unclear handoffs between two groups."
+      ],
+      "existingSolutionsOrAlternatives": [
+        "Keep the existing manual process."
+      ],
+      "constraints": [
+        "Small invented scope; no measured service benefit."
+      ],
+      "myContribution": [
+        "Facilitated the conversation and captured conflicting expectations."
+      ],
+      "teamOrExistingContribution": [
+        "Two groups supplied their workflow constraints and rejected the proposed change."
+      ],
+      "approachAndDecisions": [
+        "Record the baseline, inspect feedback, and preserve limits."
+      ],
+      "differentiators": [
+        "No novelty claim."
+      ],
+      "outcomes": [
+        "The proposed process change stopped after the workshop; adoption was not shown."
+      ],
+      "lessons": [
+        "Small feedback loops can inform the next decision."
+      ],
+      "tools": [
+        "notes",
+        "spreadsheet"
+      ],
+      "tags": [
+        "Organizational / stakeholder"
+      ],
+      "openQuestions": [
+        "Whether the idea would work beyond the described setting."
+      ],
+      "provisionalSignals": [
+        {
+          "type": "Capability",
+          "label": "Feedback inspection",
+          "interpretation": "A bounded signal; not a general performance claim.",
+          "evidence": "Facilitated the conversation and captured conflicting expectations.",
+          "confidence": "medium",
+          "confirmedByUser": true
+        }
+      ]
+    }
+  ],
+  "crossProjectObservations": [],
+  "suggestedClassificationTypes": [
+    "Capability",
+    "Working principle"
+  ],
+  "exportNotes": [
+    "Synthetic fixture. All names, projects, results and confirmations are invented."
+  ]
+}

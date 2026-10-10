@@ -1,0 +1,371 @@
+{
+  "schemaVersion": "1.0",
+  "sourceDigest": "38f8424811bf3919a495ee6bdc74cb37f9ae2a59d4e437447e97f33e99b3289f",
+  "datasetKind": "synthetic",
+  "publication": {
+    "status": "approved",
+    "reviewer": "Synthetic fixture curator",
+    "revision": "synthetic-poc-1"
+  },
+  "records": {
+    "profile": {
+      "approval": {
+        "status": "approved",
+        "reviewer": "Synthetic fixture curator",
+        "revision": "synthetic-poc-1"
+      },
+      "public": {
+        "name": "Alex Example",
+        "title": "Invented contributor for the Mosaic pipeline proof of concept",
+        "tagline": "Three fictional experiences, with bounded evidence and visible limits.",
+        "summary": "This dataset is entirely synthetic. Its outcomes, attributions, confidence levels and confirmations are test examples, not claims about a real person.",
+        "location": "Fictional setting"
+      },
+      "sourceRefs": [
+        {
+          "sourcePath": "engineering.json",
+          "pointer": "/profileContext"
+        }
+      ]
+    },
+    "capabilities": [
+      {
+        "approval": {
+          "status": "approved",
+          "reviewer": "Synthetic fixture curator",
+          "revision": "synthetic-poc-1"
+        },
+        "public": {
+          "id": "feedback-inspection",
+          "label": "Feedback inspection",
+          "category": "Curated synthetic capability",
+          "description": "Making small feedback loops inspectable; supported here by two distinct fictional project episodes."
+        },
+        "sourceRefs": [
+          {
+            "sourcePath": "engineering.json",
+            "pointer": "/projects/0/provisionalSignals/0"
+          }
+        ]
+      },
+      {
+        "approval": {
+          "status": "approved",
+          "reviewer": "Synthetic fixture curator",
+          "revision": "synthetic-poc-1"
+        },
+        "public": {
+          "id": "experiment-framing",
+          "label": "Experiment framing",
+          "category": "Curated synthetic candidate",
+          "description": "Writing an evaluation question and baseline plan; the proposed evaluation remains unrun."
+        },
+        "sourceRefs": [
+          {
+            "sourcePath": "research.json",
+            "pointer": "/projects/0/provisionalSignals/0"
+          }
+        ]
+      }
+    ],
+    "principles": [
+      {
+        "approval": {
+          "status": "approved",
+          "reviewer": "Synthetic fixture curator",
+          "revision": "synthetic-poc-1"
+        },
+        "public": {
+          "id": "preserve-limits",
+          "label": "Preserve the limits",
+          "description": "Keep failed adoption, absent measurements and uncertain interpretations visible."
+        },
+        "sourceRefs": [
+          {
+            "sourcePath": "organizational.json",
+            "pointer": "/projects/0/lessons/0"
+          }
+        ]
+      }
+    ],
+    "experiences": [
+      {
+        "approval": {
+          "status": "approved",
+          "reviewer": "Synthetic fixture curator",
+          "revision": "synthetic-poc-1"
+        },
+        "public": {
+          "id": "synthetic-checkpoint-view",
+          "title": "Checkpoint status view",
+          "type": "Engineering",
+          "company": "Example Cooperative",
+          "period": {
+            "start": "2024",
+            "end": "2024",
+            "label": "Invented 2024 episode"
+          },
+          "summary": "A small local status view was demonstrated on three prepared examples.",
+          "publicNarrative": "The contributor wrote a parser; a teammate defined the checklist and reviewed the view.",
+          "challenge": "Three checklist states were difficult to inspect together.",
+          "approach": "Built a small parser and checked the prepared examples.",
+          "impact": "Delivered a local demonstration. No service benefit or wider reliability was measured.",
+          "strengthenedCapabilities": [
+            "feedback-inspection"
+          ],
+          "revealedPatterns": [
+            "A bounded example of inspecting feedback."
+          ],
+          "tools": [
+            "local parser",
+            "prepared examples"
+          ],
+          "principles": [
+            "preserve-limits"
+          ],
+          "tone": [
+            "practical"
+          ]
+        },
+        "sourceRefs": [
+          {
+            "sourcePath": "engineering.json",
+            "pointer": "/projects/0"
+          }
+        ]
+      },
+      {
+        "approval": {
+          "status": "approved",
+          "reviewer": "Synthetic fixture curator",
+          "revision": "synthetic-poc-1"
+        },
+        "public": {
+          "id": "synthetic-handoff-workshop",
+          "title": "Handoff conversation",
+          "type": "Organizational / stakeholder",
+          "company": "Example Cooperative",
+          "period": {
+            "start": "2024",
+            "end": "2024",
+            "label": "Invented 2024 episode"
+          },
+          "summary": "A workshop surfaced conflicting handoff expectations; the process change stopped.",
+          "publicNarrative": "The contributor facilitated the discussion. The groups supplied constraints and rejected the proposal.",
+          "challenge": "Two fictional groups had conflicting handoff expectations.",
+          "approach": "Facilitated a conversation and recorded the disagreement.",
+          "impact": "The proposal stopped after the workshop. Adoption and operational improvement were not demonstrated.",
+          "strengthenedCapabilities": [
+            "feedback-inspection"
+          ],
+          "revealedPatterns": [
+            "Making disagreement visible can inform a decision to stop."
+          ],
+          "tools": [
+            "facilitation notes"
+          ],
+          "principles": [
+            "preserve-limits"
+          ],
+          "tone": [
+            "reflective"
+          ]
+        },
+        "sourceRefs": [
+          {
+            "sourcePath": "organizational.json",
+            "pointer": "/projects/0"
+          }
+        ]
+      },
+      {
+        "approval": {
+          "status": "approved",
+          "reviewer": "Synthetic fixture curator",
+          "revision": "synthetic-poc-1"
+        },
+        "public": {
+          "id": "synthetic-sensor-notebook",
+          "title": "Sensor comparison notebook",
+          "type": "Research / personal",
+          "period": {
+            "start": "2024",
+            "end": "2024",
+            "label": "Invented 2024 idea"
+          },
+          "summary": "A written comparison plan exists; no sensor experiment has been run.",
+          "publicNarrative": "The contributor framed a question and baseline protocol, with AI assistance suggesting questions.",
+          "challenge": "A comparison idea needed a testable question and baseline.",
+          "approach": "Wrote a protocol outline; measurements remain absent.",
+          "impact": "An idea and plan only. No result, validated capability or product was established.",
+          "strengthenedCapabilities": [
+            "experiment-framing"
+          ],
+          "revealedPatterns": [
+            "A tentative planning signal, awaiting evaluation."
+          ],
+          "tools": [
+            "notebook"
+          ],
+          "principles": [
+            "preserve-limits"
+          ],
+          "tone": [
+            "tentative"
+          ]
+        },
+        "sourceRefs": [
+          {
+            "sourcePath": "research.json",
+            "pointer": "/projects/0"
+          }
+        ]
+      }
+    ],
+    "evidenceEpisodes": [
+      {
+        "approval": {
+          "status": "approved",
+          "reviewer": "Synthetic fixture curator",
+          "revision": "synthetic-poc-1"
+        },
+        "public": {
+          "id": "episode-checkpoint",
+          "experienceId": "synthetic-checkpoint-view",
+          "summary": "One fictional engineering delivery episode.",
+          "myContribution": "Wrote the local parser and checked three prepared examples.",
+          "teamContribution": "A teammate defined the checklist and reviewed the view.",
+          "aiContribution": "AI suggested parser edge cases; the contributor checked them.",
+          "result": "A local demonstration worked on three prepared examples.",
+          "limitation": "No deployment, general reliability or service benefit was measured.",
+          "outcomeStatus": "delivered"
+        },
+        "sourceRefs": [
+          {
+            "sourcePath": "engineering.json",
+            "pointer": "/projects/0"
+          }
+        ]
+      },
+      {
+        "approval": {
+          "status": "approved",
+          "reviewer": "Synthetic fixture curator",
+          "revision": "synthetic-poc-1"
+        },
+        "public": {
+          "id": "episode-handoff",
+          "experienceId": "synthetic-handoff-workshop",
+          "summary": "One distinct fictional stakeholder episode.",
+          "myContribution": "Facilitated the conversation and recorded conflicting expectations.",
+          "teamContribution": "The groups supplied constraints and rejected the proposal.",
+          "aiContribution": "No AI assistance was used.",
+          "result": "The proposed process change stopped after the workshop.",
+          "limitation": "Adoption and operational improvement were not shown.",
+          "outcomeStatus": "stopped"
+        },
+        "sourceRefs": [
+          {
+            "sourcePath": "organizational.json",
+            "pointer": "/projects/0"
+          }
+        ]
+      },
+      {
+        "approval": {
+          "status": "approved",
+          "reviewer": "Synthetic fixture curator",
+          "revision": "synthetic-poc-1"
+        },
+        "public": {
+          "id": "episode-sensor-plan",
+          "experienceId": "synthetic-sensor-notebook",
+          "summary": "One fictional personal research idea.",
+          "myContribution": "Wrote a comparison question and baseline protocol outline.",
+          "teamContribution": "No team contribution claimed.",
+          "aiContribution": "AI suggested questions; it generated no measurements.",
+          "result": "A written plan exists; the comparison has not been run.",
+          "limitation": "The evidence supports tentative framing only, not experimental success.",
+          "outcomeStatus": "idea"
+        },
+        "sourceRefs": [
+          {
+            "sourcePath": "research.json",
+            "pointer": "/projects/0"
+          }
+        ]
+      }
+    ],
+    "evidenceLinks": [
+      {
+        "approval": {
+          "status": "approved",
+          "reviewer": "Synthetic fixture curator",
+          "revision": "synthetic-poc-1"
+        },
+        "public": {
+          "id": "link-checkpoint-feedback",
+          "capabilityId": "feedback-inspection",
+          "experienceId": "synthetic-checkpoint-view",
+          "episodeId": "episode-checkpoint",
+          "explanation": "Checking a status view supplies a bounded feedback-inspection signal in this invented episode.",
+          "signalType": "demonstrated",
+          "confidence": "medium",
+          "confirmedByUser": false
+        },
+        "sourceRefs": [
+          {
+            "sourcePath": "engineering.json",
+            "pointer": "/projects/0/provisionalSignals/0"
+          }
+        ]
+      },
+      {
+        "approval": {
+          "status": "approved",
+          "reviewer": "Synthetic fixture curator",
+          "revision": "synthetic-poc-1"
+        },
+        "public": {
+          "id": "link-handoff-feedback",
+          "capabilityId": "feedback-inspection",
+          "experienceId": "synthetic-handoff-workshop",
+          "episodeId": "episode-handoff",
+          "explanation": "Recording disagreement supplies a separate signal even though the proposed change stopped.",
+          "signalType": "demonstrated",
+          "confidence": "medium",
+          "confirmedByUser": true
+        },
+        "sourceRefs": [
+          {
+            "sourcePath": "organizational.json",
+            "pointer": "/projects/0/provisionalSignals/0"
+          }
+        ]
+      },
+      {
+        "approval": {
+          "status": "approved",
+          "reviewer": "Synthetic fixture curator",
+          "revision": "synthetic-poc-1"
+        },
+        "public": {
+          "id": "link-sensor-framing",
+          "capabilityId": "experiment-framing",
+          "experienceId": "synthetic-sensor-notebook",
+          "episodeId": "episode-sensor-plan",
+          "explanation": "The written question is a low-confidence planning candidate. The evaluation remains unrun.",
+          "signalType": "candidate",
+          "confidence": "low",
+          "confirmedByUser": false
+        },
+        "sourceRefs": [
+          {
+            "sourcePath": "research.json",
+            "pointer": "/projects/0/provisionalSignals/0"
+          }
+        ]
+      }
+    ]
+  }
+}

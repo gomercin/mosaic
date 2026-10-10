@@ -7,3 +7,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+# Private interview evidence must never enter Git or public assets.
+_interview_raw_extracts/
+.private-evidence/
+
+# Repeatable browser verification artifacts (synthetic release only).
+test-results/
+playwright-report/
+blob-report/

@@ -367,6 +367,7 @@
   overflow: hidden;
   place-items: center;
   align-content: center;
+  grid-auto-rows: max-content;
   gap: 6px;
   padding: 22px;
   border: 1px solid rgba(125, 211, 252, 0.34);
@@ -800,4 +801,50 @@
     display: none;
   }
 
+}
+
+/* Intrinsic text rows avoid compression with different platform font metrics. */
+.constellation-core.is-capability-focus .constellation-core__initials,
+.constellation-core.is-principle-focus .constellation-core__initials {
+  width: 38px;
+  height: 38px;
+}
+
+/* Narrow screens use the same data and controls in an ordinary reading order. */
+.capability-reading-view { display: none; }
+
+@media (max-width: 760px) {
+  .constellation-foundation { display: none; }
+  .constellation-heading__subtitle { display: none; }
+  .constellation-heading { flex-direction: column; align-items: flex-start; }
+  .capability-reading-view { display: grid; gap: 14px; min-width: 0; }
+  .capability-reading-view h3, .capability-reading-view p { margin: 0; }
+  .capability-reading-view p { color: var(--color-muted); line-height: 1.5; }
+  .capability-reading-view header { display: grid; gap: 8px; }
+  .reading-capabilities, .reading-projects { display: grid; gap: 12px; min-width: 0; }
+  .reading-capability-button, .reading-project-button {
+    display: grid;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 16px;
+    border: 1px solid rgba(125, 211, 252, 0.3);
+    border-radius: 16px;
+    color: #eff6ff;
+    background: rgba(125, 211, 252, 0.05);
+    text-align: left;
+    overflow-wrap: anywhere;
+  }
+  .reading-capability-button[aria-pressed="true"] {
+    border-color: var(--color-cyan);
+    background: rgba(125, 211, 252, 0.12);
+  }
+  .reading-project-button { border-color: rgba(168, 85, 247, 0.35); }
+  .reading-capability-button span, .reading-project-button span { line-height: 1.5; }
+  .reading-capability-button small, .reading-project-button small { color: var(--color-muted); line-height: 1.5; }
+  .reading-capability-button:focus-visible, .reading-project-button:focus-visible {
+    outline: 3px solid var(--color-cyan);
+    outline-offset: 3px;
+  }
 }
