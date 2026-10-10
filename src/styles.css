@@ -1375,3 +1375,16 @@ button {
 .evidence-episode dd { margin: 0.3rem 0 0; line-height: 1.6; }
 .evidence-connection { margin-top: 1rem; border-top: 1px solid rgba(139, 182, 213, 0.18); padding-top: 1rem; }
 .evidence-connection small { color: #ecdcaa; line-height: 1.5; }
+
+.overview-detail-drawer .detail-panel,
+.overview-inspector__body { overscroll-behavior: contain; }
+
+@media (max-width: 760px) {
+  .mode-switch { max-width: 100%; flex-wrap: wrap; }
+  .filter-pill { max-width: 100%; white-space: normal; text-align: left; }
+  .overview-detail-drawer {
+    height: min(76vh, 680px);
+    height: min(76dvh, 680px);
+    max-height: none;
+  }
+}

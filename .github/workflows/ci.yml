@@ -39,6 +39,20 @@ jobs:
       - name: Audit deployable public artifact
         run: npm run validate:dist
 
+      - name: Install Chromium for browser verification
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify desktop and mobile evidence paths
+        run: npx playwright test
+
+      - name: Upload browser verification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mosaic-browser-verification
+          path: test-results
+          if-no-files-found: warn
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:

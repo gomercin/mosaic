@@ -15,7 +15,18 @@ npm run build
 npm run preview
 ```
 
-`npm test` typechecks the app, checks deterministic generation, validates the public model, and runs importer, projection, inventory, loader, and deploy-audit tests. `npm run build` validates the generated data before compiling and audits the actual `dist/` tree afterward. CI, Pages, and release packaging explicitly audit that tree before uploading it. This PR does not deploy or change hosting.
+`npm test` typechecks the app, checks deterministic generation, validates the public model, and runs importer, projection, inventory, loader, and deploy-audit tests. `npm run build` validates the generated data before compiling and audits the actual `dist/` tree afterward. CI, Pages, and release packaging explicitly audit that tree before uploading it. This change has not been merged or deployed. The current Pages workflow runs on pushes to `main` (including a PR merge) and manual dispatch; merging this PR therefore triggers the Pages build/deploy workflow for the synthetic demo. A successful deployment publishes it. Before merge, the owner must choose to publish the synthetic demo through the existing workflow, or approve a separate change that decouples merge from publication. This pass does not change deployment settings.
+
+## Repeatable browser verification
+
+Use Node 22, install the lockfile dependencies with `npm ci`, then run:
+
+```sh
+npx playwright install chromium
+npm run browser:test
+```
+
+This builds and audits the production artifact, starts a fresh loopback preview, and runs Chromium at 1440×1000 and 390×844. It checks capability selection, complete project evidence and attribution, Timeline, Enter/Space, Close/Escape focus restoration, wheel/PageDown detail scrolling, and responsive geometry. Screenshots, measurements, asset hashes and the tested Git revision are written under ignored `test-results/`. CI runs the same browser suite after its audited build. See [the verification report](docs/phase1-verification.md) for retained before/after screenshots, the verified implementation commit, and limitations.
 
 ## Evidence and publication workflow
 
@@ -69,4 +80,4 @@ The earlier design handoffs in `docs/` still guide the constellation. Their olde
 
 The deploy audit allows only the app entry, compiled JS/CSS, and the exact validated public projection. It rejects extra JSON, source archives, source maps, symlinks, private paths, and declared canaries. These checks enforce the construction boundary; they cannot decide whether arbitrary editorial prose is confidential or semantically justified. Human review remains necessary.
 
-Review meaning, attribution, and information density with the owner before expanding beyond this slice. Full consolidation, broader taxonomy, UI redesign, deployment, and backend work remain later steps.
+Review meaning, attribution, and information density with the owner before expanding beyond this slice. Full consolidation, broader taxonomy, broad UI redesign, and backend work remain later steps. Publication is an immediate owner decision before merge because the existing Pages workflow deploys `main`.

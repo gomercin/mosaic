@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { CapabilityMap } from './components/CapabilityMap';
 import { ExperiencePanel } from './components/ExperiencePanel';
 import { Header } from './components/Header';
@@ -48,6 +48,7 @@ export function App() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('overview');
   const [activeFocus, setActiveFocus] = useState<ActiveFocus>({ kind: 'overview' });
+  const focusOpener = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     loadMosaicData()
@@ -60,7 +61,7 @@ export function App() {
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
-        setActiveFocus({ kind: 'overview' });
+        handleFocusChange({ kind: 'overview' });
       }
     }
 
@@ -68,6 +69,33 @@ export function App() {
 
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  function handleFocusChange(next: ActiveFocus) {
+    const trigger = document.activeElement;
+    // Inspector project buttons disappear when the story replaces that inspector.
+    // Preserve the stable external capability/project opener for Escape and Close.
+    if (next.kind !== 'overview' && trigger instanceof HTMLElement &&
+      trigger.matches('button') && !trigger.closest('.overview-detail-drawer')) {
+      focusOpener.current = trigger;
+    }
+    setActiveFocus((current) => current.kind === 'overview' && next.kind === 'overview' ? current : next);
+  }
+
+  useEffect(() => {
+    if (viewMode !== 'overview') return;
+    const drawer = document.querySelector<HTMLElement>('.overview-detail-drawer');
+    if (drawer) {
+      const story = drawer.querySelector<HTMLElement>('.detail-panel, .overview-inspector__body');
+      if (story) story.scrollTop = 0;
+      drawer.querySelector<HTMLButtonElement>('button')?.focus({ preventScroll: true });
+    } else if (focusOpener.current) {
+      const opener = focusOpener.current;
+      const target = opener.isConnected && opener.getClientRects().length
+        ? opener
+        : document.querySelector<HTMLButtonElement>('.mode-switch button.is-active');
+      target?.focus({ preventScroll: true });
+    }
+  }, [activeFocus, viewMode]);
 
   const selectedCapabilityId = activeFocus.kind === 'capability' ? activeFocus.id : null;
   const selectedPrincipleId = activeFocus.kind === 'principle' ? activeFocus.id : null;
@@ -130,6 +158,10 @@ export function App() {
   }
 
   function handleViewModeChange(nextViewMode: ViewMode) {
+    // A Timeline opener unmounts when its story moves back into the overview drawer.
+    if (nextViewMode === 'overview' && document.activeElement instanceof HTMLButtonElement) {
+      focusOpener.current = document.activeElement;
+    }
     setViewMode(nextViewMode);
   }
 
@@ -146,7 +178,7 @@ export function App() {
             <button
               type="button"
               className="overview-detail-drawer__close"
-              onClick={() => setActiveFocus({ kind: 'overview' })}
+              onClick={() => handleFocusChange({ kind: 'overview' })}
             >
               Close
             </button>
@@ -171,7 +203,7 @@ export function App() {
             <button
               type="button"
               className="overview-detail-drawer__close"
-              onClick={() => setActiveFocus({ kind: 'overview' })}
+              onClick={() => handleFocusChange({ kind: 'overview' })}
             >
               Close
             </button>
@@ -186,7 +218,7 @@ export function App() {
                 <button
                   key={experience.id}
                   type="button"
-                  onClick={() => setActiveFocus({ kind: 'project', id: experience.id })}
+                  onClick={() => handleFocusChange({ kind: 'project', id: experience.id })}
                 >
                   <span className="overview-inspector__glyph">{getExperienceGlyph(experience)}</span>
                   <span>
@@ -211,7 +243,7 @@ export function App() {
           <button
             type="button"
             className="overview-detail-drawer__close"
-            onClick={() => setActiveFocus({ kind: 'overview' })}
+            onClick={() => handleFocusChange({ kind: 'overview' })}
           >
             Close
           </button>
@@ -225,7 +257,7 @@ export function App() {
               <button
                 key={experience.id}
                 type="button"
-                onClick={() => setActiveFocus({ kind: 'project', id: experience.id })}
+                onClick={() => handleFocusChange({ kind: 'project', id: experience.id })}
               >
                 <span className="overview-inspector__glyph">{getExperienceGlyph(experience)}</span>
                 <span>
@@ -298,7 +330,7 @@ export function App() {
           <CapabilityMap
             data={data}
             activeFocus={activeFocus}
-            onFocusChange={setActiveFocus}
+            onFocusChange={handleFocusChange}
           />
           {renderOverviewInspector()}
         </section>
@@ -311,7 +343,7 @@ export function App() {
             selectedCapabilityId={selectedCapabilityId}
             selectedPrincipleId={selectedPrincipleId}
             selectedExperienceId={selectedExperienceId}
-            onExperienceSelect={(experienceId) => setActiveFocus({ kind: 'project', id: experienceId })}
+            onExperienceSelect={(experienceId) => handleFocusChange({ kind: 'project', id: experienceId })}
           />
           <ExperiencePanel
             data={data}
@@ -328,9 +360,9 @@ export function App() {
             selectedPrincipleId={selectedPrincipleId}
             selectedExperienceId={selectedExperienceId}
             onPrincipleSelect={(principleId) =>
-              setActiveFocus(principleId ? { kind: 'principle', id: principleId } : { kind: 'overview' })
+              handleFocusChange(principleId ? { kind: 'principle', id: principleId } : { kind: 'overview' })
             }
-            onExperienceSelect={(experienceId) => setActiveFocus({ kind: 'project', id: experienceId })}
+            onExperienceSelect={(experienceId) => handleFocusChange({ kind: 'project', id: experienceId })}
           />
           <ExperiencePanel
             data={data}

@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { CapabilityReadingView } from './CapabilityReadingView';
 import type { CSSProperties } from 'react';
 import type { ActiveFocus, Capability, Experience, HoverTarget, MosaicData } from '../types';
 import {
@@ -450,6 +451,8 @@ export function CapabilityMap({
         </div>
         <p>{data.experiences.length} experiences · {data.capabilities.length} capabilities</p>
       </div>
+
+      <CapabilityReadingView data={data} activeFocus={activeFocus} onFocusChange={onFocusChange} />
 
       <div className="constellation-foundation">
         <div
