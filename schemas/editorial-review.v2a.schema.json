@@ -1,0 +1,477 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gomercin.github.io/mosaic/schemas/editorial-review.v2a.schema.json",
+  "title": "Private proposed editorial review for Phase 2A",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "2A.1.0"
+    },
+    "sourceDigest": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "reviewStatus": {
+      "const": "proposed"
+    },
+    "reviewer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "meaning": {
+            "type": "string",
+            "minLength": 1
+          },
+          "supportingProjectIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "supportingSignalIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "observationIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sourceId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "pointer": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "sourceId",
+                "pointer"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 0
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "confidence": {
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "confirmationStatus": {
+            "const": "unconfirmed"
+          },
+          "alternativeInterpretations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "contradictions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "reviewQuestions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "label",
+          "meaning",
+          "supportingProjectIds",
+          "supportingSignalIds",
+          "observationIds",
+          "evidenceRefs",
+          "reasons",
+          "confidence",
+          "confirmationStatus",
+          "alternativeInterpretations",
+          "contradictions",
+          "reviewQuestions"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fromCandidateId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "toCandidateId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "enum": [
+              "related",
+              "distinct",
+              "alternative",
+              "broader",
+              "narrower"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "fromCandidateId",
+          "toCandidateId",
+          "type",
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "episodeCandidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "occurrenceIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sourceId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "pointer": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "sourceId",
+                "pointer"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 0
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claimBasis": {
+            "type": "string",
+            "minLength": 1
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "outcomeStatus": {
+            "enum": [
+              "source-described",
+              "delivered",
+              "stopped",
+              "idea",
+              "mixed",
+              "unresolved"
+            ]
+          },
+          "independenceStatus": {
+            "enum": [
+              "unresolved",
+              "same-project",
+              "distinct-episode-proposed"
+            ]
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "projectId",
+          "occurrenceIds",
+          "evidenceRefs",
+          "summary",
+          "claimBasis",
+          "limitations",
+          "outcomeStatus",
+          "independenceStatus",
+          "rationale"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "reviewQuestions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "identityReviewGroups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "projectIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "disposition": {
+            "const": "review-only"
+          },
+          "independenceRelation": {
+            "enum": [
+              "unresolved",
+              "same-program",
+              "distinct-context-proposed"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "projectIds",
+          "reason",
+          "disposition",
+          "independenceRelation"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "classificationTypes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "meaning": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "type",
+          "label",
+          "meaning",
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "rejectedGroupings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "proposedCandidateIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "projectIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "evidenceRefs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sourceId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "pointer": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "sourceId",
+                "pointer"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 0
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contradictions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "proposedCandidateIds",
+          "projectIds",
+          "evidenceRefs",
+          "reason",
+          "contradictions"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "synthesisNotes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "sourceDigest",
+    "reviewStatus",
+    "reviewer",
+    "revision",
+    "candidates",
+    "relationships",
+    "episodeCandidates",
+    "reviewQuestions",
+    "identityReviewGroups"
+  ],
+  "additionalProperties": false
+}
