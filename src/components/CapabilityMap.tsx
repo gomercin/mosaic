@@ -692,7 +692,7 @@ export function CapabilityMap({
                 <span className="constellation-core__initials">{getProfileInitials(data.profile.name)}</span>
                 <span className="constellation-core__label">Mosaic</span>
                 <strong className="constellation-core__title">Capability Atlas</strong>
-                <small>Hover a project to preview its path. Click to open the full story.</small>
+                <small>Select a project to read its evidence.</small>
               </>
             )}
           </div>
