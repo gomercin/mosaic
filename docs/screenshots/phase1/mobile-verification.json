@@ -1,0 +1,231 @@
+{
+  "sourceRevision": "18f574bdeca11db0b7029f32b90bb118201858ed",
+  "sourceWorktreeDirty": false,
+  "project": "mobile",
+  "browser": "chromium",
+  "browserVersion": "156.0.8078.4",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "deviceScaleFactor": 1,
+  "reducedMotion": "reduce",
+  "baseURL": "http://127.0.0.1:4178",
+  "assets": [
+    {
+      "path": "index.html",
+      "bytes": 566,
+      "sha256": "1d284bb6b08a818be863e438db6955fc7db68eb00ff88279db7fa42c42bfd8e8"
+    },
+    {
+      "path": "data/mosaic.json",
+      "bytes": 7682,
+      "sha256": "92ea1715b893484e7834750f9e04dc8ed7310c28c5727b797b44b960f05a8ae3"
+    },
+    {
+      "path": "assets/index-CLKSetcm.js",
+      "bytes": 229347,
+      "sha256": "81692a918d500c705785a80dc16110a0a9f5f228da69ccb534a3c1ab702324bf"
+    },
+    {
+      "path": "assets/index-DtZ5frsi.css",
+      "bytes": 42844,
+      "sha256": "9c99dd81dc5f53f99f2b9a0354bf54f61dc0df7e0d95f3f7e2b296ff36297421"
+    }
+  ],
+  "screenshots": {
+    "overview": "mobile-overview.png",
+    "capability": "mobile-capability.png",
+    "engineering-scrolled": "mobile-engineering-scrolled.png",
+    "tentative": "mobile-tentative.png",
+    "timeline": "mobile-timeline.png"
+  },
+  "measurements": {
+    "overview": {
+      "container": {
+        "name": "Capability reading view",
+        "x": 29,
+        "y": 24.078125,
+        "width": 332,
+        "height": 1059.90625,
+        "right": 361,
+        "bottom": 1083.984375
+      },
+      "nodes": [
+        {
+          "name": "Feedback inspectionMaking small feedback loops inspectable; supported here by two distinct fictional project episodes.2 connected projects",
+          "x": 29,
+          "y": 116.078125,
+          "width": 332,
+          "height": 159.984375,
+          "right": 361,
+          "bottom": 276.0625
+        },
+        {
+          "name": "Experiment framingWriting an evaluation question and baseline plan; the proposed evaluation remains unrun.1 connected project",
+          "x": 29,
+          "y": 288.0625,
+          "width": 332,
+          "height": 159.984375,
+          "right": 361,
+          "bottom": 448.046875
+        },
+        {
+          "name": "Select experience: Checkpoint status view",
+          "x": 29,
+          "y": 584.046875,
+          "width": 332,
+          "height": 159.984375,
+          "right": 361,
+          "bottom": 744.03125
+        },
+        {
+          "name": "Select experience: Handoff conversation",
+          "x": 29,
+          "y": 756.03125,
+          "width": 332,
+          "height": 179.96875,
+          "right": 361,
+          "bottom": 936
+        },
+        {
+          "name": "Select experience: Sensor comparison notebook",
+          "x": 29,
+          "y": 948,
+          "width": 332,
+          "height": 135.984375,
+          "right": 361,
+          "bottom": 1083.984375
+        }
+      ],
+      "overlaps": [],
+      "cropped": [],
+      "clippedLabels": [],
+      "centerTextOverlaps": [],
+      "centerTextOutside": [],
+      "documentWidth": 390,
+      "viewportWidth": 390
+    },
+    "capability": {
+      "container": {
+        "name": "Capability reading view",
+        "x": 29,
+        "y": 24.078125,
+        "width": 332,
+        "height": 911.921875,
+        "right": 361,
+        "bottom": 936
+      },
+      "nodes": [
+        {
+          "name": "Feedback inspectionMaking small feedback loops inspectable; supported here by two distinct fictional project episodes.2 connected projects",
+          "x": 29,
+          "y": 116.078125,
+          "width": 332,
+          "height": 159.984375,
+          "right": 361,
+          "bottom": 276.0625
+        },
+        {
+          "name": "Experiment framingWriting an evaluation question and baseline plan; the proposed evaluation remains unrun.1 connected project",
+          "x": 29,
+          "y": 288.0625,
+          "width": 332,
+          "height": 159.984375,
+          "right": 361,
+          "bottom": 448.046875
+        },
+        {
+          "name": "Select experience: Checkpoint status view",
+          "x": 29,
+          "y": 584.046875,
+          "width": 332,
+          "height": 159.984375,
+          "right": 361,
+          "bottom": 744.03125
+        },
+        {
+          "name": "Select experience: Handoff conversation",
+          "x": 29,
+          "y": 756.03125,
+          "width": 332,
+          "height": 179.96875,
+          "right": 361,
+          "bottom": 936
+        }
+      ],
+      "overlaps": [],
+      "cropped": [],
+      "clippedLabels": [],
+      "centerTextOverlaps": [],
+      "centerTextOutside": [],
+      "documentWidth": 390,
+      "viewportWidth": 390
+    },
+    "tentative": {
+      "container": {
+        "name": "Capability reading view",
+        "x": 29,
+        "y": -250.921875,
+        "width": 332,
+        "height": 1059.90625,
+        "right": 361,
+        "bottom": 808.984375
+      },
+      "nodes": [
+        {
+          "name": "Feedback inspectionMaking small feedback loops inspectable; supported here by two distinct fictional project episodes.2 connected projects",
+          "x": 29,
+          "y": -158.921875,
+          "width": 332,
+          "height": 159.984375,
+          "right": 361,
+          "bottom": 1.0625
+        },
+        {
+          "name": "Experiment framingWriting an evaluation question and baseline plan; the proposed evaluation remains unrun.1 connected project",
+          "x": 29,
+          "y": 13.0625,
+          "width": 332,
+          "height": 159.984375,
+          "right": 361,
+          "bottom": 173.046875
+        },
+        {
+          "name": "Select experience: Checkpoint status view",
+          "x": 29,
+          "y": 309.046875,
+          "width": 332,
+          "height": 159.984375,
+          "right": 361,
+          "bottom": 469.03125
+        },
+        {
+          "name": "Select experience: Handoff conversation",
+          "x": 29,
+          "y": 481.03125,
+          "width": 332,
+          "height": 179.96875,
+          "right": 361,
+          "bottom": 661
+        },
+        {
+          "name": "Select experience: Sensor comparison notebook",
+          "x": 29,
+          "y": 673,
+          "width": 332,
+          "height": 135.984375,
+          "right": 361,
+          "bottom": 808.984375
+        }
+      ],
+      "overlaps": [],
+      "cropped": [],
+      "clippedLabels": [],
+      "centerTextOverlaps": [],
+      "centerTextOutside": [],
+      "documentWidth": 390,
+      "viewportWidth": 390
+    }
+  }
+}

@@ -13,7 +13,7 @@ export function ExperiencePanel({ data, experience, selectedCapabilityId }: Expe
 
   if (!experience) {
     return (
-      <aside className="detail-panel">
+      <aside className="detail-panel" tabIndex={0} aria-label="Project story">
         <p className="eyebrow">Experience</p>
         <h2>Pick an experience</h2>
         <p>Select a card or a point on the timeline to inspect how it contributes to the atlas.</p>
@@ -25,15 +25,44 @@ export function ExperiencePanel({ data, experience, selectedCapabilityId }: Expe
   const revealedPatterns = experience.revealedPatterns ?? [];
   const principles = experience.principles ?? [];
   const evidence = experience.evidence ?? [];
+  const episodes = (data.evidenceEpisodes ?? []).filter((episode) => episode.experienceId === experience.id);
+  const links = (data.evidenceLinks ?? []).filter((link) => link.experienceId === experience.id);
 
   return (
-    <aside className="detail-panel">
+    <aside className="detail-panel" tabIndex={0} aria-label="Project story">
       <p className="eyebrow">{experience.type} · {experience.period.label}</p>
       <h2>{experience.title}</h2>
       {experience.company && <p className="detail-panel__company">{experience.company}</p>}
       <p className="detail-panel__summary">{experience.summary}</p>
       {experience.publicNarrative && (
         <p className="detail-panel__narrative">{experience.publicNarrative}</p>
+      )}
+
+      {episodes.length > 0 && (
+        <section className="episode-section" aria-label="Evidence episodes">
+          <h3>The evidence behind the connection</h3>
+          {episodes.map((episode) => (
+            <article key={episode.id} id={episode.id} className="evidence-episode">
+              <h4>{episode.summary}</h4>
+              <dl>
+                <dt>My contribution</dt><dd>{episode.myContribution}</dd>
+                <dt>Team / existing work</dt><dd>{episode.teamContribution}</dd>
+                <dt>AI assistance</dt><dd>{episode.aiContribution}</dd>
+                <dt>Result · {episode.outcomeStatus}</dt><dd>{episode.result}</dd>
+                <dt>Limitations</dt><dd>{episode.limitation}</dd>
+              </dl>
+              {links.filter((link) => link.episodeId === episode.id).map((link) => (
+                <div key={link.id} className="evidence-connection">
+                  <strong>{capabilityMap[link.capabilityId]?.label}</strong>
+                  <p>{link.explanation}</p>
+                  <small>
+                    {link.signalType} · {link.confidence} confidence · {link.confirmedByUser ? 'User-confirmed' : 'Interpretation awaiting confirmation'}
+                  </small>
+                </div>
+              ))}
+            </article>
+          ))}
+        </section>
       )}
 
       {revealedPatterns.length > 0 && (
@@ -86,7 +115,7 @@ export function ExperiencePanel({ data, experience, selectedCapabilityId }: Expe
       </div>
 
       <section className="tag-section">
-        <h3>What did it strengthen?</h3>
+        <h3>Connected capabilities</h3>
         <div className="tag-list">
           {getExperienceCapabilityIds(experience).map((capabilityId) => {
             const capability = capabilityMap[capabilityId];

@@ -9,16 +9,21 @@
   "scripts": {
     "dev": "vite",
     "typecheck": "tsc --noEmit",
-    "validate:data": "node scripts/validate-mosaic-data.mjs public/data/mosaic.sample.json",
-    "test": "npm run typecheck && npm run validate:data",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "validate:data": "node scripts/validate-mosaic-data.mjs public/data/mosaic.json",
+    "test": "npm run typecheck && npm run generate:data -- --check && npm run validate:data && node --test scripts/*.test.mjs",
+    "build": "npm run generate:data -- --check && npm run validate:data && tsc && vite build && npm run validate:dist",
+    "preview": "vite preview",
+    "inventory:interviews": "node scripts/inventory-interviews.mjs",
+    "generate:data": "node scripts/build-public-data.mjs",
+    "validate:dist": "node scripts/validate-public-build.mjs",
+    "browser:test": "npm run build && playwright test"
   },
   "dependencies": {
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.0",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",

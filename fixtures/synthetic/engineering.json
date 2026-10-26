@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "0.2",
+  "profileContext": {
+    "education": "Invented background for pipeline testing; no real interview subject."
+  },
+  "projects": [
+    {
+      "id": "synthetic-checkpoint-view",
+      "title": "Checkpoint status view",
+      "status": "delivered",
+      "summary": "A small status view made three fictional checklist states inspectable.",
+      "rawNotes": "PRIVATE_EVIDENCE_CANARY: invented internal note for synthetic-checkpoint-view. AI attribution: An AI assistant suggested parser edge cases; the contributor checked them.",
+      "period": {
+        "start": "2024",
+        "end": "2024",
+        "label": "Invented 2024 episode"
+      },
+      "context": {
+        "type": "Engineering",
+        "organization": "Example Cooperative",
+        "roleAtTime": "Contributor",
+        "careerStage": "Synthetic example",
+        "collaboration": "Shared work"
+      },
+      "confidentiality": {
+        "level": "private",
+        "publicUseApproved": false,
+        "notes": [
+          "Raw wording has no publication approval. Synthetic manifest supplies separately reviewed public text."
+        ]
+      },
+      "motivation": [
+        "Understand a small, observable problem."
+      ],
+      "problem": [
+        "A small status view made three fictional checklist states inspectable."
+      ],
+      "existingSolutionsOrAlternatives": [
+        "Keep the existing manual process."
+      ],
+      "constraints": [
+        "Small invented scope; no measured service benefit."
+      ],
+      "myContribution": [
+        "Wrote a local parser and checked three prepared examples."
+      ],
+      "teamOrExistingContribution": [
+        "A teammate defined the checklist and reviewed the view."
+      ],
+      "approachAndDecisions": [
+        "Record the baseline, inspect feedback, and preserve limits."
+      ],
+      "differentiators": [
+        "No novelty claim."
+      ],
+      "outcomes": [
+        "A local demonstration worked on the three prepared examples."
+      ],
+      "lessons": [
+        "Small feedback loops can inform the next decision."
+      ],
+      "tools": [
+        "notes",
+        "spreadsheet"
+      ],
+      "tags": [
+        "Engineering"
+      ],
+      "openQuestions": [
+        "Whether the idea would work beyond the described setting."
+      ],
+      "provisionalSignals": [
+        {
+          "type": "Capability",
+          "label": "Feedback inspection",
+          "interpretation": "A bounded signal; not a general performance claim.",
+          "evidence": "Wrote a local parser and checked three prepared examples.",
+          "confidence": "medium",
+          "confirmedByUser": false
+        }
+      ]
+    }
+  ],
+  "crossProjectObservations": [],
+  "suggestedClassificationTypes": [
+    "Capability",
+    "Working principle"
+  ],
+  "exportNotes": [
+    "Synthetic fixture. All names, projects, results and confirmations are invented."
+  ]
+}
