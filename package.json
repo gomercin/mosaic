@@ -16,7 +16,8 @@
     "inventory:interviews": "node scripts/inventory-interviews.mjs",
     "generate:data": "node scripts/build-public-data.mjs",
     "validate:dist": "node scripts/validate-public-build.mjs",
-    "browser:test": "npm run build && playwright test"
+    "browser:test": "npm run build && playwright test",
+    "consolidate:interviews": "node scripts/consolidate-interviews.mjs"
   },
   "dependencies": {
     "react": "^19.2.7",

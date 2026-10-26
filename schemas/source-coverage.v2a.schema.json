@@ -1,0 +1,463 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "2A.1.0"
+    },
+    "sourceDigest": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "publicationApproval": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "const": "pending"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "counts": {
+      "type": "object",
+      "properties": {
+        "interviewJsonSources": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ancillaryFiles": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "projectOccurrences": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "originalProjectIds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "canonicalProjectRecords": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "rawSignalOccurrences": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "canonicalSignals": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "crossObservationOccurrences": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "classificationSuggestionOccurrences": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "profileContexts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "exportNotes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sourceLeafFields": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "uncoveredSourceFields": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "editorialCandidates": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "candidateEpisodes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "interviewJsonSources",
+        "ancillaryFiles",
+        "projectOccurrences",
+        "originalProjectIds",
+        "canonicalProjectRecords",
+        "rawSignalOccurrences",
+        "canonicalSignals",
+        "crossObservationOccurrences",
+        "classificationSuggestionOccurrences",
+        "profileContexts",
+        "exportNotes",
+        "sourceLeafFields",
+        "uncoveredSourceFields",
+        "editorialCandidates",
+        "candidateEpisodes"
+      ],
+      "additionalProperties": false
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "profileContextId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "projectOccurrenceIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "signalOccurrenceIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "crossObservationIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "classificationSuggestionIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "exportNoteIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "sourceFieldIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "sourceId",
+          "sha256",
+          "profileContextId",
+          "projectOccurrenceIds",
+          "signalOccurrenceIds",
+          "crossObservationIds",
+          "classificationSuggestionIds",
+          "exportNoteIds",
+          "sourceFieldIds"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "projectOccurrences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "canonicalOccurrenceId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sourceRefs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sourceId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "sha256": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "pointer": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "sourceId",
+                "sha256",
+                "pointer"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "publicationApproval": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "const": "pending"
+              }
+            },
+            "required": [
+              "status"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "projectId",
+          "canonicalOccurrenceId",
+          "sourceRefs",
+          "publicationApproval"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "signalOccurrences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "projectOccurrenceId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "canonicalSignalId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sourceRefs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sourceId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "sha256": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "pointer": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "sourceId",
+                "sha256",
+                "pointer"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "id",
+          "projectOccurrenceId",
+          "canonicalSignalId",
+          "sourceRefs"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "leafCoverage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "pointer": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sourceFieldId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "retainedInNormalizedPayload": {
+            "const": true
+          }
+        },
+        "required": [
+          "sourceId",
+          "pointer",
+          "sourceFieldId",
+          "retainedInNormalizedPayload"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "uncovered": {
+      "type": "array",
+      "items": {},
+      "maxItems": 0
+    },
+    "ancillaryFiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "relativePath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "byteLength": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "retention": {
+            "const": "metadata-only-non-interview"
+          }
+        },
+        "required": [
+          "relativePath",
+          "byteLength",
+          "sha256",
+          "retention"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "independence": {
+      "type": "object",
+      "properties": {
+        "observedContextCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "conservativeIndependentContextCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "independentContextBounds": {
+          "type": "object",
+          "properties": {
+            "lower": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "upper": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "lower",
+            "upper"
+          ],
+          "additionalProperties": false
+        },
+        "confirmedIndependentEpisodeCount": {
+          "const": 0
+        },
+        "demonstrationCount": {
+          "const": 0
+        },
+        "contextGroups": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "minItems": 0
+        },
+        "qualification": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "observedContextCount",
+        "conservativeIndependentContextCount",
+        "independentContextBounds",
+        "confirmedIndependentEpisodeCount",
+        "demonstrationCount",
+        "contextGroups",
+        "qualification"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "sourceDigest",
+    "publicationApproval",
+    "counts",
+    "sources",
+    "projectOccurrences",
+    "signalOccurrences",
+    "leafCoverage",
+    "uncovered",
+    "ancillaryFiles",
+    "independence"
+  ],
+  "additionalProperties": false,
+  "$id": "https://gomercin.github.io/mosaic/schemas/source-coverage.v2a.schema.json",
+  "title": "Private Phase 2A source coverage"
+}

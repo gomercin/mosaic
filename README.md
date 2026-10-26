@@ -1,6 +1,6 @@
 # Mosaic
 
-Mosaic is a static capability atlas: experiences connect to capabilities, principles, and time. This increment implements Phase 0 and a small Phase 1 proof of concept from [issue #3](https://github.com/gomercin/mosaic/issues/3).
+Mosaic is a static capability atlas: experiences connect to capabilities, principles, and time. The repository includes the Phase 0 inventory, a synthetic Phase 1 proof of concept, and a private Phase 2A consolidation tool from [issue #3](https://github.com/gomercin/mosaic/issues/3).
 
 The default dataset contains **three invented projects**, clearly labeled in the app. It proves the publication pipeline without making career claims or publishing private interviews. The existing constellation, timeline, principles view, and local Studio are retained.
 
@@ -83,6 +83,16 @@ Generation retains normalized evidence and an integrity report locally under `.p
 
 The release loader fetches `data/mosaic.json` relative to the hosting base path, validates the same contract used by the CLI, and displays actionable errors. It never falls back to sample data. The old public sample has been removed so it cannot accidentally ship beside the new projection.
 
+## Private Phase 2A consolidation
+
+Phase 2A preserves the complete source collection and prepares provisional interpretations for human review. It runs separately from public generation and has no publication or visualization path. Source claims, candidate episodes, classification relationships, duplicate decisions, and coverage remain local. New interpretations are unconfirmed, even when the underlying interview signal was confirmed.
+
+```sh
+npm run consolidate:interviews -- --input /absolute/path/to/_interview_raw_extracts --output /absolute/path/to/.private-evidence/phase-2a/v1
+```
+
+A digest-bound private editorial input can be supplied with `--review /absolute/path/to/.private-evidence/phase-2a/review-input.json`. Without it, the command normalizes evidence and reports unresolved interpretation work; it does not invent a taxonomy. The command prints aggregate counts and writes six private artifacts with restrictive permissions. See [the Phase 2A contract and review guide](docs/phase2a-consolidation.md) for output names, review input, evidence counting, validation, and limitations.
+
 ## Inspect the proof of concept
 
 Choose a capability in Overview, then choose a connected project. Its story shows an evidence episode, personal contribution, team or existing work, AI assistance, delivered result or stop, limitations, and the explanation for each capability connection. Confidence and confirmation are visible. The shared capability has independent links across distinct projects; repetition is not a proficiency score. Timeline offers a reading path over the same projects.
@@ -94,11 +104,12 @@ Studio is available only during `npm run dev` and excluded from production JavaS
 - [Phase 0 census, decisions, exclusions, and Phase 2 plan](docs/consolidation-review.md)
 - [Interview mapping and representation gaps](docs/interview-mapping.md)
 - [Local verification and browser checks](docs/phase1-verification.md)
-- [Consolidated evidence schema](schemas/normalized-evidence.v1.schema.json)
+- [Lossless normalized evidence schema](schemas/normalized-evidence.v1.schema.json)
+- [Private Phase 2A consolidation and review](docs/phase2a-consolidation.md)
 - [Public presentation schema](schemas/public-mosaic.v1.schema.json)
 
 The earlier design handoffs in `docs/` still guide the constellation. Their older examples that put raw narratives or private notes in public JSON are superseded by this publication contract and issue #3.
 
 The deploy audit allows only the app entry, compiled JS/CSS, and the exact validated public projection. It rejects extra JSON, source archives, source maps, symlinks, private paths, and declared canaries. These checks enforce the construction boundary; they cannot decide whether arbitrary editorial prose is confidential or semantically justified. Human review remains necessary.
 
-Review meaning, attribution, and information density with the owner before expanding beyond this slice. Full consolidation, broader taxonomy, broad UI redesign, and backend work remain later steps. Code merge and publication are separate owner decisions. After the foundation is approved and merged, the next development activity can be Phase 2 evidence consolidation and cross-project synthesis from issue #3; this change does not begin that work or approve real public content.
+Phase 2A prepares private evidence and candidate interpretations; it does not establish a final taxonomy or approve real public content. Human review must resolve meaning, attribution, independent evidence counting, and confidentiality before curated public reporting. Visualization comparison remains Phase 3. Code merge and publication remain separate owner decisions.
