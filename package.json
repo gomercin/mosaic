@@ -8,6 +8,11 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:designs": "vite --config vite.designs.config.ts",
+    "dev:designs:private": "MOSAIC_DESIGN_PRIVATE=1 vite --config vite.designs.config.ts",
+    "design:profile": "node scripts/build-design-profile.mjs",
+    "build:designs": "tsc && vite build --config vite.designs.config.ts && node scripts/validate-design-build.mjs",
+    "preview:designs": "vite preview --config vite.designs.config.ts --host 127.0.0.1 --port 5187 --strictPort",
     "typecheck": "tsc --noEmit",
     "validate:data": "node scripts/validate-mosaic-data.mjs public/data/mosaic.json",
     "test": "npm run typecheck && npm run generate:data -- --check && npm run validate:data && node --test scripts/*.test.mjs",
